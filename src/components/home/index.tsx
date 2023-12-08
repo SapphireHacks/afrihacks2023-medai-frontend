@@ -5,8 +5,8 @@ import MicIcon from '@/assets/icons/microphone';
 const HomePage = () => {
   return (
     <Flex flexDir="column" h="100vh" w="100%">
-      <Box h="85%"></Box>
-      <Box h="15%">
+      <Box h="80%"></Box>
+      <Box h="20%">
         <Flex
           pos="relative"
           alignItems="center"
@@ -15,13 +15,14 @@ const HomePage = () => {
           borderColor="text.100"
           borderRadius="0.5rem"
           p="1rem"
+          mb="0.5rem"
         >
           <Textarea
             placeholder="Message Doc MedAI"
-            h="max-content"
+            h="4rem"
             overflowY="scroll"
             maxH="10rem"
-            fontSize="xl"
+            fontSize="lg"
             border="none"
             _focus={{ outline: 'none' }}
             sx={{
@@ -40,16 +41,16 @@ const HomePage = () => {
           <IconButton
             icon={<SendIcon />}
             aria-label="Send message"
-            h="6rem"
-            w="6rem"
+            h="4rem"
+            w="4rem"
             p="1rem"
             bg="white.600"
           />
           <IconButton
             icon={<MicIcon />}
             aria-label="Send message"
-            h="6rem"
-            w="6rem"
+            h="4rem"
+            w="4rem"
             bg="none"
           />
         </Flex>
