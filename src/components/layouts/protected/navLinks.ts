@@ -1,6 +1,5 @@
 import HistoryIcon from '@/assets/icons/history';
 import CommunityIcon from '@/assets/icons/community';
-import HealthIcon from '@/assets/icons/health';
 import SettingsIcon from '@/assets/icons/settings';
 import ActiveChat from '@/assets/icons/activeChat';
 
@@ -28,11 +27,6 @@ const LinkItems: LinkItemProps[] = [
     path: '/community',
     icon: CommunityIcon
   },
-  // {
-  //   label: 'Health facilities',
-  //   path: '/health-facilities',
-  //   icon: HealthIcon
-  // },
   {
     label: 'Settings',
     path: '/settings',
