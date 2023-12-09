@@ -3,8 +3,10 @@ import ProtectedLayout from '@/components/layouts/protected/DefaultLayout';
 import { Button, Icon, Flex } from '@chakra-ui/react';
 import SearchIcon from '@/assets/icons/search';
 import TrashIcon from '@/assets/icons/trash';
+import RightChevron from '@/assets/icons/rightChevron';
 import HistoryList from '@/components/history/HistoryList';
 import DesktopHeader from '@/components/history/DesktopHeader';
+import CollapsableSearchBar from "@/components/history/CollapsableSearchBar"
 
 const History = () => {
   return (
@@ -25,14 +27,14 @@ const History = () => {
 
 function HeaderActionItems() {
   return (
-    <>
-      <Button>
+    <Flex alignItems="center">
+      <CollapsableSearchBar childrenWhenExpanded={<Icon as={RightChevron}/>}>
         <Icon as={SearchIcon} w="2rem" h="2rem" />
-      </Button>
-      <Button>
+      </CollapsableSearchBar>
+      <Button bg="transparent" position="static">
         <Icon as={TrashIcon} w="2rem" h="2rem" />
       </Button>
-    </>
+    </Flex>
   );
 }
 

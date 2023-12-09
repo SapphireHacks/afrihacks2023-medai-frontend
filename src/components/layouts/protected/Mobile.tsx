@@ -56,7 +56,7 @@ const MobileLayout = ({
           </Text>
           <Box>{HeaderActionItems && <HeaderActionItems />}</Box>
         </Flex>
-        <Divider />
+        <Divider position="relative" zIndex="-3" />
       </Box>
       <Box pt={{ base: '100px', md: '0' }}>{children}</Box>
     </>

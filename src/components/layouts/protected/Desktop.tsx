@@ -8,7 +8,7 @@ const DesktopLayout = ({ children }: Children) => {
       <GridItem colSpan={3} bg="primary.50">
         <Navigation />
       </GridItem>
-      <GridItem colSpan={9}>{children}</GridItem>
+      <GridItem colSpan={9} position="relative">{children}</GridItem>
     </Grid>
   );
 };

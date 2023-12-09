@@ -1,24 +1,16 @@
-import { useState } from 'react';
-
-let recognition: any = null;
-if (
-  global?.window &&
-  window.innerHeight &&
-  'webkitSpeechRecognition' in window
-) {
-  recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.lang = 'en-NG';
-}
+import { useState, useEffect, useCallback } from 'react';
 
 const useSpeechRecognition = (
   setMessage: (value: string) => void,
   getMessage: () => string
 ) => {
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(
+    null
+  );
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
 
-  const startListening = () => {
+  const startListening = useCallback(() => {
     if (!recognition) return;
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = Array.from(event.results)
@@ -32,12 +24,21 @@ const useSpeechRecognition = (
     };
     setListening(true);
     recognition.start();
-  };
+  }, [getMessage, recognition, setMessage]);
 
-  const stopListening = () => {
-    recognition.stop();
+  const stopListening = useCallback(() => {
+    if (recognition) recognition.stop();
     setListening(false);
-  };
+  }, [recognition]);
+
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window && recognition === null) {
+      const newRecognition = new webkitSpeechRecognition();
+      newRecognition.continuous = true;
+      newRecognition.lang = 'en-NG';
+      setRecognition(newRecognition);
+    }
+  }, [recognition]);
 
   return {
     text,
