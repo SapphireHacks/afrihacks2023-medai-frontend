@@ -5,6 +5,8 @@ import navLinks from './navLinks';
 import LogoutIcon from '@/assets/icons/logOut';
 import EditIcon from '@/assets/icons/edit';
 import Image from 'next/image';
+import CreateNewChatButton from "@/components/buttons/CreateNewChatButton"
+import LogoutButton from "@/components/buttons/LogoutButton"
 
 const Sidebar = () => {
   return (
@@ -32,7 +34,9 @@ const Sidebar = () => {
               New Chat
             </Text>
           </Flex>
-          <Icon as={EditIcon} w="2rem" h="2rem" />
+          <CreateNewChatButton>
+            <Icon as={EditIcon} w="2rem" h="2rem" />
+          </CreateNewChatButton>
         </Flex>
         <List as={Stack} gap="2rem" mb="6rem" w="100%">
           {navLinks.map(item => (
@@ -46,8 +50,8 @@ const Sidebar = () => {
             </ListItem>
           ))}
         </List>
-        <Flex
-          as="button"
+        <LogoutButton>
+          <Flex
           gap="1rem"
           p="0.8rem"
           alignItems="center"
@@ -58,6 +62,7 @@ const Sidebar = () => {
             Sign Out
           </Text>
         </Flex>
+        </LogoutButton>
       </Flex>
     </Flex>
   );
