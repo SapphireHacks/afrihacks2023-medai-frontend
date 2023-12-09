@@ -6,21 +6,19 @@ import {
   Text,
   Drawer,
   DrawerBody,
-  DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
-  Button
+  Button,
+  useBoolean
 } from '@chakra-ui/react';
 import Navigation from './Navigation';
 import HamburgerIcon from '@/assets/icons/hamburger';
 import EditIcon from '@/assets/icons/edit';
 import { Divider } from '@chakra-ui/react';
-import { useState, useCallback, useRef } from 'react';
+import { useRef } from 'react';
 
 const MobileLayout = ({ children }: Children) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const onClose = useCallback(() => setIsOpen(false), []);
+  const [isOpen, setIsOpen] = useBoolean();
   const finalFocusRef = useRef<HTMLButtonElement | null>(null);
 
   return (
@@ -28,7 +26,7 @@ const MobileLayout = ({ children }: Children) => {
       <Drawer
         isOpen={isOpen}
         placement="left"
-        onClose={onClose}
+        onClose={setIsOpen.off}
         finalFocusRef={finalFocusRef}
         size="sm"
       >
@@ -42,17 +40,16 @@ const MobileLayout = ({ children }: Children) => {
       <Flex
         alignItems="center"
         justifyContent="space-between"
-        py="1rem"
-        pr={{
-          base: '1rem',
-          md: '3rem'
-        }}
+        pb="1rem"
         pt="2rem"
+        px="2rem"
+        as="header"
       >
         <Button
-          onClick={() => setIsOpen(true)}
+          onClick={setIsOpen.toggle}
           backgroundColor="transparent"
           title="toggle navigation"
+          p="0"
         >
           <Icon width="12" height="12" as={HamburgerIcon} />
         </Button>
