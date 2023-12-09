@@ -4,6 +4,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import themes from '@/utils/themes';
 import { NextPageWithLayout } from '@/types';
 import { Toaster } from 'react-hot-toast';
+import ReduxStoreProvider from "@/redux/StoreProvider"
+import store from "@/redux/store"
 
 type Props = {
   Component: NextPageWithLayout;
@@ -12,11 +14,12 @@ type Props = {
 
 export default function App({ Component, pageProps }: Props) {
   const getLayout = Component.getLayout ?? (page => page);
-
   return (
-    <ChakraProvider theme={themes}>
-      {getLayout(<Component {...pageProps} />)}
-      <Toaster />
-    </ChakraProvider>
+    <ReduxStoreProvider store={store}>
+      <ChakraProvider theme={themes}>
+        {getLayout(<Component {...pageProps} />)}
+        <Toaster />
+      </ChakraProvider>
+    </ReduxStoreProvider>
   );
 }

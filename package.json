@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@reduxjs/toolkit": "^2.0.1",
     "@types/dom-speech-recognition": "^0.0.4",
     "axios": "^1.6.2",
     "framer-motion": "^10.16.15",
@@ -21,6 +22,7 @@
     "react-geocode": "^1.0.0-alpha.1",
     "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.1",
+    "react-redux": "^9.0.2",
     "react-spinners": "^0.13.8",
     "sharp": "^0.33.0"
   },
