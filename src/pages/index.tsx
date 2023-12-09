@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import HomePage from '@/components/home';
-import ProtectedLayout from '@/components/layouts/protected/DefaultLayout';
+import ProtectedLayout from '@/components/layouts/protected/CollapsedNavLayout';
 
 const Home = () => {
   return (

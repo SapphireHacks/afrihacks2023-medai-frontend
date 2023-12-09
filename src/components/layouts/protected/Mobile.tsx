@@ -4,14 +4,10 @@ import {
   Box,
   Icon,
   Text,
-  Drawer,
-  DrawerBody,
-  DrawerOverlay,
-  DrawerContent,
   Button,
   useBoolean
 } from '@chakra-ui/react';
-import Navigation from './Navigation';
+import NavigationDrawer from './NavigationDrawer';
 import HamburgerIcon from '@/assets/icons/hamburger';
 import EditIcon from '@/assets/icons/edit';
 import { Divider } from '@chakra-ui/react';
@@ -23,20 +19,7 @@ const MobileLayout = ({ children }: Children) => {
 
   return (
     <>
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={setIsOpen.off}
-        finalFocusRef={finalFocusRef}
-        size="sm"
-      >
-        <DrawerOverlay />
-        <DrawerContent background="primary.50">
-          <DrawerBody>
-            <Navigation />
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      <NavigationDrawer isOpen={isOpen} finalFocusRef={finalFocusRef} setIsOpen={setIsOpen}/>
       <Flex
         alignItems="center"
         justifyContent="space-between"
