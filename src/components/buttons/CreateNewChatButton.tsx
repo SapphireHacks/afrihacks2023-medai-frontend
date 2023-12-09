@@ -1,5 +1,5 @@
 
-import { Box } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import { useCallback } from "react"
 import { Children } from "@/types/index"
 
@@ -14,9 +14,9 @@ const CreateNewChatButton = ({ children, onCreateNewChat }: Children & {
   }, [onCreateNewChat])
 
   return (
-    <Box as="button" onClick={createNewChat}>
+    <Flex as="button" onClick={createNewChat}>
       {children}
-    </Box>
+    </Flex>
   )
 }
 

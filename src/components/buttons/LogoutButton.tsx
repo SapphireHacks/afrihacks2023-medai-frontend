@@ -1,5 +1,5 @@
 
-import { Box } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import { useCallback } from "react"
 import { Children } from "@/types/index"
 
@@ -14,9 +14,9 @@ const LogoutButton = ({ children, onLogout }: Children & {
   }, [onLogout])
 
   return (
-    <Box as="button" onClick={logUserOut}>
+    <Flex as="button" onClick={logUserOut}>
       {children}
-    </Box>
+    </Flex>
   )
 }
 
