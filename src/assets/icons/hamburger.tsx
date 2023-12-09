@@ -10,7 +10,7 @@ const SVGComponent = (props: SVGProps<SVGSVGElement>) => (
   >
     <path
       d="M4 6H20M4 12H12M4 18H20"
-      stroke="#2E2E2E"
+      stroke={"#2E2E2E"}
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
