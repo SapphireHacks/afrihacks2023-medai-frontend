@@ -9,7 +9,7 @@ interface SidebarProps {
   activeIcon?: React.FC;
 }
 
-const SidebarLink = ({ path, label, icon, activeIcon }: SidebarProps) => {
+const NavLinkItem = ({ path, label, icon, activeIcon }: SidebarProps) => {
   const router = useRouter();
   const isActive = router.pathname === path;
 
@@ -36,4 +36,4 @@ const SidebarLink = ({ path, label, icon, activeIcon }: SidebarProps) => {
   );
 };
 
-export default SidebarLink;
+export default NavLinkItem;
