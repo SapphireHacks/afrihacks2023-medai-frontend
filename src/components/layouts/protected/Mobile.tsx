@@ -27,6 +27,10 @@ const MobileLayout = ({ children }: Children) => {
         pt="2rem"
         px="2rem"
         as="header"
+        position="fixed"
+        w="100%"
+        bg="white"
+        top="0"
       >
         <Button
           onClick={setIsOpen.toggle}
