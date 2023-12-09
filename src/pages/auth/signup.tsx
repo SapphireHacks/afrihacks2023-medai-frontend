@@ -16,7 +16,7 @@ import SignUpImage from '@/assets/images/signup-image.png';
 import EyeOffIcon from '@/assets/icons/eyeOff';
 import { useState } from 'react';
 import Link from 'next/link';
-import urls from '../api/urls';
+import urls from '../../services/urls';
 import useAxios from '@/hooks/use-axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 

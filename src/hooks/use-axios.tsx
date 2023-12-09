@@ -30,7 +30,6 @@ function useAxios<RType>() {
           error: null
         };
       } catch (error: unknown) {
-        console.log(error);
         let message;
         if (error instanceof AxiosError) {
           const serverErrorMsg = error.response?.data?.message;

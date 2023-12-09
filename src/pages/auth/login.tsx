@@ -19,12 +19,15 @@ import EyeOffIcon from '@/assets/icons/eyeOff';
 import useAxios from '@/hooks/use-axios';
 import toast from 'react-hot-toast';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import urls from '../api/urls';
+import urls from '../../services/urls';
+import { useRouter } from 'next/router';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClick = () => setShowPassword(!showPassword);
   const { loading, makeRequest } = useAxios();
+  const [rememberMe, setRememberMe] = useState(false);
+  const router = useRouter();
 
   const formHook = useForm({
     defaultValues: {
@@ -44,13 +47,30 @@ const Login = () => {
     password: string;
   }> = async (data: any) => {
     if (!data) return;
-    console.log(data);
 
-    const result = await makeRequest({
+    const result: any = await makeRequest({
       url: urls.loginUser,
       method: 'post',
       payload: data
     });
+    console.log(result);
+    try {
+      if (!result) {
+        return;
+      }
+      if (result.status === 'success') {
+        toast.success(result.data.message || 'Login successful');
+        if (rememberMe) {
+          localStorage.setItem('user', JSON.stringify(result.data.data));
+        } else {
+          sessionStorage.setItem('user', JSON.stringify(result.data.data));
+        }
+        router.push('/');
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'An error occurred');
+      throw new Error(error);
+    }
   };
 
   return (
@@ -154,7 +174,11 @@ const Login = () => {
                 </InputGroup>
               </FormControl>
               <Flex justifyContent="space-between" alignItems="center">
-                <Checkbox iconSize="2rem">
+                <Checkbox
+                  iconSize="2rem"
+                  onChange={() => setRememberMe(!rememberMe)}
+                  isChecked={rememberMe}
+                >
                   <Text fontSize="sm">Remember me</Text>
                 </Checkbox>
 
