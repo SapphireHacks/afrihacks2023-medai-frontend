@@ -18,7 +18,7 @@ const TextContent = ({
       textAlign={textAlign}
       bg={bg}
       p="1.2rem"
-      fontSize={{ "2xs": "1.1rem", md: "1.6rem"}}
+      fontSize={{ base: '1.1rem', md: '1.6rem' }}
       borderRadius={borderRadius}
     >
       {content}

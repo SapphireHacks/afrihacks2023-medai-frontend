@@ -15,8 +15,7 @@ const LinkItems: LinkItemProps[] = [
   {
     label: 'Chatbot',
     path: '/',
-    // icon: ActiveHome,
-    activeIcon: ActiveChat
+    icon: ActiveChat
   },
   {
     label: 'Chat history',
