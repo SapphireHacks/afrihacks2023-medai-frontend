@@ -12,7 +12,7 @@ const LogoutButton = ({ children, onLogout }: Children & {
     sessionStorage.removeItem("user")
     router.push("/")
     if(onLogout) onLogout()
-  }, [onLogout])
+  }, [onLogout, router])
 
   return (
     <Flex as="button" onClick={logUserOut}>
