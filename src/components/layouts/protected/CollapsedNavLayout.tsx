@@ -18,6 +18,8 @@ import DoubleChevronIcon from '@/assets/icons/doubleChevron';
 import NavigationDrawer from './NavigationDrawer';
 import { useRef } from 'react';
 import LogoutIcon from '@/assets/icons/logOut';
+import CreateNewChatButton from "@/components/buttons/CreateNewChatButton"
+import LogoutButton from "@/components/buttons/LogoutButton"
 
 const CollapsedNavLayout = ({ children }: Children) => {
   const [isOpen, setIsOpen] = useBoolean();
@@ -53,9 +55,9 @@ const CollapsedNavLayout = ({ children }: Children) => {
               />
             </ListItem>
             <ListItem>
-              <Button bg="transparent">
+              <CreateNewChatButton>
                 <Icon as={EditIcon} w="3rem" h="3rem" />
-              </Button>
+              </CreateNewChatButton>
             </ListItem>
             {navLinks.map(link => (
               <ListItem key={link.path} w="60%" mx="auto">
@@ -64,9 +66,9 @@ const CollapsedNavLayout = ({ children }: Children) => {
             ))}
           </List>
           <Flex justify="center">
-            <Button bg="transparent" gap="1rem" p="1rem" className="signout">
-              <Icon as={LogoutIcon} w="3rem" h="3rem" />
-            </Button>
+            <LogoutButton>
+              <Icon color="" as={LogoutIcon} w="3rem" h="3rem" />
+            </LogoutButton>
           </Flex>
         </GridItem>
         <GridItem colSpan={11}>{children}</GridItem>
