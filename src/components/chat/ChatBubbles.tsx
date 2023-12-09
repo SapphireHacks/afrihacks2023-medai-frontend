@@ -1,7 +1,7 @@
-import { Flex, HStack, Box, keyframes } from "@chakra-ui/react";
-import { MedAIChatAvatar, UserChatAvatar } from "./Avatars";
-import { MedAITextContent, UserTextContent } from "./TextContents";
-import { Children } from "@/types/index";
+import { Flex, HStack, Box, keyframes } from '@chakra-ui/react';
+import { MedAIChatAvatar, UserChatAvatar } from './Avatars';
+import { MedAITextContent, UserTextContent } from './TextContents';
+import { Children } from '@/types/index';
 
 const Bubble = ({
   children,
@@ -9,13 +9,13 @@ const Bubble = ({
   direction,
   gap
 }: Children & {
-  justification: "start" | "end";
-  direction?: "row" | "row-reverse";
+  justification: 'start' | 'end';
+  direction?: 'row' | 'row-reverse';
   gap: { [x: string]: string };
 }) => {
   return (
     <Flex
-      flexDirection={direction || "row"}
+      flexDirection={direction || 'row'}
       justify={justification}
       w="100%"
       gap={gap}
@@ -38,7 +38,7 @@ export const UserBubble = ({
 }) => {
   return (
     <Bubble
-      gap={{ "2xs": "10px", md: "24px" }}
+      gap={{ base: '10px', md: '24px' }}
       direction="row-reverse"
       justification="end"
     >
@@ -46,7 +46,7 @@ export const UserBubble = ({
         imageSrc={user.profileImage}
         name={`${user.firstName} ${user.lastName}`}
       />
-      <UserTextContent content={content} />
+      <UserTextContent content="Hey, I've been experiencing frequent fatigue and difficulty concentrating lately. What could be causing this, and what are some remedies or lifestyle changes I could consider?" />
     </Bubble>
   );
 };
@@ -54,7 +54,7 @@ export const UserBubble = ({
 export const AIBubble = ({ content }: { content: string }) => {
   return (
     <Bubble
-      gap={{ "2xs": "10px", md: "16px" }}
+      gap={{ base: '10px', md: '16px' }}
       direction="row"
       justification="start"
     >
@@ -72,7 +72,7 @@ export const AIBubbleLoading = () => {
 
   return (
     <Bubble
-      gap={{ "2xs": "10px", md: "16px" }}
+      gap={{ base: '10px', md: '16px' }}
       direction="row"
       justification="start"
     >
@@ -82,8 +82,8 @@ export const AIBubbleLoading = () => {
           animation={`${bounce} infinite 1500ms ease-in-out`}
           position="absolute"
           left="30px"
-          w={{ "2xs": "0.9rem", md: "1.5rem" }}
-          h={{ "2xs": "0.9rem", md: "1.5rem" }}
+          w={{ base: '0.9rem', md: '1.5rem' }}
+          h={{ base: '0.9rem', md: '1.5rem' }}
           bg="primary.600"
           borderRadius="50%"
         ></Box>
@@ -91,8 +91,8 @@ export const AIBubbleLoading = () => {
           animation={`${bounce} infinite 1500ms 500ms ease-in-out`}
           position="absolute"
           left="60px"
-          w={{ "2xs": "0.9rem", md: "1.5rem" }}
-          h={{ "2xs": "0.9rem", md: "1.5rem" }}
+          w={{ base: '0.9rem', md: '1.5rem' }}
+          h={{ base: '0.9rem', md: '1.5rem' }}
           bg="primary.600"
           borderRadius="50%"
         ></Box>
@@ -100,8 +100,8 @@ export const AIBubbleLoading = () => {
           animation={`${bounce} infinite 1500ms 1000ms ease-in-out`}
           position="absolute"
           left="90px"
-          w={{ "2xs": "0.9rem", md: "1.5rem" }}
-          h={{ "2xs": "0.9rem", md: "1.5rem" }}
+          w={{ base: '0.9rem', md: '1.5rem' }}
+          h={{ base: '0.9rem', md: '1.5rem' }}
           bg="primary.600"
           borderRadius="50%"
         ></Box>

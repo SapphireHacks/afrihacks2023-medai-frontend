@@ -9,7 +9,14 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import LoadingState from '@/components/loading-state';
 
-const ProtectedLayout = ({ children }: Children) => {
+const ProtectedLayout = ({
+  children,
+  title,
+  HeaderActionItems,
+}: Children & {
+  title: string;
+  HeaderActionItems?: () => JSX.Element;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const config = configOptions();
@@ -35,7 +42,9 @@ const ProtectedLayout = ({ children }: Children) => {
         <DesktopLayout>{children}</DesktopLayout>
       </Show>
       <Show below="md">
-        <MobileLayout>{children}</MobileLayout>
+        <MobileLayout title={title} HeaderActionItems={HeaderActionItems}>
+          {children}
+        </MobileLayout>
       </Show>
     </>
   );

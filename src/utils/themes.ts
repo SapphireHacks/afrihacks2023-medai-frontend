@@ -1,5 +1,5 @@
-import { extendTheme } from "@chakra-ui/react";
-import Avatar from "./componentThemes/Avatar"
+import { extendTheme } from '@chakra-ui/react';
+import Avatar from './componentThemes/Avatar';
 
 const colors = Object.freeze({
   primary: {
@@ -28,6 +28,8 @@ const colors = Object.freeze({
   },
   white: {
     main: '#ffffff',
+    400: "#898A8D",
+    500: '#F7F7F7',
     600: '#e8e8e8',
     700: '#b5b5b5',
     800: '#8c8c8c',
@@ -39,6 +41,7 @@ const colors = Object.freeze({
     200: '#8a8a8a',
     300: '#545454',
     400: '#333333',
+    500: "#2F3C33",
     black: '#000000'
   }
 });
@@ -83,7 +86,7 @@ const styles = Object.freeze({
       fontSize: '62.5%'
     },
     body: {
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: 'Montserrat, sans-serif',
       color: '#000',
       backgroundColor: '#fff',
       fontSize: '1.6rem',
@@ -104,5 +107,5 @@ export default extendTheme({
   styles,
   fontWeights,
   fontSizes,
-  components: { Avatar },
+  components: { Avatar }
 });

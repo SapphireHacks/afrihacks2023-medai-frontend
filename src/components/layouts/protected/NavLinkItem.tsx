@@ -18,7 +18,7 @@ const NavLinkItem = ({ path, label, icon, activeIcon }: NavLinkItemProps) => {
   const isActive = useGetIsActive(path)
 
   return (
-    <Link as={NextLink} href={path}>
+    <Link as={NextLink} href={path} _hover={{ textDecoration: "none" }} _active={{ textDecoration: "none" }} >
       <Flex
         align="center"
         gap="1rem"
@@ -26,12 +26,13 @@ const NavLinkItem = ({ path, label, icon, activeIcon }: NavLinkItemProps) => {
         w="100%"
         bg={isActive ? 'primary.800' : 'unset'}
         borderRadius="0.5rem"
+        color={isActive ? 'white' : 'black'}
       >
-        <Icon as={isActive ? activeIcon : icon} w="3rem" h="3rem" />
+        <Icon stroke={isActive ? "#fff" : undefined} as={icon} w="3rem" h="3rem" />
         <Text
-          color={isActive ? 'white' : 'black'}
           fontSize="lg"
           fontWeight="500"
+          textDecoration="none"
         >
           {label}
         </Text>
