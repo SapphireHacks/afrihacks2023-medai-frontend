@@ -11,7 +11,7 @@ const LogoutButton = ({ children, onLogout }: Children & {
     // logout code
     console.log("logout")
     if(onLogout) onLogout()
-  }, [])
+  }, [onLogout])
 
   return (
     <Box as="button" onClick={logUserOut}>

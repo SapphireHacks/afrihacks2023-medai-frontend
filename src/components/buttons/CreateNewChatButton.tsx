@@ -11,7 +11,7 @@ const CreateNewChatButton = ({ children, onCreateNewChat }: Children & {
     // create new chat code
     console.log("create new chat")
     if(onCreateNewChat) onCreateNewChat()
-  }, [])
+  }, [onCreateNewChat])
 
   return (
     <Box as="button" onClick={createNewChat}>
