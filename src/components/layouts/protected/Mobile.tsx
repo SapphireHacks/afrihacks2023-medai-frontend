@@ -12,6 +12,7 @@ import HamburgerIcon from '@/assets/icons/hamburger';
 import EditIcon from '@/assets/icons/edit';
 import { Divider } from '@chakra-ui/react';
 import { useRef } from 'react';
+import CreateNewChatButton from "@/components/buttons/CreateNewChatButton"
 
 const MobileLayout = ({ children }: Children) => {
   const [isOpen, setIsOpen] = useBoolean();
@@ -40,10 +41,12 @@ const MobileLayout = ({ children }: Children) => {
         >
           <Icon width="12" height="12" as={HamburgerIcon} />
         </Button>
-        <Text fontSize="lg" fontWeight="600" textTransform="capitalize">
+        <Text as="h1" fontSize="lg" fontWeight="600" textTransform="capitalize">
           Doc MedAI
         </Text>
-        <Icon as={EditIcon} w="2rem" h="2rem" />
+        <CreateNewChatButton>
+          <Icon as={EditIcon} w="2rem" h="2rem" />
+        </CreateNewChatButton>
       </Flex>
       <Divider />
       <Box>{children}</Box>
