@@ -1,4 +1,5 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme } from "@chakra-ui/react";
+import Avatar from "./componentThemes/Avatar"
 
 const colors = Object.freeze({
   primary: {
@@ -102,5 +103,6 @@ export default extendTheme({
   colors,
   styles,
   fontWeights,
-  fontSizes
+  fontSizes,
+  components: { Avatar },
 });

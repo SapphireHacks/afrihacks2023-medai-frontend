@@ -24,6 +24,7 @@ const MobileLayout = ({ children }: Children) => {
       <Box
         as="header"
         position="fixed"
+        zIndex="100"
         w="100%"
         bg="white"
         top="0">
