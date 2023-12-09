@@ -53,7 +53,6 @@ const Login = () => {
       method: 'post',
       payload: data
     });
-    console.log(result);
     try {
       if (!result) {
         return;

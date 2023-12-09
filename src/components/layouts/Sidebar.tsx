@@ -1,7 +1,7 @@
-import { Flex, Stack, Text, Box, Icon, IconButton } from '@chakra-ui/react';
+import { Flex, Stack, Text, Icon } from '@chakra-ui/react';
 import React from 'react';
-import SidebarLink from '../sidebar-link';
-import LinkItems from './LinkItems';
+import NavLinkItem from './protected/NavLinkItem';
+import LinkItems from './protected/navLinks';
 import LogoutIcon from '@/assets/icons/logOut';
 
 const Sidebar = () => {
@@ -27,7 +27,7 @@ const Sidebar = () => {
     >
       <Stack gap="2rem" mb="6rem" w="100%">
         {LinkItems.map(item => (
-          <SidebarLink
+          <NavLinkItem
             key={item.label}
             path={item.path}
             label={item.label}

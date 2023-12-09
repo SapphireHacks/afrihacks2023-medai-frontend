@@ -9,6 +9,7 @@ Welcome to the Medai project! This is the frontend repository built with Next.js
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Deployment](#deployment)
 
 ## Introduction
 
@@ -66,3 +67,6 @@ To build the production-ready application, use:
 ```bash
 npm run build
 ```
+
+## Deployment
+The frontend is deployed [here](https://afrihacks2023-medai-frontend-sapphire-hacks-projects.vercel.app/).
