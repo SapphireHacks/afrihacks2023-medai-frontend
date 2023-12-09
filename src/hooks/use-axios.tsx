@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 type Request<PType> = {
   payload?: PType;
   url: string;
-  method: 'post' | 'delete' | 'patch' | 'put';
+  method: 'post' | 'delete' | 'patch' | 'put' | 'get';
 };
 
 type MakeRequest<RType> = <PType>(args: Request<PType>) => Promise<{
