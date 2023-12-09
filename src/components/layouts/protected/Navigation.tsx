@@ -3,12 +3,12 @@ import React from 'react';
 import NavLinkItem from './NavLinkItem';
 import navLinks from './navLinks';
 import LogoutIcon from '@/assets/icons/logOut';
-import MedAILogo from '@/assets/images/medAI';
 import EditIcon from '@/assets/icons/edit';
+import Image from 'next/image';
 
 const Sidebar = () => {
   return (
-    <Flex as="nav" flexDirection="column" bg="white" w="100%">
+    <Flex as="nav" flexDirection="column" bg="transparent" w="100%">
       <Flex
         flexDirection="column"
         py="24px"
@@ -20,8 +20,13 @@ const Sidebar = () => {
       >
         <Flex alignItems="center" justifyContent="space-between" w="100%">
           <Flex gap="4px" alignItems="center">
-            <MedAILogo
-            height={'6rem'} width={'6rem'}
+            <Image
+              src="/app-logo.png"
+              objectFit="cover"
+              alt="medai logo"
+              width={50}
+              height={50}
+              style={{ width: '7rem', height: 'auto' }}
             />
             <Text fontSize="lg" fontWeight="550">
               New Chat

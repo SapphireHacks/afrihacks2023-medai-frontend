@@ -33,7 +33,7 @@ const MobileLayout = ({ children }: Children) => {
         size="sm"
       >
         <DrawerOverlay />
-        <DrawerContent background="white">
+        <DrawerContent background="primary.50">
           <DrawerBody>
             <Navigation />
           </DrawerBody>
