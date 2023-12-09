@@ -12,7 +12,8 @@ import Sidebar from './Sidebar';
 import HamburgerIcon from '@/assets/icons/hamburger';
 import CloseIcon from '@/assets/icons/close';
 import EditIcon from '@/assets/icons/edit';
-import MedAILogo from '@/assets/images/medAI';
+import Image from 'next/image';
+import MedAILogo from '@/assets/images/medAI-transparent.png';
 
 const ProtectedLayout = ({ children }: Children) => {
   return (
@@ -25,23 +26,30 @@ const ProtectedLayout = ({ children }: Children) => {
         base: '0',
         md: '16px'
       }}
-      px={{
+      pr={{
         base: '0',
         md: '4rem'
       }}
     >
-      <GridItem colSpan={3}>
+      <GridItem colSpan={3} bg="primary.50" pl="4rem">
         <Flex
           alignItems="center"
           justifyContent="space-between"
           py="1rem"
-          pr={{
+          mr={{
             base: '1rem',
             md: '3rem'
           }}
           pt="2rem"
         >
-          <MedAILogo height={' 6rem'} width={'6rem'} />
+          <Image
+            src={MedAILogo}
+            alt="MedAI Logo"
+            style={{
+              width: '6rem',
+              height: '6rem'
+            }}
+          />
           <Text fontSize="lg" fontWeight="550">
             New Chat
           </Text>

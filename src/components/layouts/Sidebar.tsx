@@ -17,7 +17,6 @@ const Sidebar = () => {
       }}
       display={{ base: 'none', md: 'flex' }}
       flexDirection="column"
-      bg="white"
       top="5rem"
       left="0"
       right="0"
