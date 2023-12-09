@@ -19,10 +19,14 @@ import Link from 'next/link';
 import urls from '../../services/urls';
 import useAxios from '@/hooks/use-axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClick = () => setShowPassword(!showPassword);
+  const [agreed, setAgreed] = useState(false);
+  const router = useRouter();
 
   const { loading, makeRequest } = useAxios();
 
@@ -43,15 +47,33 @@ const SignUp = () => {
     email: string;
     password: string;
   }> = async (data: any) => {
+    if (!agreed) {
+      toast.error('Please agree to the terms and conditions');
+      return;
+    }
     if (!data) return;
-    console.log(data);
 
-    const result = await makeRequest({
+    const result: any = await makeRequest({
       url: urls.createUser,
       method: 'post',
       payload: data
     });
+    if (!result) {
+      return;
+    }
     console.log(result);
+    if (result.status === 'success') {
+      toast.success(
+        result.data.message ||
+          'Account created successfully. Check your email to verify your account'
+      );
+    } else if (result.status === 'error') {
+      if (result.error.includes('E11000')) {
+        toast.error('This user already exists. Please login');
+        return;
+      }
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -152,7 +174,11 @@ const SignUp = () => {
                 </InputGroup>
               </FormControl>
               <Flex justifyContent="space-between" alignItems="center">
-                <Checkbox size="lg">
+                <Checkbox
+                  size="lg"
+                  onChange={() => setAgreed(!agreed)}
+                  isChecked={agreed}
+                >
                   <Text fontSize="base">
                     I agree with the{' '}
                     <Text as="span" color="primary.900" fontWeight="600">
@@ -171,6 +197,7 @@ const SignUp = () => {
                 mt="2rem"
                 color="white"
                 _hover={{ bg: 'primary.700' }}
+                isLoading={loading}
               >
                 Sign up
               </Button>

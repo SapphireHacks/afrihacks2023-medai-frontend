@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import themes from '@/utils/themes';
 import { NextPageWithLayout } from '@/types';
+import { Toaster } from 'react-hot-toast';
 
 type Props = {
   Component: NextPageWithLayout;
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }: Props) {
   return (
     <ChakraProvider theme={themes}>
       {getLayout(<Component {...pageProps} />)}
+      <Toaster />
     </ChakraProvider>
   );
 }

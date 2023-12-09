@@ -3,7 +3,9 @@ const baseUrl =
 
 const urls = {
   createUser: `${baseUrl}/users/signup`,
-  loginUser: `${baseUrl}/users/login`
+  loginUser: `${baseUrl}/users/login`,
+  verifyEmail: (userId: string, emailVerificationToken: string) =>
+    `${baseUrl}/users/verify-email/${userId}/${emailVerificationToken}`
 };
 
 export default urls;
