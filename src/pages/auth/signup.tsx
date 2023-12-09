@@ -16,10 +16,43 @@ import SignUpImage from '@/assets/images/signup-image.png';
 import EyeOffIcon from '@/assets/icons/eyeOff';
 import { useState } from 'react';
 import Link from 'next/link';
+import urls from '../api/urls';
+import useAxios from '@/hooks/use-axios';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClick = () => setShowPassword(!showPassword);
+
+  const { loading, makeRequest } = useAxios();
+
+  const formHook = useForm({
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = formHook;
+
+  const submit: SubmitHandler<{
+    email: string;
+    password: string;
+  }> = async (data: any) => {
+    if (!data) return;
+    console.log(data);
+
+    const result = await makeRequest({
+      url: urls.createUser,
+      method: 'post',
+      payload: data
+    });
+    console.log(result);
+  };
 
   return (
     <Flex
@@ -69,64 +102,80 @@ const SignUp = () => {
             Discover a Healthier You - Sign Up on MedAI
           </Text>
 
-          <Flex flexDir="column" mt="2rem" gap="1.5rem">
-            <FormControl isRequired>
-              <FormLabel fontSize="lg">Email Address</FormLabel>
-              <Input
-                type="email"
-                h="5rem"
-                borderRadius="0.5rem"
-                fontSize="base"
-                placeholder="Enter your email address"
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel fontSize="lg">Password</FormLabel>
-              <InputGroup size="md">
+          <form onSubmit={handleSubmit(submit)}>
+            <Flex flexDir="column" mt="2rem" gap="1.5rem">
+              <FormControl isRequired>
+                <FormLabel fontSize="lg">Email Address</FormLabel>
                 <Input
-                  pr="4.5rem"
-                  type={showPassword ? 'text' : 'password'}
+                  type="email"
                   h="5rem"
                   borderRadius="0.5rem"
                   fontSize="base"
-                  placeholder="Enter your password"
+                  placeholder="Enter your email address"
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: 'Entered value does not match email format'
+                    }
+                  })}
                 />
-                <InputRightElement width="4.5rem" mt="1.25rem">
-                  <IconButton
-                    bg="transparent"
-                    h="1.5rem"
-                    aria-label="hide password"
-                    icon={<EyeOffIcon />}
-                    onClick={handleClick}
-                    _hover={{ bg: 'transparent' }}
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel fontSize="lg">Password</FormLabel>
+                <InputGroup size="md">
+                  <Input
+                    pr="4.5rem"
+                    type={showPassword ? 'text' : 'password'}
+                    h="5rem"
+                    borderRadius="0.5rem"
+                    fontSize="base"
+                    placeholder="Enter your password"
+                    {...register('password', {
+                      required: 'Password is required',
+                      minLength: {
+                        value: 6,
+                        message: 'Password should be at least 6 characters'
+                      }
+                    })}
                   />
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <Flex justifyContent="space-between" alignItems="center">
-              <Checkbox size="lg">
-                <Text fontSize="base">
-                  I agree with the{' '}
-                  <Text as="span" color="primary.900" fontWeight="600">
-                    Terms and conditions of MedAI
+                  <InputRightElement width="4.5rem" mt="1.25rem">
+                    <IconButton
+                      bg="transparent"
+                      h="1.5rem"
+                      aria-label="hide password"
+                      icon={<EyeOffIcon />}
+                      onClick={handleClick}
+                      _hover={{ bg: 'transparent' }}
+                    />
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Checkbox size="lg">
+                  <Text fontSize="base">
+                    I agree with the{' '}
+                    <Text as="span" color="primary.900" fontWeight="600">
+                      Terms and conditions of MedAI
+                    </Text>
                   </Text>
-                </Text>
-              </Checkbox>
+                </Checkbox>
+              </Flex>
+              <Button
+                type="submit"
+                h="4rem"
+                borderRadius="0.5rem"
+                fontSize="lg"
+                fontWeight="400"
+                bg="primary.900"
+                mt="2rem"
+                color="white"
+                _hover={{ bg: 'primary.700' }}
+              >
+                Sign up
+              </Button>
             </Flex>
-            <Button
-              type="submit"
-              h="4rem"
-              borderRadius="0.5rem"
-              fontSize="lg"
-              fontWeight="400"
-              bg="primary.900"
-              mt="2rem"
-              color="white"
-              _hover={{ bg: 'primary.700' }}
-            >
-              Sign up
-            </Button>
-          </Flex>
+          </form>
           <Text textAlign="center" fontSize="lg" fontWeight="400" mt="2rem">
             I have an account?{' '}
             <Link href="/auth/login">
