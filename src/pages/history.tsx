@@ -7,8 +7,10 @@ import RightChevron from '@/assets/icons/rightChevron';
 import HistoryList from '@/components/history/HistoryList';
 import DesktopHeader from '@/components/history/DesktopHeader';
 import CollapsableSearchBar from "@/components/history/CollapsableSearchBar"
+import useConversationsSocket from "@/socket.io/sockets/useConversationsSocket"
 
 const History = () => {
+  const conversationsSocket = useConversationsSocket()
   return (
     <>
       <Head>
