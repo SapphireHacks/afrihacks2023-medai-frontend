@@ -8,8 +8,8 @@ import {
   updateIdOfChatToDelete,
   deleteConversation,
   clearConversations,
+  StoreConversation
 } from '@/redux/conversations/slice';
-import { Conversation } from '@/types/chat';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 export default function useConversationsSocket() {
@@ -38,7 +38,7 @@ export default function useConversationsSocket() {
         );
         dispatch(updateActiveConversationId(data.conversation._id));
       },
-      getMany: (data: { conversations: Conversation[]; hasMore: boolean }) => {
+      getMany: (data: { conversations: StoreConversation[]; hasMore: boolean }) => {
         const { conversations, hasMore } = data;
         dispatch(
           updateConversations({

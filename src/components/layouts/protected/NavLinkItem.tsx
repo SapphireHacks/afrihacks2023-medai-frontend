@@ -27,6 +27,9 @@ const NavLinkItem = ({ path, label, icon, activeIcon }: NavLinkItemProps) => {
         bg={isActive ? 'primary.800' : 'unset'}
         borderRadius="0.5rem"
         color={isActive ? 'white' : 'black'}
+        transition="background 400ms ease"
+        _hover={{bg: "primary.200", color: "black"}}
+        _active={{bg: "primary.400", color: "white",}}
       >
         <Icon stroke={isActive ? "#fff" : undefined} as={icon} w="3rem" h="3rem" />
         <Text

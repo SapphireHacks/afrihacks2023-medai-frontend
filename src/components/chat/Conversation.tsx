@@ -1,6 +1,6 @@
 import { Message } from '@/types/chat';
 import { UserBubble, AIBubble, AIBubbleLoading } from './ChatBubbles';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Button } from '@chakra-ui/react';
 import { getCoordinates, getNearbyHospitals } from '@/utils/getPlacesHelpers';
 import { useState } from 'react';
 
@@ -39,24 +39,22 @@ export default function Conversation({ messages }: { messages: Message[] }) {
   };
 
   return (
-    <Flex flexDirection="column" gap="16px" w="100%">
-      {/* <button onClick={() => getHospitals('Ikoyi, Lagos')}>
-        Get Hospitals
-      </button> */}
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubbleLoading />
+    <Flex flexDirection="column" gap="16px" w="100%" position="relative">
+      {/* <Button
+        position="sticky" 
+        w="fit-content" 
+        mx="auto" 
+        top="0" 
+        px="1.2rem" 
+        py="1.6rem" 
+        fontSize="1.6rem"
+        onClick={() => getHospitals('Ikoyi, Lagos')}>
+        Find Hospitals
+      </Button> */}
+      {messages.map(msg => {
+        if(msg.role === "user") return <UserBubble key={msg._id} user={tempUser} content={msg.content} />
+        else return <AIBubble key={msg._id} content={msg.content} />
+      })}
     </Flex>
   );
 }

@@ -22,7 +22,7 @@ const Home = () => {
       
         <Flex
           flexDir="column"
-          h="100dvh"
+          h={{base: "calc(100vh - 100px)",md: "100dvh",}}
           w="100%"
           px="3.5%"
           mx="auto"

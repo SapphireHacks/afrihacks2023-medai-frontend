@@ -16,11 +16,11 @@ export default function ActiveConversation() {
     <>
       {activeConversation && (
         <Box
-          h="calc(100dvh-773.03)"
+          h="calc(100dvh - 77.3px)"
           pt={{ base: '0', md: '100px' }}
           overflow="auto"
         >
-          <Conversation messages={activeConversation.messages} />
+          <Conversation messages={activeConversation.messages || []} />
         </Box>
       )}
       <Box position="sticky" top="100%" bottom="0" w="100%" p="1.6rem">

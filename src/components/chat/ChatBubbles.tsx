@@ -46,7 +46,7 @@ export const UserBubble = ({
         imageSrc={user.profileImage}
         name={`${user.firstName} ${user.lastName}`}
       />
-      <UserTextContent content="Hey, I've been experiencing frequent fatigue and difficulty concentrating lately. What could be causing this, and what are some remedies or lifestyle changes I could consider?" />
+      <UserTextContent content={content} />
     </Bubble>
   );
 };
@@ -59,7 +59,7 @@ export const AIBubble = ({ content }: { content: string }) => {
       justification="start"
     >
       <MedAIChatAvatar />
-      <MedAITextContent content="Feeling fatigued and having difficulty concentrating can stem from various factors. It might be due to inadequate sleep, excessive stress, poor nutrition, or even an underlying health issue. To provide more tailored guidance, could you share any recent changes in your routine or additional symptoms you've noticed? " />
+      <MedAITextContent content={content} />
     </Bubble>
   );
 };

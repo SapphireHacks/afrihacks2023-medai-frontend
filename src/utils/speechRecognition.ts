@@ -21,6 +21,7 @@ const useSpeechRecognition = (
       setMessage(getMessage() + ' ' + transcript);
       recognition.stop();
       setListening(false);
+      recognition.abort();
     };
     setListening(true);
     recognition.start();
