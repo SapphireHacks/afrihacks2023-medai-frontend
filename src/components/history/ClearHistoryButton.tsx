@@ -1,6 +1,5 @@
-import { Icon, Button } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { clearConversations } from '@/redux/conversations/slice';
-import TrashIcon from '@/assets/icons/trash';
 import {
   Popover,
   PopoverTrigger,
@@ -27,15 +26,16 @@ export default function ClearHistoryButton({
           <ConfirmDeletePopover
             confirmDelete={() => dispatch(clearConversations())}
           >
-            <Button
+            <Box 
+              as="button"
               _hover={{ bg: 'white.500' }}
               fontSize="1.6rem"
-              py="2rem"
+              py="1rem"
               w="100%"
               bg="transparent"
             >
               Clear History
-            </Button>
+            </Box>
           </ConfirmDeletePopover>
         </PopoverBody>
       </PopoverContent>

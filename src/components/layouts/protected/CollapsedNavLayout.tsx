@@ -47,11 +47,10 @@ const CollapsedNavLayout = ({ children }: Children) => {
             <ListItem>
               <Image
                 src="/app-logo.png"
-                objectFit="cover"
                 alt="medai logo"
                 width={50}
                 height={50}
-                style={{ width: '7rem', height: 'auto' }}
+                style={{ width: '7rem', height: 'auto', objectFit: "cover" }}
               />
             </ListItem>
             <ListItem>

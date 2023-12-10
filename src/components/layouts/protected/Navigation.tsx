@@ -24,11 +24,10 @@ const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
           <Flex gap="4px" alignItems="center">
             <Image
               src="/app-logo.png"
-              objectFit="cover"
               alt="medai logo"
               width={50}
               height={50}
-              style={{ width: '7rem', height: 'auto' }}
+              style={{ width: '7rem', height: 'auto', objectFit: "cover" }}
             />
             <Text fontSize="lg" fontWeight="550">
               New Chat

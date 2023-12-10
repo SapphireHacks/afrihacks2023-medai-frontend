@@ -3,14 +3,15 @@ import { UserBubble, AIBubble, AIBubbleLoading } from './ChatBubbles';
 import { Flex } from '@chakra-ui/react';
 import { getCoordinates, getNearbyHospitals } from '@/utils/getPlacesHelpers';
 import { useState } from 'react';
+import useSortMessages from "@/hooks/useSortMessages"
+import { User } from "@/redux/user/slice"
 
-export default function Conversation({ messages }: { messages: Message[] }) {
-  const tempUser = {
-    firstName: 'Haley',
-    lastName: 'Thomas',
-    profileImage: ''
-  };
+export default function Conversation({ messages, messageToSend, user, }: 
+  { messages: Message[], messageToSend: {
+  content: string,
+  conversationId: string | null
 
+} | null ;  user: User["data"] | null}) {
   // to ensure we don't make unnecessary API calls while testing
   const [hospitals, setHospitals] = useState(null);
   const [lastLocation, setLastLocation] = useState('');
@@ -38,25 +39,26 @@ export default function Conversation({ messages }: { messages: Message[] }) {
     }
   };
 
+  const sortedMessages = useSortMessages(messages)
   return (
-    <Flex flexDirection="column" gap="16px" w="100%">
-      {/* <button onClick={() => getHospitals('Ikoyi, Lagos')}>
-        Get Hospitals
-      </button> */}
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubble content={'placeholder'} />
-      <UserBubble user={tempUser} content={'placeholder'} />
-      <AIBubbleLoading />
+    <Flex flexDirection="column" gap="16px" w="100%" position="relative">
+      {/* <Button
+        position="sticky" 
+        w="fit-content" 
+        mx="auto" 
+        top="0" 
+        px="1.2rem" 
+        py="1.6rem" 
+        fontSize="1.6rem"
+        onClick={() => getHospitals('Ikoyi, Lagos')}>
+        Find Hospitals
+      </Button> */}
+      {sortedMessages.map(msg => {
+        if(msg.role === "user") return <UserBubble key={msg._id} user={user} content={msg.content} />
+        else return <AIBubble key={msg._id} content={msg.content} />
+      })}
+      { messageToSend !== null && <UserBubble user={user} content={messageToSend.content} />}
+      { messageToSend !== null && <AIBubbleLoading />}
     </Flex>
   );
 }

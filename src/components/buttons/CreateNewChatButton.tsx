@@ -2,20 +2,22 @@
 import { Flex } from "@chakra-ui/react"
 import { useCallback } from "react"
 import { Children } from "@/types/index"
-import { createNewConversation } from '@/redux/conversations/slice';
+import { createNewConversation, updateLoading } from '@/redux/conversations/slice';
 import { useAppDispatch } from '@/redux/hooks';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const CreateNewChatButton = ({ children, onCreateNewChat }: Children & {
   onCreateNewChat?: () => void
 }) => {
   const router = useRouter();
+  const pathname = usePathname()
   const dispatch = useAppDispatch();
   const createNewChat = useCallback(() => {
     dispatch(createNewConversation());
+    dispatch(updateLoading(true))
     if (onCreateNewChat) onCreateNewChat();
-    router.push('/');
-  }, [onCreateNewChat, dispatch, router]);
+    pathname !== "/" && router.push('/');
+  }, [onCreateNewChat, dispatch, router, pathname]);
 
   return (
     <Flex as="button" onClick={createNewChat}>
