@@ -5,14 +5,20 @@ import {
   DrawerOverlay,
   DrawerContent
 } from '@chakra-ui/react';
-import { MutableRefObject } from "react"
+import { MutableRefObject } from 'react';
 
-const NavigationDrawer = ({ isOpen, finalFocusRef, setIsOpen }: {
-  isOpen: boolean, finalFocusRef: MutableRefObject<any>, setIsOpen: {
-    on: () => void,
-    off: () => void,
-    toggle: () => void
-  }
+const NavigationDrawer = ({
+  isOpen,
+  finalFocusRef,
+  setIsOpen
+}: {
+  isOpen: boolean;
+  finalFocusRef: MutableRefObject<any>;
+  setIsOpen: {
+    on: () => void;
+    off: () => void;
+    toggle: () => void;
+  };
 }) => {
   return (
     <Drawer
@@ -25,11 +31,11 @@ const NavigationDrawer = ({ isOpen, finalFocusRef, setIsOpen }: {
       <DrawerOverlay />
       <DrawerContent background="primary.50">
         <DrawerBody>
-          <Navigation />
+          <Navigation closeNav={setIsOpen.off} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
   );
 };
 
-export default NavigationDrawer
+export default NavigationDrawer;

@@ -1,9 +1,9 @@
-export default function SearchIcon() {
+export default function SearchIcon({ height = 22, width = 22 }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="22"
-      height="22"
+      width={width}
+      height={height}
       viewBox="0 0 22 22"
       fill="none"
     >

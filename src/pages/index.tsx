@@ -5,12 +5,12 @@ import ActiveConversation from '@/components/chat/ActiveConversation';
 import EditIcon from '@/assets/icons/edit';
 import CreateNewChatButton from '@/components/buttons/CreateNewChatButton';
 import LoadingState from '@/components/loading-state';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 
 const Home = () => {
   const { shouldCreateNewConversation, activeConversationId } = useAppSelector(
     store => store.conversations
-  ); 
+  );
   return (
     <>
       <Head>
