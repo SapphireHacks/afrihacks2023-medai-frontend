@@ -20,7 +20,7 @@ export default function useSocket({
   const [token, setToken] = useState<string | null>(null);
   const socket = useMemo(
     () =>
-      io(`${process.env.NEXT_PUBLIC_MEDAI_SOCKET_HOST}${namespace}`, {
+      io(`${process.env.NEXT_PUBLIC_MEDAI_SOCKET_HOST || "https://medai.adaptable.app"}${namespace}`, {
         auth: {
           token
         },
