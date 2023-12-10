@@ -28,6 +28,7 @@ const colors = Object.freeze({
   },
   white: {
     main: '#ffffff',
+    300: "#263238",
     400: "#898A8D",
     500: '#F7F7F7',
     600: '#e8e8e8',

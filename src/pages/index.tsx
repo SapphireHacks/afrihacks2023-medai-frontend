@@ -1,12 +1,16 @@
 import Head from 'next/head';
 import ProtectedLayout from '@/components/layouts/protected/DefaultLayout';
-import { Box, Text, Flex, Icon } from '@chakra-ui/react';
-import ChatInput from '@/components/chat/ChatInput';
-import Conversation from '@/components/chat/Conversation';
+import { Flex, Icon } from '@chakra-ui/react';
+import ActiveConversation from '@/components/chat/ActiveConversation';
 import EditIcon from '@/assets/icons/edit';
 import CreateNewChatButton from '@/components/buttons/CreateNewChatButton';
+import LoadingState from '@/components/loading-state';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 
 const Home = () => {
+  const { shouldCreateNewConversation, activeConversationId } = useAppSelector(
+    store => store.conversations
+  );
   return (
     <>
       <Head>
@@ -15,39 +19,20 @@ const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex flexDir="column" h="100dvh" w="100%" mx="auto" overflow="hidden">
-        <Box
-          h="calc(100dvh-773.03)"
-          pt={{ base: '0', md: '100px' }}
-          px="3.5%"
-          overflow="auto"
-          sx={{
-            '::-webkit-scrollbar': {
-              width: '10px'
-            },
-            '::-webkit-scrollbar-thumb': {
-              background: 'gray',
-              borderRadius: '6px'
-            },
-            '::-webkit-scrollbar-thumb:hover': {
-              background: 'darkgray'
-            }
-          }}
-        >
-          <Conversation messages={[]} />
-        </Box>
-        <Box position="sticky" top="100%" bottom="0" w="100%" p="1.6rem">
-          <ChatInput />
-          <Text
-            fontSize={{ base: 'md', md: 'base' }}
-            color="text.300"
-            mt="0.5rem"
-            textAlign="center"
-          >
-            Doc MedAI can make mistakes. Consider checking important
-            information.
-          </Text>
-        </Box>
+
+      <Flex
+        flexDir="column"
+        h="100dvh"
+        w="100%"
+        px="3.5%"
+        mx="auto"
+        overflow="hidden"
+      >
+        {shouldCreateNewConversation ? (
+          <LoadingState />
+        ) : (
+          <ActiveConversation />
+        )}
       </Flex>
     </>
   );

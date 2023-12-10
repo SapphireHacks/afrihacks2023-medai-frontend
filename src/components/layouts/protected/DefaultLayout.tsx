@@ -8,11 +8,12 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import LoadingState from '@/components/loading-state';
+import useConversationsSocket from '@/socket.io/sockets/useConversationsSocket';
 
 const ProtectedLayout = ({
   children,
   title,
-  HeaderActionItems,
+  HeaderActionItems
 }: Children & {
   title: string;
   HeaderActionItems?: () => JSX.Element;
@@ -31,6 +32,8 @@ const ProtectedLayout = ({
       setIsLoading(false);
     }
   }, [tokenExpired, router]);
+
+  useConversationsSocket();
 
   if (isLoading) {
     return <LoadingState />;
