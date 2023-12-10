@@ -23,6 +23,7 @@ import MicIcon from '@/assets/icons/microphone';
 import useSpeechRecognition from '@/utils/speechRecognition';
 import SearchIcon from '@/assets/icons/search';
 import CommunityCard from '@/components/community/CommunityCard';
+import Link from 'next/link';
 
 const Community = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -264,28 +265,34 @@ const Community = () => {
           h="100%"
         >
           <GridItem h="100%">
-            <CommunityCard />
+            <Link href="/community/1">
+              <CommunityCard />
+            </Link>
           </GridItem>
           <GridItem h="100%">
-            <CommunityCard />
+            <Link href="/community/1">
+              <CommunityCard />
+            </Link>
           </GridItem>
           <GridItem h="100%">
-            <CommunityCard />
+            <Link href="/community/1">
+              <CommunityCard />
+            </Link>
           </GridItem>
           <GridItem h="100%">
-            <CommunityCard />
+            <Link href="/community/1">
+              <CommunityCard />
+            </Link>
           </GridItem>
           <GridItem h="100%">
-            <CommunityCard />
+            <Link href="/community/1">
+              <CommunityCard />
+            </Link>
           </GridItem>
           <GridItem h="100%">
-            <CommunityCard />
-          </GridItem>
-          <GridItem h="100%">
-            <CommunityCard />
-          </GridItem>
-          <GridItem h="100%">
-            <CommunityCard />
+            <Link href="/community/1">
+              <CommunityCard />
+            </Link>
           </GridItem>
         </Grid>
       </Box>

@@ -12,7 +12,11 @@ interface NavLinkItemProps {
 
 function useGetIsActive(path: string) {
   const router = useRouter();
-  return router.pathname === path;
+  const currentPath = router.pathname;
+  if (path !== '/' && currentPath === path) {
+    return true;
+  }
+  return currentPath.startsWith(path + '/') || currentPath === path;
 }
 
 const NavLinkItem = ({
