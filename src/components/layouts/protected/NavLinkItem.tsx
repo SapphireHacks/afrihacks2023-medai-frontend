@@ -7,6 +7,7 @@ interface NavLinkItemProps {
   label: string;
   icon?: React.FC;
   activeIcon?: React.FC;
+  closeNav?: () => void;
 }
 
 function useGetIsActive(path: string) {
@@ -14,11 +15,25 @@ function useGetIsActive(path: string) {
   return router.pathname === path;
 }
 
-const NavLinkItem = ({ path, label, icon, activeIcon }: NavLinkItemProps) => {
-  const isActive = useGetIsActive(path)
+const NavLinkItem = ({
+  path,
+  label,
+  icon,
+  activeIcon,
+  closeNav
+}: NavLinkItemProps) => {
+  const isActive = useGetIsActive(path);
 
   return (
-    <Link as={NextLink} href={path} _hover={{ textDecoration: "none" }} _active={{ textDecoration: "none" }} >
+    <Link
+      as={NextLink}
+      href={path}
+      _hover={{
+        textDecoration: 'none'
+      }}
+      _active={{ textDecoration: 'none' }}
+      onClick={closeNav}
+    >
       <Flex
         align="center"
         gap="1rem"
@@ -27,13 +42,17 @@ const NavLinkItem = ({ path, label, icon, activeIcon }: NavLinkItemProps) => {
         bg={isActive ? 'primary.800' : 'unset'}
         borderRadius="0.5rem"
         color={isActive ? 'white' : 'black'}
+        _hover={{
+          bg: isActive ? 'primary.900' : 'primary.100'
+        }}
       >
-        <Icon stroke={isActive ? "#fff" : undefined} as={icon} w="3rem" h="3rem" />
-        <Text
-          fontSize="lg"
-          fontWeight="500"
-          textDecoration="none"
-        >
+        <Icon
+          stroke={isActive ? '#fff' : undefined}
+          as={icon}
+          w="3rem"
+          h="3rem"
+        />
+        <Text fontSize="lg" fontWeight="500" textDecoration="none">
           {label}
         </Text>
       </Flex>
@@ -43,8 +62,12 @@ const NavLinkItem = ({ path, label, icon, activeIcon }: NavLinkItemProps) => {
 
 export default NavLinkItem;
 
-
-export function NavLinkIconItem({ path, label, icon, activeIcon }: NavLinkItemProps){
+export function NavLinkIconItem({
+  path,
+  label,
+  icon,
+  activeIcon
+}: NavLinkItemProps) {
   const isActive = useGetIsActive(path);
 
   return (
@@ -60,5 +83,5 @@ export function NavLinkIconItem({ path, label, icon, activeIcon }: NavLinkItemPr
         <Icon as={isActive ? activeIcon : icon} w="3rem" h="3rem" />
       </Flex>
     </Link>
-  )
+  );
 }

@@ -5,10 +5,10 @@ import navLinks from './navLinks';
 import LogoutIcon from '@/assets/icons/logOut';
 import EditIcon from '@/assets/icons/edit';
 import Image from 'next/image';
-import CreateNewChatButton from "@/components/buttons/CreateNewChatButton"
-import LogoutButton from "@/components/buttons/LogoutButton"
+import CreateNewChatButton from '@/components/buttons/CreateNewChatButton';
+import LogoutButton from '@/components/buttons/LogoutButton';
 
-const Sidebar = () => {
+const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
   return (
     <Flex as="nav" flexDirection="column" bg="transparent" w="100%">
       <Flex
@@ -46,22 +46,18 @@ const Sidebar = () => {
                 label={item.label}
                 icon={item.icon}
                 activeIcon={item.activeIcon}
+                closeNav={closeNav}
               />
             </ListItem>
           ))}
         </List>
         <LogoutButton>
-          <Flex
-          gap="1rem"
-          p="0.8rem"
-          alignItems="center"
-          className="signout"
-        >
-          <Icon as={LogoutIcon} w="2rem" h="2rem" />
-          <Text fontSize="lg" color="#DC3545">
-            Sign Out
-          </Text>
-        </Flex>
+          <Flex gap="1rem" p="0.8rem" alignItems="center" className="signout">
+            <Icon as={LogoutIcon} w="2rem" h="2rem" />
+            <Text fontSize="lg" color="#DC3545">
+              Sign Out
+            </Text>
+          </Flex>
         </LogoutButton>
       </Flex>
     </Flex>

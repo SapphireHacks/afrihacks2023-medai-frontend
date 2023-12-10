@@ -10,7 +10,7 @@ import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 const Home = () => {
   const { shouldCreateNewConversation, activeConversationId } = useAppSelector(
     store => store.conversations
-  ); 
+  );
   return (
     <>
       <Head>
@@ -19,17 +19,21 @@ const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
-        <Flex
-          flexDir="column"
-          h="100dvh"
-          w="100%"
-          px="3.5%"
-          mx="auto"
-          overflow="hidden"
-        >
-          {shouldCreateNewConversation ? <LoadingState /> : <ActiveConversation/>}
-        </Flex>
+
+      <Flex
+        flexDir="column"
+        h="100dvh"
+        w="100%"
+        px="3.5%"
+        mx="auto"
+        overflow="hidden"
+      >
+        {shouldCreateNewConversation ? (
+          <LoadingState />
+        ) : (
+          <ActiveConversation />
+        )}
+      </Flex>
     </>
   );
 };
