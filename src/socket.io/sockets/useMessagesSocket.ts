@@ -3,13 +3,15 @@ import useSocket from '../useSocket';
 import useListenForEvents from '../useListenForEvents';
 import {
   appendSingleMessageToConversation,
-  appendMultipleMessagesToConversation
+  appendMultipleMessagesToConversation,
+  appendUserMessageAndAIResponseToConversation,
+  updateMessgeToSend
 } from '@/redux/conversations/slice';
 import { Message } from '@/types/chat';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 export default function useMessagesSocket() {
-  const { activeConversationId, conversations } = useAppSelector(
+  const { activeConversationId, conversations, messageToSend } = useAppSelector(
     store => store.conversations
   );
 
@@ -28,7 +30,8 @@ export default function useMessagesSocket() {
   const handlers = useMemo(() => {
     return {
       new: (data: any) => {
-        dispatch(appendMultipleMessagesToConversation(data));
+        dispatch(appendUserMessageAndAIResponseToConversation(data));
+        dispatch(updateMessgeToSend(null));
       },
       getMany: (data: any) => {
         dispatch(appendMultipleMessagesToConversation(data));
@@ -51,11 +54,9 @@ export default function useMessagesSocket() {
     ) {
       messagesSocket.emit('getMany', {
         conversationId: activeConversation._id,
-        query: {
-          page: activeConversation.page,
-          limit: 100,
-          sort: '-createdAt'
-        }
+        page: activeConversation.page,
+        limit: 100,
+        sort: '-createdAt'
       });
     }
   }, [dispatch, messagesSocket, activeConversation]);
@@ -73,13 +74,14 @@ export default function useMessagesSocket() {
     }
   }, [messagesSocket, activeConversation]);
 
-  // useEffect(() => {
-  //   if (idOfConversationToDelete !== null) {
-  //     conversationsSocket.emit('deleteOne', {
-  //       conversationId: idOfConversationToDelete
-  //     });
-  //   }
-  // }, [conversationsSocket, idOfConversationToDelete, dispatch]);
+  useEffect(() => {
+    if (messageToSend !== null) {
+      messagesSocket.emit('new', {
+        conversationId: messageToSend.conversationId,
+        newMessage: { content: messageToSend.content }
+      });
+    }
+  }, [messagesSocket, messageToSend]);
 
   return messagesSocket;
 }

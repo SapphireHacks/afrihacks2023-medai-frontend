@@ -34,7 +34,7 @@ export const UserBubble = ({
     profileImage: string;
     firstName: string;
     lastName: string;
-  };
+  } | null;
 }) => {
   return (
     <Bubble
@@ -43,8 +43,8 @@ export const UserBubble = ({
       justification="end"
     >
       <UserChatAvatar
-        imageSrc={user.profileImage}
-        name={`${user.firstName} ${user.lastName}`}
+        imageSrc={user?.profileImage}
+        name={`${user?.firstName} ${user?.lastName}`}
       />
       <UserTextContent content={content} />
     </Bubble>

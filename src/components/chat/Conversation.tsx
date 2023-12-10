@@ -1,16 +1,17 @@
 import { Message } from '@/types/chat';
 import { UserBubble, AIBubble, AIBubbleLoading } from './ChatBubbles';
-import { Flex, Button } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { getCoordinates, getNearbyHospitals } from '@/utils/getPlacesHelpers';
 import { useState } from 'react';
+import useSortMessages from "@/hooks/useSortMessages"
+import { User } from "@/redux/user/slice"
 
-export default function Conversation({ messages }: { messages: Message[] }) {
-  const tempUser = {
-    firstName: 'Haley',
-    lastName: 'Thomas',
-    profileImage: ''
-  };
+export default function Conversation({ messages, messageToSend, user, }: 
+  { messages: Message[], messageToSend: {
+  content: string,
+  conversationId: string | null
 
+} | null ;  user: User["data"] | null}) {
   // to ensure we don't make unnecessary API calls while testing
   const [hospitals, setHospitals] = useState(null);
   const [lastLocation, setLastLocation] = useState('');
@@ -38,6 +39,7 @@ export default function Conversation({ messages }: { messages: Message[] }) {
     }
   };
 
+  const sortedMessages = useSortMessages(messages)
   return (
     <Flex flexDirection="column" gap="16px" w="100%" position="relative">
       {/* <Button
@@ -51,10 +53,12 @@ export default function Conversation({ messages }: { messages: Message[] }) {
         onClick={() => getHospitals('Ikoyi, Lagos')}>
         Find Hospitals
       </Button> */}
-      {messages.map(msg => {
-        if(msg.role === "user") return <UserBubble key={msg._id} user={tempUser} content={msg.content} />
+      {sortedMessages.map(msg => {
+        if(msg.role === "user") return <UserBubble key={msg._id} user={user} content={msg.content} />
         else return <AIBubble key={msg._id} content={msg.content} />
       })}
+      { messageToSend !== null && <UserBubble user={user} content={messageToSend.content} />}
+      { messageToSend !== null && <AIBubbleLoading />}
     </Flex>
   );
 }

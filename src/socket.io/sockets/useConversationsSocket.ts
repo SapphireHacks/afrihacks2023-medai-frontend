@@ -7,10 +7,12 @@ import {
   updateActiveConversationId,
   updateIdOfChatToDelete,
   deleteConversation,
-  clearConversations,
-  StoreConversation
+  updateLoading,
+  StoreConversation,
+  resetShouldClearConversations
 } from '@/redux/conversations/slice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import toast from 'react-hot-toast';
 
 export default function useConversationsSocket() {
   const {
@@ -18,9 +20,10 @@ export default function useConversationsSocket() {
     hasFetchedAll,
     hasFetchedInitial,
     idOfConversationToDelete,
+    shouldClearConversations
   } = useAppSelector(store => store.conversations);
   const events = useMemo(
-    () => ['new', 'getMany', 'deleteMany', 'deleteOne'],
+    () => ['new', 'getMany', 'deleteAll', 'deleteOne'],
     []
   );
   const { socket: conversationsSocket, disconnect } = useSocket({
@@ -37,8 +40,12 @@ export default function useConversationsSocket() {
           })
         );
         dispatch(updateActiveConversationId(data.conversation._id));
+        dispatch(updateLoading(false))
       },
-      getMany: (data: { conversations: StoreConversation[]; hasMore: boolean }) => {
+      getMany: (data: {
+        conversations: StoreConversation[];
+        hasMore: boolean;
+      }) => {
         const { conversations, hasMore } = data;
         dispatch(
           updateConversations({
@@ -47,12 +54,14 @@ export default function useConversationsSocket() {
           })
         );
       },
-      deleteMany: () => {
-        dispatch(clearConversations());
+      deleteAll: (data: any) => {
+        dispatch(resetShouldClearConversations());
+        toast.success(data.message);
       },
       deleteOne: (data: any) => {
-        dispatch(deleteConversation(data.conversationId))
+        dispatch(deleteConversation(data.conversationId));
         dispatch(updateIdOfChatToDelete(null));
+        toast.success(data.message);
       }
     };
   }, [dispatch, hasFetchedAll]);
@@ -82,6 +91,12 @@ export default function useConversationsSocket() {
       });
     }
   }, [conversationsSocket, idOfConversationToDelete, dispatch]);
+
+  useEffect(() => {
+    if (shouldClearConversations) {
+      conversationsSocket.emit('deleteAll');
+    }
+  }, [conversationsSocket, dispatch, shouldClearConversations]);
 
   return conversationsSocket;
 }

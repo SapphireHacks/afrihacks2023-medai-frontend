@@ -3,7 +3,8 @@ export type Message = {
   conversation: string;
   content: string;
   role: 'user' | 'assistant' | 'system';
-  _id: string
+  _id: string,
+  createdAt?: string
 };
 export type Conversation = {
   _id: string;
