@@ -11,7 +11,27 @@ const SingleCommunity = () => {
   const { communityId } = router.query;
 
   return (
-    <Box h="100%" p="2rem">
+    <Box
+      h="100vh"
+      overflowY="auto"
+      p="2rem"
+      py={{
+        base: '0',
+        md: '2rem'
+      }}
+      sx={{
+        '::-webkit-scrollbar': {
+          width: '10px'
+        },
+        '::-webkit-scrollbar-thumb': {
+          background: 'gray',
+          borderRadius: '6px'
+        },
+        '::-webkit-scrollbar-thumb:hover': {
+          background: 'darkgray'
+        }
+      }}
+    >
       <Box
         h="4rem"
         mb="3rem"

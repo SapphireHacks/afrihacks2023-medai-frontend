@@ -17,7 +17,10 @@ const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
         justifyContent="start"
         alignItems="start"
         rowGap="32px"
-        w="78.9%"
+        w={{
+          base: '100%',
+          md: '78.9%'
+        }}
         mx="auto"
       >
         <Flex alignItems="center" justifyContent="space-between" w="100%">
@@ -27,7 +30,7 @@ const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
               alt="medai logo"
               width={50}
               height={50}
-              style={{ width: '7rem', height: 'auto', objectFit: "cover" }}
+              style={{ width: '7rem', height: 'auto', objectFit: 'cover' }}
             />
             <Text fontSize="lg" fontWeight="550">
               New Chat

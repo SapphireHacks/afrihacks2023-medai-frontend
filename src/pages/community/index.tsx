@@ -148,7 +148,7 @@ const Community = () => {
       )}
       <Box
         w="100%"
-        h="100vh"
+        h="100%"
         p="2rem"
         pt={{
           base: '0',
