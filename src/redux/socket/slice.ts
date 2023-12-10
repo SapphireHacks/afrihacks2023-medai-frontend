@@ -28,7 +28,8 @@ export const socketSlice = createSlice({
       const disconnector = state.disconnectors.find(
         it => typeof it[action.payload] === 'function'
       );
-      if (disconnector && disconnector[action.payload]) disconnector[action.payload]();
+      if (disconnector && disconnector[action.payload])
+        disconnector[action.payload]();
       state.disconnectors = state.disconnectors.filter(
         it => Boolean(typeof it[action.payload]) === false
       );
