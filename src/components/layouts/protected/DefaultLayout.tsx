@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import LoadingState from '@/components/loading-state';
 import useConversationsSocket from '@/socket.io/sockets/useConversationsSocket';
+import useMessagesSocket from '@/socket.io/sockets/useMessagesSocket';
 
 const ProtectedLayout = ({
   children,
@@ -34,6 +35,7 @@ const ProtectedLayout = ({
   }, [tokenExpired, router]);
 
   useConversationsSocket();
+  useMessagesSocket()
 
   if (isLoading) {
     return <LoadingState />;

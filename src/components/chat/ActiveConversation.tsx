@@ -3,26 +3,35 @@ import ChatInput from '@/components/chat/ChatInput';
 import Conversation from '@/components/chat/Conversation';
 import { useMemo } from 'react';
 import { useAppSelector } from '@/redux/hooks';
+import Loader from "@/components/loading-state"
 
 export default function ActiveConversation() {
-  const { activeConversationId, conversations } = useAppSelector(
+  const { activeConversationId, conversations, messageToSend, loading } = useAppSelector(
     store => store.conversations
+  );
+  const { data } = useAppSelector(
+    store => store.user
   );
   const activeConversation = useMemo(() => {
     return conversations.find(it => it._id === activeConversationId);
   }, [conversations, activeConversationId]);
 
+  if(loading) return <Loader/>
   return (
     <>
-      {activeConversation && (
-        <Box
-          h="calc(100dvh-773.03)"
-          pt={{ base: '0', md: '100px' }}
-          overflow="auto"
-        >
-          <Conversation messages={activeConversation.messages} />
+      <Box
+        h="calc(100dvh - 77.3px)"
+        pt={{ base: '0', md: '100px' }}
+        overflow="auto"
+      >
+        { activeConversation ? 
+          <Conversation user={data} messageToSend={messageToSend} messages={activeConversation.messages || []} /> : 
+          <Conversation user={data} messageToSend={messageToSend} messages={[{
+            role: "assistant", _id: "0", content: `Hello, How may I assist you today?`,
+            conversationOwner: "", conversation: "",
+          }]} /> }
+       
         </Box>
-      )}
       <Box position="sticky" top="100%" bottom="0" w="100%" p="1.6rem">
         <ChatInput />
         <Text

@@ -1,10 +1,14 @@
 import { Flex, Textarea, IconButton } from '@chakra-ui/react';
 import SendIcon from '@/assets/icons/send';
 import MicIcon from '@/assets/icons/microphone';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import useSpeechRecognition from '@/utils/speechRecognition';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { updateMessgeToSend } from "@/redux/conversations/slice"
 
 export default function ChatInput() {
+  const dispatch = useAppDispatch()
+  const { activeConversationId, messageToSend } = useAppSelector(store => store.conversations)
   const [message, setMessage] = useState('');
   const {
     text,
@@ -13,6 +17,22 @@ export default function ChatInput() {
     stopListening,
     hasRecognitionSupport
   } = useSpeechRecognition(setMessage, () => message);
+
+  const handleSendMessage = useCallback(
+    (e: any) => {
+      e.stopPropagation();
+      if (message.length === 0 || messageToSend !== null) return;
+      if ((e.key && e.key === 'Enter') || !e.key) {
+        e.preventDefault();
+        dispatch(updateMessgeToSend({
+          conversationId: activeConversationId,
+          content: message,
+        }))
+        setMessage("")
+      }
+    },
+    [message, activeConversationId, messageToSend, dispatch]
+  );
 
   return (
     <Flex
@@ -26,6 +46,7 @@ export default function ChatInput() {
       p={{ base: '0.8rem', md: '1.6rem' }}
     >
       <Textarea
+        onKeyDown={handleSendMessage}
         placeholder="Message Doc MedAI"
         p={{ base: '0.5rem', md: '1rem' }}
         lineHeight="150%"
@@ -49,6 +70,9 @@ export default function ChatInput() {
         }}
       />
       <IconButton
+        disabled={message.length === 0 || messageToSend !== null}
+        opacity={message.length === 0 || messageToSend !== null ? "0.5" : "1"}
+        onClick={handleSendMessage}
         icon={<SendIcon />}
         aria-label="Send message"
         h="4rem"
