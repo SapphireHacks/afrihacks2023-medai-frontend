@@ -5,7 +5,7 @@ export const configOptions = () => {
   if (!accessToken) {
     accessToken = window.localStorage.getItem('user');
   }
-  if (accessToken) {
+  if (accessToken && accessToken !== "undefined") {
     return JSON.parse(accessToken);
   }
   return false;
