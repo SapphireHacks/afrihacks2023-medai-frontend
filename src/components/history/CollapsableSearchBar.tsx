@@ -16,9 +16,11 @@ import useSpeechRecognition from '@/utils/speechRecognition';
 
 export default function CollapsableSearchBar({
   children,
-  childrenWhenExpanded
+  childrenWhenExpanded,
+  disabled
 }: Children & {
   childrenWhenExpanded?: Children['children'];
+  disabled: boolean;
 }) {
   const [showSearchBar, setShowSearchBar] = useBoolean(false);
 
@@ -26,9 +28,10 @@ export default function CollapsableSearchBar({
     <Flex alignItems="center" bg="white">
       <Box position="relative" w={showSearchBar ? '100%' : ''}>
         <Button
-          onClick={setShowSearchBar.toggle}
+          onClick={disabled ?  setShowSearchBar.off : setShowSearchBar.toggle}
           display={showSearchBar ? 'none' : 'block'}
           bg="transparent"
+          opacity={disabled ? '0.4' : '1'}
         >
           {children}
         </Button>
@@ -85,7 +88,7 @@ function SearchInput() {
           type="text"
           placeholder="Enter a search"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={e => setMessage(e.target.value)}
           bg="white.500"
         />
         {hasRecognitionSupport && (

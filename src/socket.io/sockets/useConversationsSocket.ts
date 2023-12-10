@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import useSocket from '../useSocket';
 import useListenForEvents from '../useListenForEvents';
+import { updateConversations, Conversation } from '@/redux/conversations/slice';
+import { useAppDispatch } from '@/redux/hooks';
 
 export default function useConversationsSocket() {
   const events = useMemo(
@@ -10,13 +12,20 @@ export default function useConversationsSocket() {
   const [conversationsSocket, disconnect] = useSocket({
     namespace: '/conversations'
   });
+  const dispatch = useAppDispatch();
   const handlers = useMemo(() => {
     return {
       new: (data: any) => {
         console.log(data, 'new');
       },
-      getMany: (data: any) => {
-        console.log(data, 'getMany');
+      getMany: (data: {
+        conversations: Conversation[]
+        hasMore: boolean
+      }) => {
+        const { conversations, hasMore } = data
+        dispatch(updateConversations({
+          conversations, hasMore, 
+        }))
       },
       deleteMany: (data: any) => {
         console.log(data, 'deleteMany');
@@ -25,7 +34,8 @@ export default function useConversationsSocket() {
         console.log(data);
       }
     };
-  }, []);
+  }, [dispatch]);
+  
   useListenForEvents(conversationsSocket, {
     events,
     handlers

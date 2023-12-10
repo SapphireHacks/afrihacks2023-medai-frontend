@@ -9,21 +9,42 @@ export type Conversation = {
 };
 
 export interface ConversationsState {
+  currentPage: number;
   conversations: Conversation[];
   activeConversation: string | null;
+  hasFetchedInitial: boolean
+  hasFetchedAll: boolean
 }
 
 const initialState: ConversationsState = {
   conversations: [],
-  activeConversation: null
+  activeConversation: null,
+  currentPage: 1,
+  hasFetchedInitial: false,
+  hasFetchedAll: false
 };
 
 export const conversationsSlice = createSlice({
   name: 'conversations',
   initialState,
-  reducers: {}
+  reducers: {
+    updateConversations: (
+      state,
+      action: PayloadAction<{ conversations: Conversation[]; hasMore: boolean }>
+    ) => {
+      console.log("here")
+      if(state.hasFetchedInitial === false) state.hasFetchedInitial = true
+      state.conversations = 
+        Array.from(new Set(
+          [...state.conversations, ...action.payload.conversations].map(el =>
+            JSON.stringify(el)
+          )
+        )).map(el => JSON.parse(el));
+      state.currentPage += 1
+    }
+  }
 });
 
-export const {} = conversationsSlice.actions;
+export const { updateConversations } = conversationsSlice.actions;
 
 export default conversationsSlice.reducer;
