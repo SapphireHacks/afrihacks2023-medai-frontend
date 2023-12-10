@@ -153,11 +153,7 @@ const Login = () => {
                     fontSize="base"
                     placeholder="Enter your password"
                     {...register('password', {
-                      required: 'Password is required',
-                      minLength: {
-                        value: 8,
-                        message: 'Password must have at least 8 characters'
-                      }
+                      required: 'Password is required'
                     })}
                   />
                   <InputRightElement width="4.5rem" mt="1.25rem">

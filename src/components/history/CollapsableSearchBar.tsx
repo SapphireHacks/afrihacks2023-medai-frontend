@@ -32,6 +32,8 @@ export default function CollapsableSearchBar({
           display={showSearchBar ? 'none' : 'block'}
           bg="transparent"
           opacity={disabled ? '0.4' : '1'}
+          p="0"
+          h="max-content"
         >
           {children}
         </Button>

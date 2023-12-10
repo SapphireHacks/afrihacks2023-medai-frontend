@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useMemo, useCallback, useState } from 'react';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 export default function useSocket({
   onConnect,
@@ -50,7 +50,6 @@ export default function useSocket({
     socket.on('reconnect_error', () => {
       onReconnectError && onReconnectError();
     });
-
     return () => {
       socket.off('connect', () => {
         onConnect && onConnect();
@@ -78,5 +77,5 @@ export default function useSocket({
     }
   }, []);
 
-  return [socket, disconnect];
+  return { socket, disconnect };
 }

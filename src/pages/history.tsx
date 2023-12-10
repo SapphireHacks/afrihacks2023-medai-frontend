@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import ProtectedLayout from '@/components/layouts/protected/DefaultLayout';
-import { Button, Icon, Flex } from '@chakra-ui/react';
+import { Icon, Flex, Box } from '@chakra-ui/react';
 import SearchIcon from '@/assets/icons/search';
 import TrashIcon from '@/assets/icons/trash';
 import RightChevron from '@/assets/icons/rightChevron';
@@ -8,23 +8,14 @@ import NoHIstoryView from '@/components/history/NoHIstoryView';
 import HistoryList from '@/components/history/HistoryList';
 import DesktopHeader from '@/components/history/DesktopHeader';
 import CollapsableSearchBar from '@/components/history/CollapsableSearchBar';
-import useConversationsSocket from '@/socket.io/sockets/useConversationsSocket';
-import { useEffect } from 'react';
+import ClearHistoryButton from '@/components/history/ClearHistoryButton';
 import { useAppSelector } from '@/redux/hooks';
-import { Socket } from 'socket.io-client';
 import LoadingState from '@/components/loading-state';
 
 const History = () => {
   const { hasFetchedInitial, conversations } = useAppSelector(
     store => store.conversations
   );
-  const conversationsSocket = useConversationsSocket();
-
-  useEffect(() => {
-    if (hasFetchedInitial === false) {
-      (conversationsSocket as Socket).emit('getMany', { page: 1, limit: 100 });
-    }
-  }, [conversationsSocket, hasFetchedInitial]);
 
   return (
     <>
@@ -34,7 +25,7 @@ const History = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex flexDirection="column" h={{ base: '80dvh', md: '100dvh' }} w="100%">
+      <Flex flexDirection="column" h={{ base: '80dvh', md: '100dvh' }} overflow="hidden" w="100%">
         <DesktopHeader hasNoHistory={conversations.length === 0} />
         {hasFetchedInitial ? (
           <>
@@ -49,24 +40,25 @@ const History = () => {
 };
 
 function HeaderActionItems() {
-  const { hasFetchedInitial, conversations } = useAppSelector(
-    store => store.conversations
-  );
+  const { conversations } = useAppSelector(store => store.conversations);
   return (
-    <Flex alignItems="center">
+    <Flex alignItems="center" gap="1rem">
       <CollapsableSearchBar
         disabled={conversations.length === 0}
         childrenWhenExpanded={<Icon as={RightChevron} />}
       >
         <Icon as={SearchIcon} w="2rem" h="2rem" />
       </CollapsableSearchBar>
-      <Button
-        bg="transparent"
-        position="static"
-        opacity={conversations.length === 0 ? '0.4' : '1'}
-      >
-        <Icon as={TrashIcon} w="2rem" h="2rem" />
-      </Button>
+      <ClearHistoryButton disabled={conversations.length === 0}>
+        <Box 
+          bg="white.500" w="2rem" h="2rem"
+          position="static"
+          opacity={conversations.length === 0 ? '0.4' : '1'}
+          as="button"
+        >
+         <Icon as={TrashIcon}  />
+        </Box>
+      </ClearHistoryButton>
     </Flex>
   );
 }

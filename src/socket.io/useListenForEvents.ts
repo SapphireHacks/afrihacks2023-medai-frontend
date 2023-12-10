@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Socket } from 'socket.io-client';
 
 export default function useListenForEvents(
-  socket: Socket | (() => void),
+  socket: Socket,
   {
     events,
     handlers
@@ -13,7 +13,7 @@ export default function useListenForEvents(
 ) {
   useEffect(() => {
     events.forEach(event => {
-      (socket as Socket).on(
+      socket.on(
         event,
         data =>
           handlers[event as keyof typeof handlers] &&
@@ -23,7 +23,7 @@ export default function useListenForEvents(
 
     return () => {
       events.forEach(event => {
-        (socket as Socket).off(event, handlers[event as keyof typeof handlers]);
+        socket.off(event, handlers[event as keyof typeof handlers]);
       });
     };
   }, [events, handlers, socket]);

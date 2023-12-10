@@ -1,7 +1,8 @@
-import { Text, Flex, Icon, Button, } from '@chakra-ui/react';
+import { Text, Flex, Icon, Box } from '@chakra-ui/react';
 import CollapsableSearchBar from './CollapsableSearchBar';
 import SearchIcon from '@/assets/icons/search';
 import TrashIcon from '@/assets/icons/trash';
+import ClearHistoryButton from './ClearHistoryButton';
 
 export default function DesktopHeader({
   hasNoHistory
@@ -23,12 +24,15 @@ export default function DesktopHeader({
         History
       </Text>
       <Flex flexGrow={hasNoHistory ?"": "1"} ml="auto" justify="end" gap="1rem" alignItems="center" w="fit-content">
-        <CollapsableSearchBar disabled={hasNoHistory}>
-          <Icon as={SearchIcon} />
+        <CollapsableSearchBar disabled={hasNoHistory} childrenWhenExpanded={<Icon as={SearchIcon}  w="2rem" h="2rem"  />}>
+          <Flex justify="center" alignItems="stretch" bg="white.500" p="1.2rem" borderRadius="8px">
+            <Icon as={SearchIcon}  w="2rem" h="2rem"  /></Flex>
         </CollapsableSearchBar>
-        <Button disabled={hasNoHistory} opacity={hasNoHistory ? '0.4' : '1'} bg="transparent" position="static">
-          <Icon as={TrashIcon} w="2rem" h="2rem" />
-        </Button>
+        <ClearHistoryButton disabled={hasNoHistory}>
+           <Flex justify="center" alignItems="center" bg="white.500" p="1rem" borderRadius="8px" as="button" cursor="pointer" opacity={hasNoHistory ? '0.4' : '1'} position="static"> 
+              <Icon as={TrashIcon} w="2rem" h="2rem" />
+            </Flex>
+        </ClearHistoryButton>
       </Flex>
     </Flex>
   );
