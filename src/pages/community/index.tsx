@@ -41,16 +41,6 @@ const Community = () => {
     }
   });
 
-  // Get user details
-  useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-    console.log(storedUser);
-    setUserDetails(storedUser);
-    setHasAcceptedTerms(storedUser.hasAcceptedCommunityTerms);
-    fetchCommunities();
-  }, []);
-
-  // Fetch communities
   const fetchCommunities = async () => {
     const result = await makeRequest({
       url: urls.getCommunities,
@@ -59,9 +49,15 @@ const Community = () => {
     });
     if (result && result.status === 'success') {
       setCommunities(result.data);
-      // console.log(communities.community);
     }
   };
+  // Get user details
+  useEffect(() => {
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    setUserDetails(storedUser);
+    setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
+    fetchCommunities();
+  }, []);
 
   // Speech Recognition
   const [searchText, setSearchText] = useState('');
@@ -82,9 +78,14 @@ const Community = () => {
     });
 
     if (result && result.status === 'success') {
+      const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+
       const updatedUser = {
-        ...userDetails.user,
-        hasAcceptedCommunityTerms: true
+        ...storedUser,
+        user: {
+          ...storedUser.user,
+          hasAcceptedCommunityTerms: true
+        }
       };
       setUserDetails(updatedUser);
       setHasAcceptedTerms(true);

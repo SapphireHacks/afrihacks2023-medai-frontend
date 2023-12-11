@@ -48,7 +48,7 @@ const SignUp = () => {
     password: string;
   }> = async (data: any) => {
     if (!data) return;
-    console.log(data);
+
     const result: any = await makeRequest({
       url: urls.createUser,
       method: 'post',
@@ -58,7 +58,7 @@ const SignUp = () => {
     if (!result) {
       return;
     }
-    console.log(result);
+
     if (result.status === 'success') {
       toast.success(
         result.data.message ||

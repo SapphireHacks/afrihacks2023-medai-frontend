@@ -8,7 +8,9 @@ const urls = {
     `${baseUrl}/users/verify-email/${userId}/${emailVerificationToken}`,
   logoutUser: `${baseUrl}/users/logout`,
   updateUser: `${baseUrl}/users/me`,
-  getCommunities: `${baseUrl}/communities`
+  getCommunities: `${baseUrl}/communities`,
+  getCommunityById: (communityId: string) =>
+    `${baseUrl}/communities/${communityId}`
 };
 
 export default urls;

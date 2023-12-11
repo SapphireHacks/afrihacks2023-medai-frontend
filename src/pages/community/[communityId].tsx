@@ -5,10 +5,38 @@ import { useRouter } from 'next/router';
 import CommunityBg from '@/assets/images/community-header-bg.png';
 import Image from 'next/image';
 import CardAvatar from '@/assets/images/community-card-avatar.png';
+import { useEffect, useState } from 'react';
+import useAxios from '@/hooks/use-axios';
+import urls from '@/services/urls';
+import LoadingState from '@/components/loading-state';
 
 const SingleCommunity = () => {
   const router = useRouter();
+  const { loading, makeRequest } = useAxios();
   const { communityId } = router.query;
+  const [community, setCommunity] = useState({} as any);
+
+  const fetchCommunity = async () => {
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const result = await makeRequest({
+      url: urls.getCommunityById(communityId as string),
+      method: 'get',
+      token: storedUser?.token
+    });
+    if (result && result.status === 'success') {
+      setCommunity(result.data);
+    }
+  };
+
+  useEffect(() => {
+    if (!communityId) return;
+    fetchCommunity();
+  }, []);
+
+  if (loading) return <LoadingState />;
+
+  const { name, primaryCoverImage, secondaryCoverImage } =
+    community?.community || {};
 
   return (
     <Box
@@ -47,7 +75,7 @@ const SingleCommunity = () => {
       </Box>
       <Box h="20%" w="100%" pos="relative" borderRadius="0.5rem">
         <Image
-          src={CommunityBg}
+          src={primaryCoverImage !== '' ? primaryCoverImage : CommunityBg}
           alt="Community header"
           style={{
             width: '100%',
@@ -71,7 +99,9 @@ const SingleCommunity = () => {
         >
           <Box h="6rem" w="6rem">
             <Image
-              src={CardAvatar}
+              src={
+                secondaryCoverImage !== '' ? secondaryCoverImage : CardAvatar
+              }
               alt="Community Avatar"
               style={{
                 width: '100%',
@@ -82,7 +112,7 @@ const SingleCommunity = () => {
             />
           </Box>
           <Text fontSize="lg" fontWeight="550" mb="-.5rem">
-            Health and Lifestyle{' '}
+            {name}
           </Text>
         </Flex>
       </Box>
