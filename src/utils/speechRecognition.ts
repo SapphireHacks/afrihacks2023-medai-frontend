@@ -12,17 +12,7 @@ const useSpeechRecognition = (
 
   const startListening = useCallback(() => {
     if (!recognition) return;
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const transcript = Array.from(event.results)
-        .map(result => result[0])
-        .map(result => result.transcript)
-        .join('');
-      setText(prevText => prevText + ' ' + transcript);
-      setMessage(getMessage() + ' ' + transcript);
-      recognition.stop();
-      setListening(false);
-      recognition.abort();
-    };
+    if(listening) return
     setListening(true);
     recognition.start();
   }, [getMessage, recognition, setMessage]);
@@ -31,6 +21,22 @@ const useSpeechRecognition = (
     if (recognition) recognition.stop();
     setListening(false);
   }, [recognition]);
+
+  useEffect(() => {
+    if(recognition){
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join('');
+        setText(prevText => prevText + ' ' + transcript);
+        setMessage(getMessage() + ' ' + transcript);
+        recognition.stop();
+        setListening(false);
+        recognition.abort();
+      };
+    }
+  }, [recognition])
 
   useEffect(() => {
     if ('webkitSpeechRecognition' in window && recognition === null) {
