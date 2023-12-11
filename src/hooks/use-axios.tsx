@@ -1,3 +1,4 @@
+import { ResponseData } from '@/types';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useCallback, useState } from 'react';
 
@@ -5,25 +6,34 @@ type Request<PType> = {
   payload?: PType;
   url: string;
   method: 'post' | 'delete' | 'patch' | 'put' | 'get';
+  token: string | null;
 };
 
-type MakeRequest<RType> = <PType>(args: Request<PType>) => Promise<{
+type MakeRequest<RType extends ResponseData> = <PType>(
+  args: Request<PType>
+) => Promise<{
   data: RType | null;
   status: 'success' | 'error';
   error: unknown;
 }>;
 
-function useAxios<RType>() {
+function useAxios<RType extends ResponseData>() {
   const [loading, setLoading] = useState<boolean>(false);
   const makeRequest: MakeRequest<RType> = useCallback(
-    async ({ payload, method, url }) => {
+    async ({ payload, method, url, token }) => {
       try {
         setLoading(true);
         const response: AxiosResponse<RType> = await axios({
           url,
           method,
-          ...(payload && { data: payload })
+          ...(payload && { data: payload }),
+          ...(token && { headers: { Authorization: `Bearer ${token}` } })
         });
+        console.log(response);
+        if (response.data.status >= 400) {
+          throw new Error(response.data.message);
+        }
+
         return {
           data: response.data,
           status: 'success',

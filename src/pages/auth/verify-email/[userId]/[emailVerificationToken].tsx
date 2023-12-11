@@ -14,7 +14,8 @@ const VerifyEmail = () => {
   const verifyAccount = async () => {
     const result: any = await makeRequest({
       url: urls.verifyEmail(userId as string, emailVerificationToken as string),
-      method: 'get'
+      method: 'get',
+      token: null
     });
     if (!result) return;
     if (result.status === 'success') {

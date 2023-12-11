@@ -56,7 +56,8 @@ const SignUp = () => {
     const result: any = await makeRequest({
       url: urls.createUser,
       method: 'post',
-      payload: data
+      payload: data,
+      token: null
     });
     if (!result) {
       return;

@@ -21,6 +21,8 @@ import toast from 'react-hot-toast';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import urls from '../../services/urls';
 import { useRouter } from 'next/router';
+import { useAppDispatch } from '@/redux/hooks';
+import { setUser } from '@/redux/user/slice';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +30,7 @@ const Login = () => {
   const { loading, makeRequest } = useAxios();
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const formHook = useForm({
     defaultValues: {
@@ -51,20 +54,32 @@ const Login = () => {
     const result: any = await makeRequest({
       url: urls.loginUser,
       method: 'post',
-      payload: data
+      payload: data,
+      token: null
     });
+    console.log(result);
     try {
       if (!result) {
         return;
       }
       if (result.status === 'success') {
+        console.log('success');
         toast.success(result.data.message || 'Login successful');
+        dispatch(
+          setUser({
+            data: result.data.data.user,
+            token: result.data.data.token
+          })
+        );
         if (rememberMe) {
           localStorage.setItem('user', JSON.stringify(result.data.data));
         } else {
           sessionStorage.setItem('user', JSON.stringify(result.data.data));
         }
         router.push('/');
+      } else if (result.status === 'error') {
+        console.log('error', result.error);
+        toast.error(result.error || 'An error occurred');
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'An error occurred');
