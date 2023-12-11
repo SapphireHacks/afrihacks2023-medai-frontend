@@ -11,15 +11,15 @@ import {
   Flex
 } from '@chakra-ui/react';
 import navLinks from './navLinks';
-import { NavLinkIconItem } from './NavLinkItem';
+import { NavLinkIconItem } from '../components/NavLinkItem';
 import Image from 'next/image';
 import EditIcon from '@/assets/icons/edit';
 import DoubleChevronIcon from '@/assets/icons/doubleChevron';
-import NavigationDrawer from './NavigationDrawer';
+import NavigationDrawer from '../components/NavigationDrawer';
 import { useRef } from 'react';
 import LogoutIcon from '@/assets/icons/logOut';
-import CreateNewChatButton from "@/components/buttons/CreateNewChatButton"
-import LogoutButton from "@/components/buttons/LogoutButton"
+import CreateNewChatButton from '@/components/buttons/CreateNewChatButton';
+import LogoutButton from '@/components/buttons/LogoutButton';
 
 const CollapsedNavLayout = ({ children }: Children) => {
   const [isOpen, setIsOpen] = useBoolean();
@@ -50,7 +50,7 @@ const CollapsedNavLayout = ({ children }: Children) => {
                 alt="medai logo"
                 width={50}
                 height={50}
-                style={{ width: '7rem', height: 'auto', objectFit: "cover" }}
+                style={{ width: '7rem', height: 'auto', objectFit: 'cover' }}
               />
             </ListItem>
             <ListItem>

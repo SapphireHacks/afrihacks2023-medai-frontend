@@ -18,6 +18,7 @@ export interface User {
     passwordResetToken: string;
     expireAt: string;
     isVerified: boolean;
+    hasAcceptedCommunityTerms: boolean;
   } | null;
   token: string | null;
 }

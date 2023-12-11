@@ -29,7 +29,6 @@ function useAxios<RType extends ResponseData>() {
           ...(payload && { data: payload }),
           ...(token && { headers: { Authorization: `Bearer ${token}` } })
         });
-        console.log(response);
         if (response.data.status >= 400) {
           throw new Error(response.data.message);
         }

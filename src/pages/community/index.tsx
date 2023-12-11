@@ -32,9 +32,11 @@ const Community = () => {
   const data = useAppSelector(state => state.user.data);
   console.log(token, data);
 
-  // useEffect(() => {
-  //   onOpen();
-  // }, []);
+  useEffect(() => {
+    if (!data?.hasAcceptedCommunityTerms) {
+      onOpen();
+    }
+  }, [data?.hasAcceptedCommunityTerms, onOpen]);
 
   const [searchText, setSearchText] = useState('');
   const {
