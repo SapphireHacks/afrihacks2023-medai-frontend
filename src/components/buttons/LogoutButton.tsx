@@ -17,7 +17,7 @@ const LogoutButton = ({ children }: Children) => {
         method: 'get',
         token
       });
-      router.push('/');
+      router.push('/auth/login');
       sessionStorage.removeItem('user');
       toast.success('Logout Successful!');
     } catch (error: any) {

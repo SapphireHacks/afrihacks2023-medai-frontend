@@ -34,7 +34,7 @@ const Community = () => {
   const [communities, setCommunities] = useState([] as any);
   const [userDetails, setUserDetails] = useState({} as any);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
-  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       hasAcceptedCommunityTerms: false
@@ -43,9 +43,8 @@ const Community = () => {
 
   // Get user details
   useEffect(() => {
-    const storedUser = JSON.parse(
-      localStorage.getItem('user') || sessionStorage.getItem('user') || '{}'
-    );
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    console.log(storedUser);
     setUserDetails(storedUser);
     setHasAcceptedTerms(storedUser.hasAcceptedCommunityTerms);
     fetchCommunities();
@@ -75,26 +74,28 @@ const Community = () => {
   } = useSpeechRecognition(setSearchText, () => searchText);
 
   const submit = async (data: any) => {
-    console.log(data);
-    // const result = await makeRequest({
-    //   url: urls.updateUser,
-    //   method: 'put',
-    //   payload: data,
-    //   token: userDetails.token
-    // });
+    const result = await makeRequest({
+      url: urls.updateUser,
+      method: 'put',
+      payload: data,
+      token: userDetails.token
+    });
 
-    // if (result && result.status === 'success') {
-    //   console.log('success');
-    //   const updatedUser = { ...userDetails, hasAcceptedCommunityTerms: true };
-    //   setUser(updatedUser);
-    //   localStorage.setItem('user', JSON.stringify(updatedUser));
-    //   sessionStorage.setItem('user', JSON.stringify(updatedUser));
-    // }
+    if (result && result.status === 'success') {
+      const updatedUser = {
+        ...userDetails.user,
+        hasAcceptedCommunityTerms: true
+      };
+      setUserDetails(updatedUser);
+      setHasAcceptedTerms(true);
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      onClose();
+    }
   };
 
   return (
     <>
-      {!userDetails?.user?.hasAcceptedCommunityTerms && (
+      {!hasAcceptedTerms && (
         <Flex
           pos="absolute"
           bg="white"
@@ -196,7 +197,7 @@ const Community = () => {
           </form>
         </Flex>
       )}
-      {userDetails?.user?.hasAcceptedCommunityTerms && (
+      {hasAcceptedTerms && (
         <Box
           w="100%"
           h="100%"
