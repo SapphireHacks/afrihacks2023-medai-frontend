@@ -12,3 +12,8 @@ export type NextPageWithLayout = NextPage & {
   getLayout?: GetLayoutFunc;
   requireAuth?: boolean;
 };
+
+export interface ResponseData {
+  status: number;
+  message: string;
+}

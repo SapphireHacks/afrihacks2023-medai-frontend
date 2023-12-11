@@ -1,7 +1,7 @@
 import { Flex, Stack, Text, ListItem, List, Icon } from '@chakra-ui/react';
 import React from 'react';
 import NavLinkItem from './NavLinkItem';
-import navLinks from './navLinks';
+import navLinks from '../protected/navLinks';
 import LogoutIcon from '@/assets/icons/logOut';
 import EditIcon from '@/assets/icons/edit';
 import Image from 'next/image';

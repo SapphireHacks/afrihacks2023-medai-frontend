@@ -1,7 +1,7 @@
 import { Children } from '@/types/index';
 import { Show } from '@chakra-ui/react';
-import DesktopLayout from './Desktop';
-import MobileLayout from './Mobile';
+import DesktopLayout from '../components/Desktop';
+import MobileLayout from '../components/Mobile';
 import { configOptions } from '@/services/config';
 import { isTokenExpired } from '@/utils/checkToken';
 import { useRouter } from 'next/router';
@@ -35,7 +35,7 @@ const ProtectedLayout = ({
   }, [tokenExpired, router]);
 
   useConversationsSocket();
-  useMessagesSocket()
+  useMessagesSocket();
 
   if (isLoading) {
     return <LoadingState />;

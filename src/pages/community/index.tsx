@@ -24,13 +24,19 @@ import useSpeechRecognition from '@/utils/speechRecognition';
 import SearchIcon from '@/assets/icons/search';
 import CommunityCard from '@/components/community/CommunityCard';
 import Link from 'next/link';
+import { useAppSelector } from '@/redux/hooks';
 
 const Community = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const token = useAppSelector(state => state.user.token);
+  const data = useAppSelector(state => state.user.data);
+  console.log(token, data);
 
-  // useEffect(() => {
-  //   onOpen();
-  // }, []);
+  useEffect(() => {
+    if (!data?.hasAcceptedCommunityTerms) {
+      onOpen();
+    }
+  }, [data?.hasAcceptedCommunityTerms, onOpen]);
 
   const [searchText, setSearchText] = useState('');
   const {
