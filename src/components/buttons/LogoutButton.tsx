@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { Children } from '@/types/index';
 import { useRouter } from 'next/navigation';
 import useAxios from '@/hooks/use-axios';
@@ -8,7 +8,7 @@ import { useAppSelector } from '@/redux/hooks';
 
 const LogoutButton = ({ children }: Children) => {
   const token = useAppSelector(state => state.user.token);
-  const { makeRequest } = useAxios();
+  const { makeRequest, loading } = useAxios();
   const router = useRouter();
   const logUserOut = async () => {
     try {
@@ -26,9 +26,19 @@ const LogoutButton = ({ children }: Children) => {
   };
 
   return (
-    <Flex as="button" onClick={logUserOut}>
+    <Button
+      w="100%"
+      h="4rem"
+      borderRadius=".5rem"
+      onClick={logUserOut}
+      disabled={loading}
+      _hover={{
+        cursor: 'pointer',
+        bgColor: 'white'
+      }}
+    >
       {children}
-    </Flex>
+    </Button>
   );
 };
 
