@@ -24,20 +24,42 @@ import useSpeechRecognition from '@/utils/speechRecognition';
 import SearchIcon from '@/assets/icons/search';
 import CommunityCard from '@/components/community/CommunityCard';
 import Link from 'next/link';
-import { useAppSelector } from '@/redux/hooks';
+import { useForm } from 'react-hook-form';
+import useAxios from '@/hooks/use-axios';
+import urls from '@/services/urls';
+import LoadingState from '@/components/loading-state';
 
 const Community = () => {
+  const { loading, makeRequest } = useAxios();
+  const [communities, setCommunities] = useState([] as any);
+  const [userDetails, setUserDetails] = useState({} as any);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const token = useAppSelector(state => state.user.token);
-  const data = useAppSelector(state => state.user.data);
-  console.log(token, data);
-
-  useEffect(() => {
-    if (!data?.hasAcceptedCommunityTerms) {
-      onOpen();
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      hasAcceptedCommunityTerms: false
     }
-  }, [data?.hasAcceptedCommunityTerms, onOpen]);
+  });
 
+  const fetchCommunities = async () => {
+    const result = await makeRequest({
+      url: urls.getCommunities,
+      method: 'get',
+      token: userDetails.token
+    });
+    if (result && result.status === 'success') {
+      setCommunities(result.data);
+    }
+  };
+  // Get user details
+  useEffect(() => {
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    setUserDetails(storedUser);
+    setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
+    fetchCommunities();
+  }, []);
+
+  // Speech Recognition
   const [searchText, setSearchText] = useState('');
   const {
     text,
@@ -47,18 +69,43 @@ const Community = () => {
     hasRecognitionSupport
   } = useSpeechRecognition(setSearchText, () => searchText);
 
+  const submit = async (data: any) => {
+    const result = await makeRequest({
+      url: urls.updateUser,
+      method: 'put',
+      payload: data,
+      token: userDetails.token
+    });
+
+    if (result && result.status === 'success') {
+      const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+
+      const updatedUser = {
+        ...storedUser,
+        user: {
+          ...storedUser.user,
+          hasAcceptedCommunityTerms: true
+        }
+      };
+      setUserDetails(updatedUser);
+      setHasAcceptedTerms(true);
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      onClose();
+    }
+  };
+
   return (
     <>
-      {isOpen && (
+      {!hasAcceptedTerms && (
         <Flex
           pos="absolute"
           bg="white"
           flexDir="column"
           gap="1.5rem"
           w="100%"
-          h="calc(100vh - 6rem)"
+          h="max-content"
           zIndex="100"
-          mt="6rem"
+          // mt="6rem"
           textAlign="center"
           py={{
             base: '0',
@@ -105,203 +152,185 @@ const Community = () => {
             health tips, share inspiring testimonies, and support one another on
             their wellness journeys.
           </Text>
-          <FormLabel
-            htmlFor="join-community"
-            fontSize={{
-              base: 'xs',
-              md: 'sm'
-            }}
-            textAlign="center"
-            mt="1rem"
-            display="flex"
-            alignItems="flex-start"
-          >
-            <input
-              type="checkbox"
-              name="join-community"
-              style={{
-                marginRight: '0.5rem',
-                marginTop: '0.2rem',
-                width: '1.5rem',
-                height: '1.5rem'
+          <form onSubmit={handleSubmit(submit)}>
+            <FormLabel
+              htmlFor="join-community"
+              fontSize={{
+                base: 'xs',
+                md: 'sm'
               }}
-            />
-            By selecting this, you acknowledge and agree to adhere to our
-            community&apos;s guidelines, fostering a positive and supportive
-            environment for all members.
-          </FormLabel>
-
-          <Box>
-            <Button
-              h="4rem"
-              w={{
-                base: '100%',
-                md: '50%'
-              }}
-              borderRadius="0.5rem"
-              fontSize="lg"
-              fontWeight="400"
-              bg="primary.900"
-              mt="2rem"
-              color="white"
-              _hover={{ bg: 'primary.700' }}
-              onClick={onClose}
+              textAlign="center"
+              mt="1rem"
+              display="flex"
+              alignItems="flex-start"
             >
-              Join our community
-            </Button>
-          </Box>
+              <Checkbox
+                size="lg"
+                {...register('hasAcceptedCommunityTerms', {
+                  required: true
+                })}
+              />
+              By selecting this, you acknowledge and agree to adhere to our
+              community&apos;s guidelines, fostering a positive and supportive
+              environment for all members.
+            </FormLabel>
+
+            <Box>
+              <Button
+                h="4rem"
+                w={{
+                  base: '100%',
+                  md: '50%'
+                }}
+                borderRadius="0.5rem"
+                fontSize="lg"
+                fontWeight="400"
+                bg="primary.900"
+                mt="2rem"
+                color="white"
+                _hover={{ bg: 'primary.700' }}
+                type="submit"
+                isLoading={loading}
+              >
+                Join our community
+              </Button>
+            </Box>
+          </form>
         </Flex>
       )}
-      <Box
-        w="100%"
-        h="100%"
-        p="2rem"
-        pt={{
-          base: '0',
-          md: '2rem'
-        }}
-        mt={{
-          base: '-0.8rem',
-          md: '0'
-        }}
-        overflow="auto"
-        sx={{
-          '::-webkit-scrollbar': {
-            width: '10px'
-          },
-          '::-webkit-scrollbar-thumb': {
-            background: 'gray',
-            borderRadius: '6px'
-          },
-          '::-webkit-scrollbar-thumb:hover': {
-            background: 'darkgray'
-          }
-        }}
-      >
+      {hasAcceptedTerms && (
         <Box
-          h="4rem"
-          textAlign="center"
-          display={{
-            base: 'none',
-            md: 'block'
-          }}
-        >
-          <Text as="h2" fontSize="2xl" fontWeight="550">
-            Community
-          </Text>
-        </Box>
-
-        <InputGroup
-          h={{
-            base: '4rem',
-            md: '6rem'
-          }}
-          mt="2rem"
-        >
-          <InputLeftElement
-            m={{
-              base: '0.8rem',
-              md: '1.55rem'
-            }}
-          >
-            <IconButton
-              aria-label="Search"
-              icon={<SearchIcon height={18} width={18} />}
-              bg="none"
-            />
-          </InputLeftElement>
-
-          <Input
-            h="100%"
-            placeholder="Search"
-            fontSize="lg"
-            pl="5rem"
-            pr="5rem"
-            borderRadius="0.5rem"
-            value={searchText}
-            onChange={e => setSearchText(e.target.value)}
-          />
-          <InputRightElement
-            m={{
-              base: '0.5rem',
-              md: '1.55rem'
-            }}
-          >
-            {hasRecognitionSupport && (
-              <IconButton
-                // to do: change icon when listening, need recording icon
-                icon={listening ? <SendIcon /> : <MicIcon />}
-                aria-label="Send message"
-                bg="none"
-                onClick={listening ? stopListening : startListening}
-              />
-            )}
-          </InputRightElement>
-        </InputGroup>
-
-        <Box mt="2rem">
-          <Text
-            fontSize={{
-              base: 'base',
-              md: 'xl'
-            }}
-            fontWeight="550"
-          >
-            Discover Communities
-          </Text>
-          <Text
-            fontSize={{
-              base: 'sm',
-              md: 'lg'
-            }}
-            fontWeight="500"
-          >
-            Communities you might like
-          </Text>
-        </Box>
-
-        <Grid
-          templateColumns={{
-            base: 'repeat(2, 1fr)',
-            sm: 'repeat(3, 1fr)',
-            md: 'repeat(4, 1fr)'
-          }}
-          gap="2.5rem"
-          mt="2rem"
+          w="100%"
           h="100%"
+          p="2rem"
+          pt={{
+            base: '0',
+            md: '2rem'
+          }}
+          mt={{
+            base: '-0.8rem',
+            md: '0'
+          }}
+          overflow="auto"
+          sx={{
+            '::-webkit-scrollbar': {
+              width: '10px'
+            },
+            '::-webkit-scrollbar-thumb': {
+              background: 'gray',
+              borderRadius: '6px'
+            },
+            '::-webkit-scrollbar-thumb:hover': {
+              background: 'darkgray'
+            }
+          }}
         >
-          <GridItem h="100%">
-            <Link href="/community/1">
-              <CommunityCard />
-            </Link>
-          </GridItem>
-          <GridItem h="100%">
-            <Link href="/community/1">
-              <CommunityCard />
-            </Link>
-          </GridItem>
-          <GridItem h="100%">
-            <Link href="/community/1">
-              <CommunityCard />
-            </Link>
-          </GridItem>
-          <GridItem h="100%">
-            <Link href="/community/1">
-              <CommunityCard />
-            </Link>
-          </GridItem>
-          <GridItem h="100%">
-            <Link href="/community/1">
-              <CommunityCard />
-            </Link>
-          </GridItem>
-          <GridItem h="100%">
-            <Link href="/community/1">
-              <CommunityCard />
-            </Link>
-          </GridItem>
-        </Grid>
-      </Box>
+          <Box
+            h="4rem"
+            textAlign="center"
+            display={{
+              base: 'none',
+              md: 'block'
+            }}
+          >
+            <Text as="h2" fontSize="2xl" fontWeight="550">
+              Community
+            </Text>
+          </Box>
+
+          <InputGroup
+            h={{
+              base: '4rem',
+              md: '6rem'
+            }}
+            mt="2rem"
+          >
+            <InputLeftElement
+              m={{
+                base: '0.8rem',
+                md: '1.55rem'
+              }}
+            >
+              <IconButton
+                aria-label="Search"
+                icon={<SearchIcon height={18} width={18} />}
+                bg="none"
+              />
+            </InputLeftElement>
+
+            <Input
+              h="100%"
+              placeholder="Search"
+              fontSize="lg"
+              pl="5rem"
+              pr="5rem"
+              borderRadius="0.5rem"
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
+            />
+            <InputRightElement
+              m={{
+                base: '0.5rem',
+                md: '1.55rem'
+              }}
+            >
+              {hasRecognitionSupport && (
+                <IconButton
+                  // to do: change icon when listening, need recording icon
+                  icon={listening ? <SendIcon /> : <MicIcon />}
+                  aria-label="Send message"
+                  bg="none"
+                  onClick={listening ? stopListening : startListening}
+                />
+              )}
+            </InputRightElement>
+          </InputGroup>
+
+          <Box mt="2rem">
+            <Text
+              fontSize={{
+                base: 'base',
+                md: 'xl'
+              }}
+              fontWeight="550"
+            >
+              Discover Communities
+            </Text>
+            <Text
+              fontSize={{
+                base: 'sm',
+                md: 'lg'
+              }}
+              fontWeight="500"
+            >
+              Communities you might like
+            </Text>
+          </Box>
+
+          {loading ? (
+            <LoadingState />
+          ) : (
+            <Grid
+              templateColumns={{
+                base: 'repeat(2, 1fr)',
+                sm: 'repeat(3, 1fr)',
+                md: 'repeat(4, 1fr)'
+              }}
+              gap="2.5rem"
+              mt="2rem"
+              h="100%"
+            >
+              {communities.community?.map((community: any) => (
+                <GridItem key={community._id} h="100%">
+                  <Link href={`/community/${community._id}`}>
+                    <CommunityCard {...community} />
+                  </Link>
+                </GridItem>
+              ))}
+            </Grid>
+          )}
+        </Box>
+      )}
     </>
   );
 };

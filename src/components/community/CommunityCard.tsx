@@ -3,7 +3,19 @@ import Image from 'next/image';
 import CardBg from '@/assets/images/community-card-bg.png';
 import CardAvatar from '@/assets/images/community-card-avatar.png';
 
-const CommunityCard = () => {
+const CommunityCard = ({
+  _id,
+  name,
+  description,
+  primaryCoverImage,
+  secondaryCoverImage
+}: {
+  _id: string;
+  name: string;
+  description: string;
+  primaryCoverImage: string;
+  secondaryCoverImage: string;
+}) => {
   return (
     <Box
       h="100%"
@@ -17,8 +29,10 @@ const CommunityCard = () => {
     >
       <Box h="30%" w="100%">
         <Image
-          src={CardBg}
+          src={primaryCoverImage !== '' ? primaryCoverImage : CardBg}
           alt="Community Image"
+          width={500}
+          height={500}
           style={{
             width: '100%',
             height: '100%',
@@ -30,11 +44,12 @@ const CommunityCard = () => {
       </Box>
       <Box h="70%" w="100%" textAlign="center" mt="4rem">
         <Text fontWeight="550" fontSize="base">
-          Effects of Drug Abuse
+          {name}
         </Text>
         <Text>
-          Lorem ipsum dolor sit amet consectetur. Mauris condimentum tincidunt
-          semper lobortis lacus.
+          {description.length > 100
+            ? `${description.substring(0, 80)}...`
+            : description}
         </Text>
       </Box>
       <Box
@@ -47,8 +62,10 @@ const CommunityCard = () => {
         mb="1rem"
       >
         <Image
-          src={CardAvatar}
+          src={secondaryCoverImage !== '' ? secondaryCoverImage : CardAvatar}
           alt="Community Avatar"
+          width={500}
+          height={500}
           style={{
             width: '100%',
             height: '100%',

@@ -40,10 +40,15 @@ export const userSlice = createSlice({
     clearUser: state => {
       state.data = null;
       state.token = null;
+    },
+    acceptCommunityTerms: state => {
+      if (state.data) {
+        state.data.hasAcceptedCommunityTerms = true;
+      }
     }
   }
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser, acceptCommunityTerms } = userSlice.actions;
 
 export default userSlice.reducer;

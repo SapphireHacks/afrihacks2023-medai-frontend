@@ -25,7 +25,6 @@ import { useRouter } from 'next/router';
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClick = () => setShowPassword(!showPassword);
-  const [agreed, setAgreed] = useState(false);
   const router = useRouter();
 
   const { loading, makeRequest } = useAxios();
@@ -33,7 +32,8 @@ const SignUp = () => {
   const formHook = useForm({
     defaultValues: {
       email: '',
-      password: ''
+      password: '',
+      hasAcceptedAppTermsOfService: false
     }
   });
 
@@ -47,10 +47,6 @@ const SignUp = () => {
     email: string;
     password: string;
   }> = async (data: any) => {
-    if (!agreed) {
-      toast.error('Please agree to the terms and conditions');
-      return;
-    }
     if (!data) return;
 
     const result: any = await makeRequest({
@@ -62,7 +58,7 @@ const SignUp = () => {
     if (!result) {
       return;
     }
-    console.log(result);
+
     if (result.status === 'success') {
       toast.success(
         result.data.message ||
@@ -177,8 +173,9 @@ const SignUp = () => {
               <Flex justifyContent="space-between" alignItems="center">
                 <Checkbox
                   size="lg"
-                  onChange={() => setAgreed(!agreed)}
-                  isChecked={agreed}
+                  {...register('hasAcceptedAppTermsOfService', {
+                    required: 'Please accept the terms and conditions'
+                  })}
                 >
                   <Text fontSize="base">
                     I agree with the{' '}

@@ -57,7 +57,6 @@ const Login = () => {
       payload: data,
       token: null
     });
-    console.log(result);
     try {
       if (!result) {
         return;
@@ -65,17 +64,7 @@ const Login = () => {
       if (result.status === 'success') {
         console.log('success');
         toast.success(result.data.message || 'Login successful');
-        dispatch(
-          setUser({
-            data: result.data.data.user,
-            token: result.data.data.token
-          })
-        );
-        if (rememberMe) {
-          localStorage.setItem('user', JSON.stringify(result.data.data));
-        } else {
-          sessionStorage.setItem('user', JSON.stringify(result.data.data));
-        }
+        sessionStorage.setItem('user', JSON.stringify(result.data.data));
         router.push('/');
       } else if (result.status === 'error') {
         console.log('error', result.error);
