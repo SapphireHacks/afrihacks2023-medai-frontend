@@ -58,7 +58,25 @@ const MobileLayout = ({
         </Flex>
         <Divider position="relative" zIndex="-3" />
       </Box>
-      <Box pt={{ base: '100px', md: '0' }}>{children}</Box>
+      <Box
+        pt={{ base: '100px', md: '0' }}
+        overflowY="auto"
+        h="100vh"
+        sx={{
+          '::-webkit-scrollbar': {
+            width: '10px'
+          },
+          '::-webkit-scrollbar-thumb': {
+            background: 'gray',
+            borderRadius: '6px'
+          },
+          '::-webkit-scrollbar-thumb:hover': {
+            background: 'darkgray'
+          }
+        }}
+      >
+        {children}
+      </Box>
     </>
   );
 };
