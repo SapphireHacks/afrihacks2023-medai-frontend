@@ -9,12 +9,12 @@ const TextContent = ({
   textAlign: 'left' | 'right';
   bg: string;
   content: string;
-  borderRadius: string
+  borderRadius: string;
 }) => {
   return (
     <Text
-      flexGrow="1"
       maxW="72ch"
+      w="fit-content"
       textAlign={textAlign}
       bg={bg}
       p="1.2rem"
@@ -28,9 +28,23 @@ const TextContent = ({
 export default TextContent;
 
 export const UserTextContent = ({ content }: { content: string }) => {
-return <TextContent borderRadius={"10px 0 10px 10px"} bg="primary.50" textAlign="right" content={content} />;
+  return (
+    <TextContent
+      borderRadius={'10px 0 10px 10px'}
+      bg="primary.50"
+      textAlign="right"
+      content={content}
+    />
+  );
 };
 
 export const MedAITextContent = ({ content }: { content: string }) => {
-  return <TextContent borderRadius={"10px 10px 10px 0"} bg="white.main" textAlign="left" content={content} />;
+  return (
+    <TextContent
+      borderRadius={'10px 10px 10px 0'}
+      bg="white.main"
+      textAlign="left"
+      content={content}
+    />
+  );
 };
