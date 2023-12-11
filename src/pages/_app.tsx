@@ -4,7 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import themes from '@/utils/themes';
 import { NextPageWithLayout } from '@/types';
 import { Toaster } from 'react-hot-toast';
-import ReduxStoreProvider from "@/redux/StoreProvider"
+import ReduxStoreProvider from '@/redux/StoreProvider';
 
 type Props = {
   Component: NextPageWithLayout;
