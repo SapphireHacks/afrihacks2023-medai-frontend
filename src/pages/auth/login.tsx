@@ -57,7 +57,6 @@ const Login = () => {
       payload: data,
       token: null
     });
-    console.log(result);
     try {
       if (!result) {
         return;
