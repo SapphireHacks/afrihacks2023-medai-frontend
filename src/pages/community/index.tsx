@@ -42,6 +42,7 @@ const Community = () => {
   });
 
   const fetchCommunities = async () => {
+    if (!userDetails.token) return;
     const result = await makeRequest({
       url: urls.getCommunities,
       method: 'get',
@@ -51,13 +52,14 @@ const Community = () => {
       setCommunities(result.data);
     }
   };
+
   // Get user details
   useEffect(() => {
     const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
     setUserDetails(storedUser);
     setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
     fetchCommunities();
-  }, []);
+  }, [userDetails.token]);
 
   // Speech Recognition
   const [searchText, setSearchText] = useState('');
@@ -198,7 +200,7 @@ const Community = () => {
           </form>
         </Flex>
       )}
-      {hasAcceptedTerms && (
+      {hasAcceptedTerms && communities && (
         <Box
           w="100%"
           p="2rem"
@@ -305,7 +307,7 @@ const Community = () => {
               gap="2.5rem"
               mt="2rem"
             >
-              {communities.community?.map((community: any) => (
+              {communities.communities?.map((community: any) => (
                 <GridItem key={community._id} h="100%">
                   <Link href={`/community/${community._id}`}>
                     <CommunityCard {...community} />
