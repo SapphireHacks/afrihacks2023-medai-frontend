@@ -21,6 +21,8 @@ export const useLogUserOut = () => {
       dispatch(resetShouldLogout())
       router.push('/auth/login');
       sessionStorage.removeItem('user');
+      sessionStorage.removeItem("token")
+      localStorage.removeItem("token")
       toast.success('Logout Successful!');
     } catch (error: any) {
       toast.error('Logout Failed. Please try again.');
