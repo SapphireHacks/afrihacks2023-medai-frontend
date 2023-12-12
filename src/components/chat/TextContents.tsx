@@ -1,5 +1,5 @@
 import { Text, Box } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 const TextContent = ({
   content,
@@ -12,12 +12,13 @@ const TextContent = ({
   content: ReactNode;
   borderRadius: string;
 }) => {
-  const Wrapper = typeof content === 'string' ? Text : Box;
+  console.log(content)
+  const Wrapper = typeof content === 'string' ? Fragment : Box;
 
   return (
     <Wrapper>
     <Text
-      dangerouslySetInnerHTML={{ __html: content?.toString().replace(/(?:\\n|\r|\n)/g, '<br>') as string}}
+      {...(typeof content === "string" ? { dangerouslySetInnerHTML:{ __html: content?.toString().replace(/(?:\\n|\r|\n)/g, '<br>') as string}} : {}) }
       w="fit-content"
       maxW="72ch"
       textAlign={textAlign}
@@ -25,6 +26,7 @@ const TextContent = ({
       p="1.2rem"
       fontSize={{ base: '1.1rem', md: '1.6rem' }}
       borderRadius={borderRadius}>
+        {typeof content !== "string" ? content : null}
     </Text>
     </Wrapper>
   );
