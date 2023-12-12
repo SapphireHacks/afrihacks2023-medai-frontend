@@ -2,6 +2,7 @@ import { Flex, HStack, Box, keyframes } from '@chakra-ui/react';
 import { MedAIChatAvatar, UserChatAvatar } from './Avatars';
 import { MedAITextContent, UserTextContent } from './TextContents';
 import { Children } from '@/types/index';
+import { ReactNode } from 'react';
 
 const Bubble = ({
   children,
@@ -29,7 +30,7 @@ export const UserBubble = ({
   content,
   user
 }: {
-  content: string;
+  content: ReactNode;
   user: {
     profileImage: string;
     firstName: string;
@@ -51,7 +52,7 @@ export const UserBubble = ({
   );
 };
 
-export const AIBubble = ({ content }: { content: string }) => {
+export const AIBubble = ({ content }: { content: ReactNode }) => {
   return (
     <Bubble
       gap={{ base: '10px', md: '16px' }}
