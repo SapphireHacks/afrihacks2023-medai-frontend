@@ -1,14 +1,7 @@
 import {
   Box,
-  Button,
   Checkbox,
   Flex,
-  FormControl,
-  FormLabel,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
   Link,
   Text,
   VStack
@@ -29,8 +22,6 @@ import { FormHeading, Paragraph } from "@/components/auth/Text";
 import Layout from "@/components/auth/Layout";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClick = () => setShowPassword(!showPassword);
   const { loading, makeRequest } = useAxios();
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
@@ -129,7 +120,7 @@ const Login = () => {
                 Forgot Password?
               </Link>
             </Flex>
-            <SubmitButton>Login</SubmitButton>
+            <SubmitButton loading={loading}>Login</SubmitButton>
           </Flex>
         </VStack>
         <Text textAlign="center" fontSize="lg" fontWeight="400" mt="2rem">

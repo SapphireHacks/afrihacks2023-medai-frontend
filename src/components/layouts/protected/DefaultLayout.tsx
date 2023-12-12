@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import LoadingState from '@/components/loading-state';
 import useConversationsSocket from '@/socket.io/sockets/useConversationsSocket';
 import useMessagesSocket from '@/socket.io/sockets/useMessagesSocket';
+import { DesktopLogoutModal, MobileLogoutDrawer } from "@/components/auth/Logout";
 
 const ProtectedLayout = ({
   children,
@@ -51,6 +52,8 @@ const ProtectedLayout = ({
           {children}
         </MobileLayout>
       </Show>
+      <DesktopLogoutModal/>
+      <MobileLogoutDrawer/>
     </>
   );
 };

@@ -19,7 +19,7 @@ import NavigationDrawer from '../components/NavigationDrawer';
 import { useRef } from 'react';
 import LogoutIcon from '@/assets/icons/logOut';
 import CreateNewChatButton from '@/components/buttons/CreateNewChatButton';
-import LogoutButton from '@/components/buttons/LogoutButton';
+import { InitiateLogoutButton  } from '@/components/buttons/LogoutButton';
 
 const CollapsedNavLayout = ({ children }: Children) => {
   const [isOpen, setIsOpen] = useBoolean();
@@ -65,9 +65,9 @@ const CollapsedNavLayout = ({ children }: Children) => {
             ))}
           </List>
           <Flex justify="center">
-            <LogoutButton>
+            <InitiateLogoutButton>
               <Icon color="" as={LogoutIcon} w="3rem" h="3rem" />
-            </LogoutButton>
+            </InitiateLogoutButton>
           </Flex>
         </GridItem>
         <GridItem colSpan={11}>{children}</GridItem>
