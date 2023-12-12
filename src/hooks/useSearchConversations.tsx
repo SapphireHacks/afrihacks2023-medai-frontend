@@ -8,6 +8,6 @@ export default function useSearchConversations() {
   const dispatch = useDispatch()
   const search = useCallback((searchTerm: string) => {
     dispatch(handleSearch(searchTerm))
-  }, [])
+  }, [dispatch])
   return debounce(search, 500)
 }

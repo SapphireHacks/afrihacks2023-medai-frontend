@@ -21,11 +21,13 @@ export interface User {
     hasAcceptedCommunityTerms: boolean;
   } | null;
   token: string | null;
+  shouldLogout: boolean
 }
 
 const initialState: User = {
   data: null,
-  token: null
+  token: null,
+  shouldLogout: false
 };
 
 export const userSlice = createSlice({
@@ -45,10 +47,16 @@ export const userSlice = createSlice({
       if (state.data) {
         state.data.hasAcceptedCommunityTerms = true;
       }
+    },
+    updateShouldLogout: (store, action: PayloadAction<boolean>) => {
+      store.shouldLogout = action.payload
+    },
+    resetShouldLogout: (store) => {
+      store.shouldLogout = false
     }
   }
 });
 
-export const { setUser, clearUser, acceptCommunityTerms } = userSlice.actions;
+export const { resetShouldLogout, updateShouldLogout, setUser, clearUser, acceptCommunityTerms } = userSlice.actions;
 
 export default userSlice.reducer;

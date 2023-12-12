@@ -47,7 +47,7 @@ export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
         setMessage("")
       }
     },
-    [message]
+    [message, onSubmit]
   );
 
   return (

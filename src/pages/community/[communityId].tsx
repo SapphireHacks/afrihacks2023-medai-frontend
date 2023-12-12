@@ -16,22 +16,20 @@ const SingleCommunity = () => {
   const { communityId } = router.query;
   const [community, setCommunity] = useState({} as any);
 
-  const fetchCommunity = async () => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-    const result = await makeRequest({
-      url: urls.getCommunityById(communityId as string),
-      method: 'get',
-      token: storedUser?.token
-    });
-    if (result && result.status === 'success') {
-      setCommunity(result.data);
-    }
-  };
+  // const fetchCommunity = async () => {
+  //   const result = await makeRequest({
+  //     url: urls.getCommunityById(communityId as string),
+  //     method: 'get',
+  //   });
+  //   if (result && result.status === 'success') {
+  //     setCommunity(result.data);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (!communityId) return;
-    fetchCommunity();
-  }, []);
+  // useEffect(() => {
+  //   if (!communityId) return;
+  //   fetchCommunity();
+  // }, [communityId, fetchCommunity]);
 
   if (loading) return <LoadingState />;
 

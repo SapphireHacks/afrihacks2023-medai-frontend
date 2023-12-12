@@ -1,39 +1,30 @@
 import {
-  Box,
-  Button,
   Checkbox,
   Flex,
-  FormControl,
-  FormLabel,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
+  VStack,
   Text
 } from '@chakra-ui/react';
-import Image from 'next/image';
 import SignUpImage from '@/assets/images/signup-image.png';
-import EyeOffIcon from '@/assets/icons/eyeOff';
-import { useState } from 'react';
 import Link from 'next/link';
 import urls from '../../services/urls';
 import useAxios from '@/hooks/use-axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/router';
+import { BasicInput, PasswordTypeInput, SubmitButton } from "@/components/auth/Inputs";
+import { FormHeading, Paragraph } from "@/components/auth/Text";
+import Layout from "@/components/auth/Layout";
+import { useRouter } from "next/router";
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClick = () => setShowPassword(!showPassword);
-  const router = useRouter();
-
+  const router = useRouter()
   const { loading, makeRequest } = useAxios();
 
   const formHook = useForm({
     defaultValues: {
       email: '',
       password: '',
-      hasAcceptedAppTermsOfService: false
+      hasAcceptedAppTermsOfService: false,
+      userName: ''
     }
   });
 
@@ -46,194 +37,105 @@ const SignUp = () => {
   const submit: SubmitHandler<{
     email: string;
     password: string;
+    userName: string
   }> = async (data: any) => {
-    if (!data) return;
-
-    const result: any = await makeRequest({
-      url: urls.createUser,
-      method: 'post',
-      payload: data,
-      token: null
-    });
-    if (!result) {
-      return;
-    }
-
-    if (result.status === 'success') {
-      toast.success(
-        result.data.message ||
-          'Account created successfully. Check your email to verify your account'
-      );
-    } else if (result.status === 'error') {
-      if (result.error.includes('E11000')) {
-        toast.error('This user already exists. Please login');
-        return;
-      }
-      toast.error(result.error);
-    }
+    let result: any
+     try{
+       result = await makeRequest({
+         url: urls.createUser,
+         method: 'post',
+         payload: data,
+       });
+     }catch(err: any){
+      toast.error(err?.message)
+     }
+     if(!result) toast.error("Something went wrong!")
+     else if (result.status !== "success") {
+        const errMsg = result.error || result.message
+       if (errMsg?.includes("E11000"))return toast.error(`It appears you already have an account. Try logging in!`)
+       else toast.error(result.message || result.error)
+     } else {
+      toast.success('Welcome to MedAI! Check your email to verify your account');
+      router.push("/auth/login")
+      toast.success("You can now login to your account!")
+     }
   };
 
   return (
-    <Flex
-      pt="6rem"
-      justifyContent="space-between"
-      flexDir={{
-        base: 'column-reverse',
-        md: 'row'
-      }}
-      px={{
-        base: '0',
-        md: '8rem'
-      }}
-    >
-      <Box
-        w={{
-          base: '90%',
-          md: '50%'
-        }}
-        mx={{
-          base: '2rem',
-          md: 'unset'
-        }}
-        mt="4rem"
-      >
-        <Box
-          w={{
-            base: '100%',
-            md: '80%'
-          }}
-          textAlign={{
-            base: 'center',
-            md: 'unset'
-          }}
-          mb="4rem"
-        >
-          <Text fontSize="3xl" fontWeight="550">
-            Create Account
-          </Text>
-          <Text
-            fontSize={{
-              base: 'base',
-              md: 'xl'
-            }}
-            fontWeight="400"
-          >
-            Discover a Healthier You - Sign Up on MedAI
-          </Text>
+    <Layout imageSource={SignUpImage} imageAlt={"Signup Illustration"}>
+      <Flex w="100%" flexDir="column">
+        <FormHeading>Create Account</FormHeading>
+        <Paragraph>Discover a Healthier You - Sign Up on MedAI</Paragraph>
+        <VStack as="form" spacing="2.4rem" onSubmit={handleSubmit(submit)} w="100%" >
+          <Flex flexDir="column" mt="2rem" gap="1.5rem" w="full">
+            <BasicInput
+              labelText="Username"
+              placeholder="Enter your preferred username"
+              type="text"
+              {...register('userName', {
+                required: 'Username is required',
+                pattern: {
+                  value: /^[a-zA-Z\-]+$/,
+                  message: 'Entered value does not match username format'
+                }
+              })}
+            />
+            <BasicInput
+              labelText="Email Address"
+              placeholder="Enter your email address"
+              type="email"
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: 'Entered value does not match email format'
+                }
+              })}
+            />
+            <PasswordTypeInput
+              labelText="Password"
+              placeholder="Enter your password"
+              type="password"
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password should be at least 6 characters'
+                }
+              })}
+            />
 
-          <form onSubmit={handleSubmit(submit)}>
-            <Flex flexDir="column" mt="2rem" gap="1.5rem">
-              <FormControl isRequired>
-                <FormLabel fontSize="lg">Email Address</FormLabel>
-                <Input
-                  type="email"
-                  h="5rem"
-                  borderRadius="0.5rem"
-                  fontSize="base"
-                  placeholder="Enter your email address"
-                  {...register('email', {
-                    required: 'Email is required',
-                    pattern: {
-                      value: /\S+@\S+\.\S+/,
-                      message: 'Entered value does not match email format'
-                    }
-                  })}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel fontSize="lg">Password</FormLabel>
-                <InputGroup size="md">
-                  <Input
-                    pr="4.5rem"
-                    type={showPassword ? 'text' : 'password'}
-                    h="5rem"
-                    borderRadius="0.5rem"
-                    fontSize="base"
-                    placeholder="Enter your password"
-                    {...register('password', {
-                      required: 'Password is required',
-                      minLength: {
-                        value: 6,
-                        message: 'Password should be at least 6 characters'
-                      }
-                    })}
-                  />
-                  <InputRightElement width="4.5rem" mt="1.25rem">
-                    <IconButton
-                      bg="transparent"
-                      h="1.5rem"
-                      aria-label="hide password"
-                      icon={<EyeOffIcon />}
-                      onClick={handleClick}
-                      _hover={{ bg: 'transparent' }}
-                    />
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Flex justifyContent="space-between" alignItems="center">
-                <Checkbox
-                  size="lg"
-                  {...register('hasAcceptedAppTermsOfService', {
-                    required: 'Please accept the terms and conditions'
-                  })}
-                >
-                  <Text fontSize="base">
-                    I agree with the{' '}
-                    <Text as="span" color="primary.900" fontWeight="600">
-                      Terms and conditions of MedAI
-                    </Text>
+            <Flex align="start" gap="1.2rem" mt="1.4rem">
+              <Checkbox
+                size="lg"
+                {...register('hasAcceptedAppTermsOfService', {
+                  required: 'Please accept the terms and conditions'
+                })}
+              >
+                <Text fontSize="1.4rem">
+                  I agree with the
+                  <Text textDecor="underline" as="span" color="primary.900" fontWeight="600">
+                    Terms and conditions of MedAI
                   </Text>
-                </Checkbox>
-              </Flex>
-              <Button
-                type="submit"
-                h="4rem"
-                borderRadius="0.5rem"
-                fontSize="lg"
-                fontWeight="400"
-                bg="primary.900"
-                mt="2rem"
-                color="white"
-                _hover={{ bg: 'primary.700' }}
-                isLoading={loading}
-              >
-                Sign up
-              </Button>
+                </Text>
+              </Checkbox>
             </Flex>
-          </form>
-          <Text textAlign="center" fontSize="lg" fontWeight="400" mt="2rem">
-            I have an account?{' '}
-            <Link href="/auth/login">
-              <Text
-                as="span"
-                color="primary.900"
-                fontWeight="600"
-                cursor="pointer"
-              >
-                Log in
-              </Text>
-            </Link>
-          </Text>
-        </Box>
-      </Box>
-      <Box
-        w={{
-          base: '80%',
-          md: '45%'
-        }}
-        mx="auto"
-      >
-        <Image
-          src={SignUpImage}
-          alt="signup illustration"
-          style={{
-            width: '100%',
-            height: '100%'
-          }}
-        />
-      </Box>
-    </Flex>
-  );
+          </Flex>
+          <SubmitButton loading={loading}>Sign up</SubmitButton>
+        </VStack>
+        <Text textAlign="center" fontSize="lg" fontWeight="400" mt="2rem">
+          I have an account?
+          <Text
+            as={Link}
+            href="/auth/login"
+            color="primary.900"
+            fontWeight="600"
+            cursor="pointer"
+          > Log in </Text>
+        </Text>
+      </Flex>
+    </Layout>
+  )
 };
 
 export default SignUp;
