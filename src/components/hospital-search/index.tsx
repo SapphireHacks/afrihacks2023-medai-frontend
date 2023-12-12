@@ -33,7 +33,7 @@ const HospitalSearch = () => {
 
       const response = await getNearbyHospitals(lat, lng);
       if ('data' in response) {
-        console.log('response.data.places', response.data);
+        console.log('response.data.places', response.data.places);
         const hospitalList = response.data.places
           .map(
             (

@@ -6,6 +6,7 @@ type Request<PType> = {
   payload?: PType;
   url: string;
   method: 'post' | 'delete' | 'patch' | 'put' | 'get';
+  token?: string;
 };
 
 type MakeRequest<RType extends ResponseData> = <PType>(
@@ -17,18 +18,17 @@ type MakeRequest<RType extends ResponseData> = <PType>(
 }>;
 
 function useAxios<RType extends ResponseData>() {
-  const [token, setToken] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const tokenInStorage = localStorage.getItem("token") || sessionStorage.getItem("token")
-    if(tokenInStorage) setToken(JSON.parse(tokenInStorage))
-    
-  }, [])
+    const tokenInStorage =
+      localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (tokenInStorage) setToken(JSON.parse(tokenInStorage));
+  }, []);
 
   const [loading, setLoading] = useState<boolean>(false);
   const makeRequest: MakeRequest<RType> = useCallback(
-    async ({ payload, method, url }) => {
-      console.log(token, "hellow")
+    async ({ payload, method, url, token }) => {
       try {
         setLoading(true);
         const response: AxiosResponse<RType> = await axios({
