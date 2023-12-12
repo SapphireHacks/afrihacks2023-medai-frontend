@@ -103,6 +103,7 @@ export const BasicInput = forwardRef<HTMLInputElement, InputProps & { labelText:
     );
   },
 );
+BasicInput.displayName = "BasicInput"
 
 export const PasswordTypeInput = forwardRef<HTMLInputElement, InputProps & {labelText: string}>(
   ({ ...props }: any, ref: ForwardedRef<HTMLInputElement>) => {
@@ -111,3 +112,4 @@ export const PasswordTypeInput = forwardRef<HTMLInputElement, InputProps & {labe
     );
   },
 );
+PasswordTypeInput.displayName = "PasswordTypeInput"

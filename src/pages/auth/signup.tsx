@@ -45,7 +45,6 @@ const SignUp = () => {
          url: urls.createUser,
          method: 'post',
          payload: data,
-         token: null
        });
      }catch(err: any){
       toast.error(err?.message)

@@ -41,23 +41,22 @@ const Community = () => {
     }
   });
 
-  const fetchCommunities = async () => {
-    const result = await makeRequest({
-      url: urls.getCommunities,
-      method: 'get',
-      token: userDetails.token
-    });
-    if (result && result.status === 'success') {
-      setCommunities(result.data);
-    }
-  };
+  // const fetchCommunities = async () => {
+  //   const result = await makeRequest({
+  //     url: urls.getCommunities,
+  //     method: 'get',
+  //   });
+  //   if (result && result.status === 'success') {
+  //     setCommunities(result.data);
+  //   }
+  // };
   // Get user details
-  useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-    setUserDetails(storedUser);
-    setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
-    fetchCommunities();
-  }, []);
+  // useEffect(() => {
+  //   const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+  //   setUserDetails(storedUser);
+  //   setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
+  //   fetchCommunities();
+  // }, [fetchCommunities]);
 
   // Speech Recognition
   const [searchText, setSearchText] = useState('');
@@ -74,7 +73,6 @@ const Community = () => {
       url: urls.updateUser,
       method: 'put',
       payload: data,
-      token: userDetails.token
     });
 
     if (result && result.status === 'success') {

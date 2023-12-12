@@ -10,7 +10,6 @@ import { useCallback } from "react";
 
 export const useLogUserOut = () => {
   const dispatch = useAppDispatch()
-  const token = useAppSelector(state => state.user.token);
   const { makeRequest } = useAxios();
   const router = useRouter();
   const logUserOut = useCallback(async () => {
@@ -18,7 +17,6 @@ export const useLogUserOut = () => {
       await makeRequest({
         url: urls.logoutUser,
         method: 'get',
-        token
       });
       dispatch(resetShouldLogout())
       router.push('/auth/login');
@@ -27,7 +25,7 @@ export const useLogUserOut = () => {
     } catch (error: any) {
       toast.error('Logout Failed. Please try again.');
     }
-  }, [makeRequest, router]);
+  }, [makeRequest, router, dispatch]);
   return logUserOut
 }
 

@@ -52,7 +52,6 @@ const Login = () => {
         url: urls.loginUser,
         method: 'post',
         payload: data,
-        token: null
       });
     } catch (error: any) {
       toast.error(error?.message)

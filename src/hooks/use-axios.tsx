@@ -6,7 +6,6 @@ type Request<PType> = {
   payload?: PType;
   url: string;
   method: 'post' | 'delete' | 'patch' | 'put' | 'get';
-  token: string | null;
 };
 
 type MakeRequest<RType extends ResponseData> = <PType>(

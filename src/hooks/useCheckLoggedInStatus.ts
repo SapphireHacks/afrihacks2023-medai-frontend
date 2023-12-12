@@ -21,6 +21,6 @@ export default function useCheckLoggedInStatus(shouldRedirectIfLoggedIn: boolean
       if (shouldRedirectIfLoggedIn) router.push("/")
       setIsChecking(false)
     };
-  }, [router]);
+  }, [router, shouldRedirectIfLoggedIn]);
   return isChecking
 }
