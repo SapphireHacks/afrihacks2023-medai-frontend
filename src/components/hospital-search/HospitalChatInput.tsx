@@ -68,8 +68,6 @@ const HospitalChatInput = ({
           color="#676767"
           onChange={({ target: { value } }) => {
             setMessage(value);
-
-            // console.log(message);
           }}
           sx={{
             '::-webkit-scrollbar': {
