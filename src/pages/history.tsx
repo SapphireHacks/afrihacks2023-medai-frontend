@@ -66,6 +66,7 @@ function HeaderActionItems() {
   );
 }
 
+History.requireAuth = true
 History.getLayout = (page: any) => (
   <ProtectedLayout title="History" HeaderActionItems={HeaderActionItems}>
     {page}
