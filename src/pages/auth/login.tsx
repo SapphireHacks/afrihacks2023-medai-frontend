@@ -53,11 +53,18 @@ const Login = () => {
     if (result.status !== 'success') {
       return toast.error(result.message || result.error);
     } else {
-      const { data } = result;
-      let user = data.data.user,
-      token = data.data.token
-      if(rememberMe) localStorage.setItem("token", JSON.stringify(token))
-      else sessionStorage.setItem("token", JSON.stringify(token))
+      if(result.data.status >= 400) return toast.error(result.data.message)
+      const { data } = result.data;
+    console.log(result, "nbvcvbnm")
+      let user = data.user,
+      token = data.token
+      if(rememberMe){
+        localStorage.setItem("token", JSON.stringify(token))
+        localStorage.setItem("user_id", JSON.stringify(user._i))
+      } else {
+        sessionStorage.setItem("token", JSON.stringify(token))
+        sessionStorage.setItem("user_id", JSON.stringify(user._id))
+      }
       dispatch(setUserData(user))
       toast.success(data.message || 'Login successful');
       router.push('/');

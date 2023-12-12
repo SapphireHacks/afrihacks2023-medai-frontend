@@ -33,7 +33,7 @@ const ProtectedLayout = ({
     if(showHospitalSearch && pathname !== "/"){
       dispatch(resetShowHospitalSearch())
     }
-    if(activeConversationId && pathname !== "/"){
+    if(activeConversationId && pathname !== "/" && pathname !== "/history"){
       dispatch(updateActiveConversationId(null))
     }
   }, [pathname, showHospitalSearch, activeConversationId, dispatch])
