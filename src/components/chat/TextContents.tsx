@@ -12,7 +12,6 @@ const TextContent = ({
   content: ReactNode;
   borderRadius: string;
 }) => {
-  console.log(content)
   const Wrapper = typeof content === 'string' ? Fragment : Box;
 
   return (
