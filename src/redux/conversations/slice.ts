@@ -19,7 +19,9 @@ export interface ConversationsState {
   shouldCreateNewConversation: boolean;
   idOfConversationToDelete: string | null;
   messageToSend: { content: string; conversationId: null | string } | null;
-  shouldClearConversations: boolean
+  shouldClearConversations: boolean;
+  searchTerm: string,
+  searchedConversations: StoreConversation[]
 }
 
 const initialState: ConversationsState = {
@@ -32,7 +34,9 @@ const initialState: ConversationsState = {
   shouldCreateNewConversation: false,
   idOfConversationToDelete: null,
   messageToSend: null,
-  shouldClearConversations: false
+  shouldClearConversations: false,
+  searchTerm: "",
+  searchedConversations: []
 };
 
 export const conversationsSlice = createSlice({
@@ -185,6 +189,17 @@ export const conversationsSlice = createSlice({
         if (state.activeConversationId === null)
           state.activeConversationId = conversation._id;
       }
+    }, 
+    handleSearch: (store, action: PayloadAction<string>) => {
+      store.searchTerm = action.payload
+      if(action.payload.length > 0){
+        store.searchedConversations = store.conversations.filter(it => {
+          return it.title.toLowerCase().includes(action.payload.toLowerCase().trim())
+        })
+      }
+    },
+    clearSearch: (store) => {
+      store.searchTerm = ""
     }
   }
 });
@@ -203,6 +218,8 @@ export const {
   updateMessgeToSend,
   appendUserMessageAndAIResponseToConversation,
   resetShouldClearConversations,
+  handleSearch,
+  clearSearch,
 } = conversationsSlice.actions;
 
 export default conversationsSlice.reducer;

@@ -11,6 +11,7 @@ import CollapsableSearchBar from '@/components/history/CollapsableSearchBar';
 import ClearHistoryButton from '@/components/history/ClearHistoryButton';
 import { useAppSelector } from '@/redux/hooks';
 import LoadingState from '@/components/loading-state';
+import useSearchConversations from "@/hooks/useSearchConversations";
 
 const History = () => {
   const { hasFetchedInitial, conversations } = useAppSelector(
@@ -41,9 +42,11 @@ const History = () => {
 
 function HeaderActionItems() {
   const { conversations } = useAppSelector(store => store.conversations);
+  const search = useSearchConversations()
   return (
     <Flex alignItems="center" gap="1rem">
       <CollapsableSearchBar
+        handleTyping={search}
         disabled={conversations.length === 0}
         childrenWhenExpanded={<Icon as={RightChevron} />}
       >
@@ -63,6 +66,7 @@ function HeaderActionItems() {
   );
 }
 
+History.requireAuth = true
 History.getLayout = (page: any) => (
   <ProtectedLayout title="History" HeaderActionItems={HeaderActionItems}>
     {page}

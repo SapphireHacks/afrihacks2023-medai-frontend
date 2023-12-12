@@ -13,7 +13,7 @@ const TextContent = ({
 }) => {
   return (
     <Text
-      flexGrow="1"
+      w="fit-content"
       maxW="72ch"
       textAlign={textAlign}
       bg={bg}

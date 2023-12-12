@@ -9,7 +9,7 @@ export default function c() {
       w="87%"
       mx="auto"
       textAlign="center"
-      color="white.300"
+      color="text.600"
     >
       <Icon as={NoHistoryIcon} />
       <Text
