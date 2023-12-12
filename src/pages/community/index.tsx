@@ -41,22 +41,25 @@ const Community = () => {
     }
   });
 
-  // const fetchCommunities = async () => {
-  //   const result = await makeRequest({
-  //     url: urls.getCommunities,
-  //     method: 'get',
-  //   });
-  //   if (result && result.status === 'success') {
-  //     setCommunities(result.data);
-  //   }
-  // };
+  const fetchCommunities = async () => {
+    if (!userDetails.token) return;
+    const result = await makeRequest({
+      url: urls.getCommunities,
+      method: 'get',
+      // token: userDetails.token
+    });
+    if (result && result.status === 'success') {
+      setCommunities(result.data);
+    }
+  };
+
   // Get user details
-  // useEffect(() => {
-  //   const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-  //   setUserDetails(storedUser);
-  //   setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
-  //   fetchCommunities();
-  // }, [fetchCommunities]);
+  useEffect(() => {
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    setUserDetails(storedUser);
+    setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
+    fetchCommunities();
+  }, [userDetails.token]);
 
   // Speech Recognition
   const [searchText, setSearchText] = useState('');
@@ -196,10 +199,9 @@ const Community = () => {
           </form>
         </Flex>
       )}
-      {hasAcceptedTerms && (
+      {hasAcceptedTerms && communities && (
         <Box
           w="100%"
-          h="100%"
           p="2rem"
           pt={{
             base: '0',
@@ -208,19 +210,6 @@ const Community = () => {
           mt={{
             base: '-0.8rem',
             md: '0'
-          }}
-          overflow="auto"
-          sx={{
-            '::-webkit-scrollbar': {
-              width: '10px'
-            },
-            '::-webkit-scrollbar-thumb': {
-              background: 'gray',
-              borderRadius: '6px'
-            },
-            '::-webkit-scrollbar-thumb:hover': {
-              background: 'darkgray'
-            }
           }}
         >
           <Box
@@ -316,9 +305,8 @@ const Community = () => {
               }}
               gap="2.5rem"
               mt="2rem"
-              h="100%"
             >
-              {communities.community?.map((community: any) => (
+              {communities.communities?.map((community: any) => (
                 <GridItem key={community._id} h="100%">
                   <Link href={`/community/${community._id}`}>
                     <CommunityCard {...community} />
