@@ -11,18 +11,26 @@ import {
 import MicrophoneFilled from '@/assets/icons/microphoneFilled';
 import { Children } from '@/types/index';
 import { Fade } from '@chakra-ui/react';
-import { useState, useCallback } from 'react';
+import { useState, useRef, MutableRefObject, useEffect } from 'react';
 import useSpeechRecognition from '@/utils/speechRecognition';
+import { pulse } from "../chat/ChatInput";
 
 export default function CollapsableSearchBar({
   children,
   childrenWhenExpanded,
-  disabled
+  disabled,
+  handleTyping,
 }: Children & {
   childrenWhenExpanded?: Children['children'];
   disabled: boolean;
+  handleTyping: (value: string) => void
 }) {
   const [showSearchBar, setShowSearchBar] = useBoolean(false);
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    showSearchBar && inputRef.current?.focus()
+  }, [showSearchBar])
 
   return (
     <Flex alignItems="center" bg="white">
@@ -56,41 +64,43 @@ export default function CollapsableSearchBar({
           <Button bg="transparent" onClick={setShowSearchBar.toggle}>
             {childrenWhenExpanded || children}
           </Button>
-          <SearchInput />
+          <SearchInput inputRef={inputRef} handleTyping={handleTyping} />
         </Flex>
       </Fade>
     </Flex>
   );
 }
 
-function SearchInput() {
+function SearchInput({ handleTyping, inputRef }: {
+  handleTyping: (search: string) => void,
+  inputRef: MutableRefObject<HTMLInputElement | null>,
+}) {
   const [message, setMessage] = useState('');
   const { listening, startListening, stopListening, hasRecognitionSupport } =
-    useSpeechRecognition(setMessage, () => message);
-
-  const handleSearch = useCallback(
-    (e: any) => {
-      e.preventDefault();
-      console.log(message);
-    },
-    [message]
-  );
+    useSpeechRecognition((value) => {
+      setMessage(value),
+      handleTyping(value)
+    }, () => message)
 
   return (
     <Box
       flexGrow="1"
       maxW={{ base: '70%', xs: '80%', md: '100%' }}
-      as="form"
-      onSubmit={handleSearch}
     >
       <InputGroup size="lg">
         <Input
+          ref={inputRef}
           p="2rem"
           pr="4.5rem"
           type="text"
+          fontFamily="accent"
+          _focusVisible={{ border: "1px solid", borderColor: "primary.800", outline: "0"}}
           placeholder="Enter a search"
           value={message}
-          onChange={e => setMessage(e.target.value)}
+          onChange={e => {
+            setMessage(e.target.value)
+            handleTyping(e.target.value)
+          }}
           bg="white.500"
         />
         {hasRecognitionSupport && (
@@ -98,8 +108,13 @@ function SearchInput() {
             <Button
               type="button"
               bg="transparent"
-              size="sm"
+              p="0"
+              h="unset"
+              size="lg"
+              transform={{ base: "scale(1)", md: "scale(1.1)"}}
               onClick={listening ? stopListening : startListening}
+              color={listening ? "primary.800" : "black"}
+              animation={listening ? `${pulse} 1000ms linear infinite` : "none"}
             >
               <Icon as={MicrophoneFilled} w="2rem" h="2rem" />
             </Button>

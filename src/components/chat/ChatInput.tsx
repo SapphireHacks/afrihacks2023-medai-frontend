@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react';
 import useSpeechRecognition from '@/utils/speechRecognition';
 
 
-const pulse = keyframes`  
+export const pulse = keyframes`  
 	0% {
 		transform: scale(0.85);
 		// box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);

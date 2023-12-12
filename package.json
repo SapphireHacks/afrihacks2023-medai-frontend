@@ -12,6 +12,8 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@fontsource/montserrat": "^5.0.16",
+    "@fontsource/nunito-sans": "^5.0.8",
     "@reduxjs/toolkit": "^2.0.1",
     "@types/dom-speech-recognition": "^0.0.4",
     "axios": "^1.6.2",

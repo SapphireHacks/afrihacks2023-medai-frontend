@@ -36,7 +36,7 @@ const useSpeechRecognition = (
         recognition.abort();
       };
     }
-  }, [recognition])
+  }, [recognition, getMessage])
 
   useEffect(() => {
     if ('webkitSpeechRecognition' in window && recognition === null) {

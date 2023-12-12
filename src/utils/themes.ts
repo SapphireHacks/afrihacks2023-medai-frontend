@@ -31,7 +31,7 @@ const colors = Object.freeze({
     400: '#F7F7F7',
     500: '#e8e8e8',
     600: '#b5b5b5',
-    700: "898A8D",
+    700: "#898A8D",
     800: '#8c8c8c',
     900: '#6b6b6b'
   },
@@ -44,7 +44,7 @@ const colors = Object.freeze({
     500: "#2F3C33",
     600: "#263238",
     black: '#000000'
-  }
+  },
 });
 
 const fontSizes = Object.freeze({
@@ -108,5 +108,9 @@ export default extendTheme({
   styles,
   fontWeights,
   fontSizes,
+  fonts: {
+    default: `'Montserrat', sans-serif`,
+    accent: `'Nunito Sans', sans-serif;`,
+  },
   components: { Avatar }
 });
