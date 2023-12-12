@@ -10,8 +10,8 @@ export default function useCheckLoggedInStatus(shouldRedirectIfLoggedIn: boolean
   const pathname = usePathname()
   const [isChecking, setIsChecking] = useState(true)
   useEffect(() => {
-    const token = sessionStorage.getItem("token") || localStorage.getItem("token")
-    console.log(token )
+    let token = sessionStorage.getItem("token") || localStorage.getItem("token")
+    if(token) token = JSON.parse(token)
     if(!token) {
       if(!pathname.includes("auth")) {
         toast.error("Unauthorized to access this route!")

@@ -20,7 +20,9 @@ function useAxios<RType extends ResponseData>() {
   const [token, setToken] = useState<string | null>(null)
 
   useEffect(() => {
-    setToken(localStorage.getItem("token") || sessionStorage.getItem("token"))
+    const tokenInStorage = localStorage.getItem("token") || sessionStorage.getItem("token")
+    if(tokenInStorage) setToken(JSON.parse(tokenInStorage))
+    
   }, [])
 
   const [loading, setLoading] = useState<boolean>(false);
