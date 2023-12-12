@@ -15,7 +15,6 @@ export const getCoordinates = async (address: string) => {
     coordinatesCache[address] = { lat, lng };
     return { lat, lng };
   } catch (error) {
-    console.error('coordinates error', error);
     return { lat: 0, lng: 0 };
   }
 };
