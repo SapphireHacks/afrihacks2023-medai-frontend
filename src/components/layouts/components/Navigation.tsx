@@ -53,19 +53,8 @@ const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
             </ListItem>
           ))}
         </List>
-<<<<<<< HEAD
         <InitiateLogoutButton>
           <Flex color="#DC3545" gap="1rem" p="0.8rem" alignItems="center" className="signout">
-=======
-        <LogoutButton>
-          <Flex
-            w="100%"
-            gap="1rem"
-            p="0.8rem"
-            alignItems="center"
-            className="signout"
-          >
->>>>>>> fbf9ab0ec55cdfb3d268f8a13b8decf60a6dc878
             <Icon as={LogoutIcon} w="2rem" h="2rem" />
             <Text fontSize="lg">
               Sign Out
