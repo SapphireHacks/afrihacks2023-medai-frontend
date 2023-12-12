@@ -1,14 +1,16 @@
-import { Text, Flex, Icon, Box } from '@chakra-ui/react';
+import { Text, Flex, Icon } from '@chakra-ui/react';
 import CollapsableSearchBar from './CollapsableSearchBar';
 import SearchIcon from '@/assets/icons/search';
 import TrashIcon from '@/assets/icons/trash';
 import ClearHistoryButton from './ClearHistoryButton';
+import useSearchConversations from "@/hooks/useSearchConversations";
 
 export default function DesktopHeader({
   hasNoHistory
 }: {
   hasNoHistory: boolean
 }) {
+  const search = useSearchConversations()
   return (
     <Flex
       alignItems="center"
@@ -24,7 +26,7 @@ export default function DesktopHeader({
         History
       </Text>
       <Flex flexGrow={hasNoHistory ?"": "1"} ml="auto" justify="end" gap="1rem" alignItems="center" w="fit-content">
-        <CollapsableSearchBar disabled={hasNoHistory} childrenWhenExpanded={<Icon as={SearchIcon}  w="2rem" h="2rem"  />}>
+        <CollapsableSearchBar handleTyping={search} disabled={hasNoHistory} childrenWhenExpanded={<Icon as={SearchIcon}  w="2rem" h="2rem"  />}>
           <Flex justify="center" alignItems="stretch" bg="white.500" p="1.2rem" borderRadius="8px">
             <Icon as={SearchIcon}  w="2rem" h="2rem"  /></Flex>
         </CollapsableSearchBar>

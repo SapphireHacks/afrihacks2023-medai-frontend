@@ -39,7 +39,7 @@ export default function HistoryItem({
     <Flex
       alignItems="center"
       borderRadius="8px"
-      bg="white.500"
+      bg="white.400"
       w="100%"
       px={{ base: '1.4rem', md: '1.6rem' }}
       py="1.6rem"
@@ -65,7 +65,7 @@ export default function HistoryItem({
         >
           {conversation.title}
         </Text>
-        <Text color="white.400" fontSize={{ base: '1.2rem', md: '1.4rem' }}>
+        <Text color="white.700" fontSize={{ base: '1.2rem', md: '1.4rem' }}>
           {date} - {time}
         </Text>
       </Box>

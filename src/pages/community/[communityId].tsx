@@ -117,7 +117,7 @@ const SingleCommunity = () => {
         </Flex>
       </Box>
       <Box py="1.6rem" position="absolute" bottom="0" width="calc(100% - 4rem)">
-        <ChatInput />
+        <ChatInput onSubmit={(message) => console.log(message)} />
       </Box>
     </Box>
   );
