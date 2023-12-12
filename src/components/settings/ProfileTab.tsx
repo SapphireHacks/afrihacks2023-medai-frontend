@@ -16,7 +16,7 @@ import { toFormData } from "axios";
 import toast from "react-hot-toast";
 import useAxios from "@/hooks/use-axios";
 import urls from "@/services/urls";
-import { User, setUserData } from "@/redux/user/slice";
+import { setUserData } from "@/redux/user/slice";
 
 const ProfileTab = () => {
   const dispatch = useAppDispatch()
@@ -24,7 +24,6 @@ const ProfileTab = () => {
   const [loading, setLoading] = useState(false)
   const { data: userData } = useAppSelector(store => store.user)
 
-   console.log(userData, "heer")
   const formHook = useForm({
     defaultValues: {
       firstName: userData?.firstName,
@@ -41,7 +40,7 @@ const ProfileTab = () => {
     formState: { errors }
   } = formHook;
 
-  const { loading: isAxiosLoading, makeRequest } = useAxios()
+  const { makeRequest } = useAxios()
 
   const onSubmit = useCallback(async (data: any) => {
     let dataToSubmit: { [x:string]: any}= {}
@@ -70,12 +69,7 @@ const ProfileTab = () => {
     }else{
       toast.error(message)
     }
-    // const user = (response?.data as any)?.user as User["data"]
-    // if (user) dispatch(setUserData(user))
-    // else{
-    //   toast.error("An error occurred! Please try again later.")
-    //   formHook.reset({...userData})
-    // }
+    setFileUpload(undefined)
     setLoading(false)
   }, [fileUpload])
 

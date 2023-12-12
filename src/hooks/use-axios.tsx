@@ -21,7 +21,8 @@ function useAxios<RType extends ResponseData>() {
   const getTokenFromStorage = useCallback(() => {
     const tokenInStorage = localStorage.getItem("token") || sessionStorage.getItem("token")
     console.log(tokenInStorage)
-    if (tokenInStorage) return JSON.parse(tokenInStorage)
+    if (tokenInStorage && tokenInStorage !== "undefined") return JSON.parse(tokenInStorage)
+    else return ""
   }, [])
   useEffect(() => {
     setToken(getTokenFromStorage() || null)
@@ -37,9 +38,9 @@ function useAxios<RType extends ResponseData>() {
           url,
           method,
           data: payload ,
-         headers: { Authorization: `Bearer ${token || JSON.parse(getTokenFromStorage())}`  }
+         headers: { Authorization: `Bearer ${token || getTokenFromStorage()}`  }
         });
-        console.log(response)
+        console.log(response.status)
         return {
           data: response.data,
           status: 'success',
