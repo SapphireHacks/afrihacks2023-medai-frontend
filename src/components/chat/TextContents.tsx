@@ -15,16 +15,17 @@ const TextContent = ({
   const Wrapper = typeof content === 'string' ? Text : Box;
 
   return (
-    <Wrapper
+    <Wrapper>
+    <Text
+      dangerouslySetInnerHTML={{ __html: content?.toString().replace(/(?:\\n|\r|\n)/g, '<br>') as string}}
       w="fit-content"
       maxW="72ch"
       textAlign={textAlign}
       bg={bg}
       p="1.2rem"
       fontSize={{ base: '1.1rem', md: '1.6rem' }}
-      borderRadius={borderRadius}
-    >
-      {content}
+      borderRadius={borderRadius}>
+    </Text>
     </Wrapper>
   );
 };

@@ -18,7 +18,7 @@ const Home = () => {
     conversations,
     messageToSend,
     loading,
-    shouldCreateNewConversation
+    shouldCreateNewConversation,
   } = useAppSelector(store => store.conversations);
   const { data } = useAppSelector(store => store.user);
   const activeConversation = useMemo(() => {
@@ -31,6 +31,8 @@ const Home = () => {
   return (
     <>
       <AppHead title="MedAI" />
+     { (shouldCreateNewConversation || loading || (messageToSend !== null && activeConversationId === null))
+      && <Loader /> }
       {showHospitalSearch ? (
         <HospitalSearch />
       ) : (
@@ -42,6 +44,7 @@ const Home = () => {
           mx="auto"
           overflow="hidden"
         >
+         { 
           <Flex
             flexDir="column"
             justify="start"
@@ -60,7 +63,7 @@ const Home = () => {
             ) : (
               <Hero />
             )}
-          </Flex>
+          </Flex>}
           {!showHospitalSearch && <InputSection />}
         </Flex>
       )}

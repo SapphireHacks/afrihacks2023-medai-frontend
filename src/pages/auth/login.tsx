@@ -9,14 +9,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import urls from '../../services/urls';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
-import { setUser } from '@/redux/user/slice';
-import {
-  BasicInput,
-  PasswordTypeInput,
-  SubmitButton
-} from '@/components/auth/Inputs';
-import { FormHeading, Paragraph } from '@/components/auth/Text';
-import Layout from '@/components/auth/Layout';
+import { setUserData } from '@/redux/user/slice';
+import { BasicInput, PasswordTypeInput, SubmitButton } from "@/components/auth/Inputs";
+import { FormHeading, Paragraph } from "@/components/auth/Text";
+import Layout from "@/components/auth/Layout";
 
 const Login = () => {
   const { loading, makeRequest } = useAxios();
@@ -59,22 +55,10 @@ const Login = () => {
     } else {
       const { data } = result;
       let user = data.data.user,
-        token = data.data.token,
-        hasAcceptedCommunityTerms = data.data.user.hasAcceptedCommunityTerms;
-      if (rememberMe) {
-        localStorage.setItem('token', JSON.stringify(token));
-        localStorage.setItem(
-          'hasAcceptedCommunityTerms',
-          JSON.stringify(hasAcceptedCommunityTerms)
-        );
-      } else {
-        sessionStorage.setItem('token', JSON.stringify(token));
-        sessionStorage.setItem(
-          'hasAcceptedCommunityTerms',
-          JSON.stringify(hasAcceptedCommunityTerms)
-        );
-      }
-      dispatch(setUser(user));
+      token = data.data.token
+      if(rememberMe) localStorage.setItem("token", JSON.stringify(token))
+      else sessionStorage.setItem("token", JSON.stringify(token))
+      dispatch(setUserData(user))
       toast.success(data.message || 'Login successful');
       router.push('/');
     }

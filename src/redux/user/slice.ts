@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface User {
   data: {
+    _id: string;
     profileImage: string;
     firstName: string;
     lastName: string;
@@ -11,6 +12,8 @@ export interface User {
       type: string;
       coordinates: number[];
     };
+    gender: "male" | "female";
+    userName: string;
     previousHealthConditions: string[];
     currentHealthConditions: string[];
     dob: string;
@@ -34,10 +37,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUserData: (state, action: PayloadAction<User["data"]>) => {
       console.log('setting user', action.payload);
-      state.data = action.payload.data;
-      state.token = action.payload.token;
+      state.data = action.payload;
     },
     clearUser: state => {
       state.data = null;
@@ -57,6 +59,6 @@ export const userSlice = createSlice({
   }
 });
 
-export const { resetShouldLogout, updateShouldLogout, setUser, clearUser, acceptCommunityTerms } = userSlice.actions;
+export const { resetShouldLogout, updateShouldLogout, setUserData, clearUser, acceptCommunityTerms } = userSlice.actions;
 
 export default userSlice.reducer;

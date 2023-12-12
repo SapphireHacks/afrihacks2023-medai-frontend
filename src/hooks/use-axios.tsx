@@ -18,13 +18,16 @@ type MakeRequest<RType extends ResponseData> = <PType>(
 }>;
 
 function useAxios<RType extends ResponseData>() {
-  const [token, setToken] = useState<string | null>(null);
-
+  const [token, setToken] = useState<string | null>(null)
+  const getTokenFromStorage = useCallback(() => {
+    const tokenInStorage = localStorage.getItem("token") || sessionStorage.getItem("token")
+    console.log(tokenInStorage)
+    if (tokenInStorage && tokenInStorage !== "undefined") return JSON.parse(tokenInStorage)
+    else return ""
+  }, [])
   useEffect(() => {
-    const tokenInStorage =
-      localStorage.getItem('token') || sessionStorage.getItem('token');
-    if (tokenInStorage) setToken(JSON.parse(tokenInStorage));
-  }, []);
+    setToken(getTokenFromStorage() || null)
+  }, [getTokenFromStorage])
 
   const [loading, setLoading] = useState<boolean>(false);
   const makeRequest: MakeRequest<RType> = useCallback(
@@ -34,13 +37,10 @@ function useAxios<RType extends ResponseData>() {
         const response: AxiosResponse<RType> = await axios({
           url,
           method,
-          ...(payload && { data: payload }),
-          ...(token && { headers: { Authorization: `Bearer ${token}` } })
+          data: payload ,
+         headers: { Authorization: `Bearer ${token || getTokenFromStorage()}`  }
         });
-        if (response.data.status >= 400) {
-          throw new Error(response.data.message);
-        }
-
+        console.log(response.status)
         return {
           data: response.data,
           status: 'success',
@@ -58,7 +58,7 @@ function useAxios<RType extends ResponseData>() {
         setLoading(false);
       }
     },
-    [token]
+    [token, getTokenFromStorage]
   );
 
   return { loading, makeRequest };
