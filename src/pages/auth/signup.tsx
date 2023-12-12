@@ -13,8 +13,10 @@ import toast from 'react-hot-toast';
 import { BasicInput, PasswordTypeInput, SubmitButton } from "@/components/auth/Inputs";
 import { FormHeading, Paragraph } from "@/components/auth/Text";
 import Layout from "@/components/auth/Layout";
+import { useRouter } from "next/router";
 
 const SignUp = () => {
+  const router = useRouter()
   const { loading, makeRequest } = useAxios();
 
   const formHook = useForm({
@@ -37,30 +39,27 @@ const SignUp = () => {
     password: string;
     userName: string
   }> = async (data: any) => {
-    if (!data) return;
-
-    const result: any = await makeRequest({
-      url: urls.createUser,
-      method: 'post',
-      payload: data,
-      token: null
-    });
-    if (!result) {
-      return;
-    }
-
-    if (result.status === 'success') {
-      toast.success(
-        result.data.message ||
-          'Account created successfully. Check your email to verify your account'
-      );
-    } else if (result.status === 'error') {
-      if (result.error.includes('E11000')) {
-        toast.error('This user already exists. Please login');
-        return;
-      }
-      toast.error(result.error);
-    }
+    let result: any
+     try{
+       result = await makeRequest({
+         url: urls.createUser,
+         method: 'post',
+         payload: data,
+         token: null
+       });
+     }catch(err: any){
+      toast.error(err?.message)
+     }
+     if(!result) toast.error("Something went wrong!")
+     else if (result.status !== "success") {
+        const errMsg = result.error || result.message
+       if (errMsg?.includes("E11000"))return toast.error(`It appears you already have an account. Try logging in!`)
+       else toast.error(result.message || result.error)
+     } else {
+      toast.success('Welcome to MedAI! Check your email to verify your account');
+      router.push("/auth/login")
+      toast.success("You can now login to your account!")
+     }
   };
 
   return (

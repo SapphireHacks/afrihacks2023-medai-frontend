@@ -4,12 +4,13 @@ import {
 } from '@chakra-ui/react';
 import Image, { StaticImageData } from 'next/image';
 import { Children } from "@/types";
+import useCheckLoggedInStatus from "@/hooks/useCheckLoggedInStatus";
 
 const Layout = ({ children, imageAlt, imageSource }: Children & {
   imageSource: StaticImageData | string 
   imageAlt: string
 }) => {
- 
+  useCheckLoggedInStatus(true)
 
   return (
     <Flex w="100dvw" minH="100dvh" justify="center" align="center">

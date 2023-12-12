@@ -46,28 +46,29 @@ const Login = () => {
   }> = async (data: any) => {
     if (!data) return;
 
-    const result: any = await makeRequest({
-      url: urls.loginUser,
-      method: 'post',
-      payload: data,
-      token: null
-    });
+    let result: any
     try {
-      if (!result) {
-        return;
-      }
-      if (result.status === 'success') {
-        console.log('success');
-        toast.success(result.data.message || 'Login successful');
-        sessionStorage.setItem('user', JSON.stringify(result.data.data));
-        router.push('/');
-      } else if (result.status === 'error') {
-        console.log('error', result.error);
-        toast.error(result.error || 'An error occurred');
-      }
+      result = await makeRequest({
+        url: urls.loginUser,
+        method: 'post',
+        payload: data,
+        token: null
+      });
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'An error occurred');
-      throw new Error(error);
+      toast.error(error?.message)
+    }
+    if (!result) return toast.error("Something went wrong!")
+    if (result.status !== "success") {
+      return toast.error(result.message || result.error)
+    } else {
+      const { data } = result
+      let user = data.data.user,
+      token = data.data.token
+      if(rememberMe) localStorage.setItem("token", JSON.stringify(token))
+      else sessionStorage.setItem("token", JSON.stringify(token))
+      dispatch(setUser(user))
+      toast.success(data.message || 'Login successful');
+      router.push('/');
     }
   };
 

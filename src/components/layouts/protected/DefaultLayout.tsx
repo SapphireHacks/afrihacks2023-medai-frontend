@@ -11,6 +11,7 @@ import LoadingState from '@/components/loading-state';
 import useConversationsSocket from '@/socket.io/sockets/useConversationsSocket';
 import useMessagesSocket from '@/socket.io/sockets/useMessagesSocket';
 import { DesktopLogoutModal, MobileLogoutDrawer } from "@/components/auth/Logout";
+import useCheckLoggedInStatus from "@/hooks/useCheckLoggedInStatus";
 
 const ProtectedLayout = ({
   children,
@@ -20,25 +21,11 @@ const ProtectedLayout = ({
   title: string;
   HeaderActionItems?: () => JSX.Element;
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const config = configOptions();
-  const token = config?.token;
-  const tokenExpired = isTokenExpired(token);
-
-  useEffect(() => {
-    if (tokenExpired) {
-      router.push('/auth/login');
-      toast.error('You are not authorized to view this page');
-    } else {
-      setIsLoading(false);
-    }
-  }, [tokenExpired, router]);
-
+  const isChecking = useCheckLoggedInStatus(false)
   useConversationsSocket();
   useMessagesSocket();
 
-  if (isLoading) {
+  if (isChecking) {
     return <LoadingState />;
   }
 
