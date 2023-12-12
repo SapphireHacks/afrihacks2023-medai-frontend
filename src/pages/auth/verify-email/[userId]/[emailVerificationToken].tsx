@@ -15,7 +15,7 @@ const VerifyEmail = () => {
     const result: any = await makeRequest({
       url: urls.verifyEmail(userId as string, emailVerificationToken as string),
       method: 'get',
-      token: null
+      // token: null
     });
     if (!result) return;
     if (result.status === 'success') {

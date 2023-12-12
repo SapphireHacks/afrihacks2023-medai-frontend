@@ -46,7 +46,7 @@ const Community = () => {
     const result = await makeRequest({
       url: urls.getCommunities,
       method: 'get',
-      token: userDetails.token
+      // token: userDetails.token
     });
     if (result && result.status === 'success') {
       setCommunities(result.data);
@@ -76,7 +76,6 @@ const Community = () => {
       url: urls.updateUser,
       method: 'put',
       payload: data,
-      token: userDetails.token
     });
 
     if (result && result.status === 'success') {

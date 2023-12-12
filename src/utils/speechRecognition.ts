@@ -15,7 +15,7 @@ const useSpeechRecognition = (
     if(listening) return
     setListening(true);
     recognition.start();
-  }, [getMessage, recognition, setMessage]);
+  }, [recognition, listening]);
 
   const stopListening = useCallback(() => {
     if (recognition) recognition.stop();
@@ -36,7 +36,7 @@ const useSpeechRecognition = (
         recognition.abort();
       };
     }
-  }, [recognition, getMessage])
+  }, [recognition, getMessage, setMessage])
 
   useEffect(() => {
     if ('webkitSpeechRecognition' in window && recognition === null) {

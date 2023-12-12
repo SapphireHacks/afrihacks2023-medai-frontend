@@ -50,7 +50,7 @@ export default function ChatInput({
         setMessage('');
       }
     },
-    [message]
+    [message, onSubmit]
   );
 
   return (

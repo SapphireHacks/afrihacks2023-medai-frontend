@@ -2,8 +2,11 @@ import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import SplashImg from '@/assets/images/medAI-white.png';
 import Link from 'next/link';
+import useCheckLoggedInStatus from "@/hooks/useCheckLoggedInStatus";
 
 const Onboarding = () => {
+
+  useCheckLoggedInStatus(true)
   return (
     <Flex
       p={{

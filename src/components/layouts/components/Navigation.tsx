@@ -6,7 +6,7 @@ import LogoutIcon from '@/assets/icons/logOut';
 import EditIcon from '@/assets/icons/edit';
 import Image from 'next/image';
 import CreateNewChatButton from '@/components/buttons/CreateNewChatButton';
-import LogoutButton from '@/components/buttons/LogoutButton';
+import { InitiateLogoutButton  } from '@/components/buttons/LogoutButton';
 
 const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
   return (
@@ -53,20 +53,14 @@ const Sidebar = ({ closeNav }: { closeNav?: () => void }) => {
             </ListItem>
           ))}
         </List>
-        <LogoutButton>
-          <Flex
-            w="100%"
-            gap="1rem"
-            p="0.8rem"
-            alignItems="center"
-            className="signout"
-          >
+        <InitiateLogoutButton>
+          <Flex color="#DC3545" gap="1rem" p="0.8rem" alignItems="center" className="signout">
             <Icon as={LogoutIcon} w="2rem" h="2rem" />
-            <Text fontSize="lg" color="#DC3545">
+            <Text fontSize="lg">
               Sign Out
             </Text>
           </Flex>
-        </LogoutButton>
+        </InitiateLogoutButton>
       </Flex>
     </Flex>
   );
