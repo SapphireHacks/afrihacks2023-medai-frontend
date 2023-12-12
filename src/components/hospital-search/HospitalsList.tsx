@@ -1,5 +1,4 @@
 import { Flex, Link, Stack, Text, Box } from '@chakra-ui/react';
-import ExternalLinkIcon from '@/assets/icons/externalLink';
 
 const HospitalList = ({
   hospitals
