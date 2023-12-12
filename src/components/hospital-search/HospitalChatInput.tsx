@@ -126,7 +126,8 @@ const HospitalChatInput = ({
           }}
           icon={<SendIcon />}
           aria-label="Send message"
-          bg="white.600"
+          bg={message.length > 0 ? 'primary.800' : 'white.600'}
+          color={message.length > 0 ? 'white.main' : 'currentcolor'}
           p="1.5rem"
           h="unset"
           w="unset"

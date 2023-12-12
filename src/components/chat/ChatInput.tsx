@@ -4,7 +4,6 @@ import MicIcon from '@/assets/icons/microphone';
 import { useState, useCallback } from 'react';
 import useSpeechRecognition from '@/utils/speechRecognition';
 
-
 export const pulse = keyframes`  
 	0% {
 		transform: scale(0.85);
@@ -22,10 +21,14 @@ export const pulse = keyframes`
 	}
 `;
 
-export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
-  onSubmit: (message: string) => void
-  disabledSubmit?: boolean
-  isOnline?: boolean
+export default function ChatInput({
+  onSubmit,
+  disabledSubmit,
+  isOnline
+}: {
+  onSubmit: (message: string) => void;
+  disabledSubmit?: boolean;
+  isOnline?: boolean;
 }) {
   const [message, setMessage] = useState('');
   const {
@@ -42,9 +45,9 @@ export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
       if (message.length === 0) return;
       if ((e.key && e.key === 'Enter') || !e.key) {
         e.preventDefault();
-        console.log('done')
-        onSubmit(message)
-        setMessage("")
+        console.log('done');
+        onSubmit(message);
+        setMessage('');
       }
     },
     [message]
@@ -60,7 +63,7 @@ export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
       borderRadius="10px"
       maxH="92px"
       p={{ base: '0.8rem', md: '1.2rem' }}
-      _focusWithin={{ borderColor: "primary.900"}}
+      _focusWithin={{ borderColor: 'primary.900' }}
     >
       <Textarea
         onKeyDown={handleSubmit}
@@ -70,7 +73,7 @@ export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
         overflowY="scroll"
         fontSize={{ base: 'base', md: 'lg' }}
         border="none"
-        _focusVisible={{ outline: '0'}}
+        _focusVisible={{ outline: '0' }}
         value={message}
         resize="none"
         color="#676767"
@@ -89,23 +92,28 @@ export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
         }}
       />
       <Flex align="end" gap="4px">
-        <Box as="span"
+        <Box
+          as="span"
           display="block"
           borderRadius="1px"
           width="10px"
           height="10px"
-          bg={isOnline ? "red" : "green"} />
+          bg={isOnline ? 'red' : 'green'}
+        />
         {hasRecognitionSupport && (
           <IconButton
-            animation={listening ? `${pulse} infinite 1500ms linear` : ""}
+            animation={listening ? `${pulse} infinite 1500ms linear` : ''}
             icon={<MicIcon />}
             aria-label="Send message"
             p="1.4rem"
-            bg={listening ? "primary.900" : "none"}
-            color={listening ? "white.main" : "currentcolor"}
+            bg={listening ? 'primary.900' : 'none'}
+            color={listening ? 'white.main' : 'currentcolor'}
             h="unset"
             borderRadius="1.6rem"
-            _hover={{ bg: listening ? "primary.900" : "white.600", color: "white.main" }}
+            _hover={{
+              bg: listening ? 'primary.900' : 'white.600',
+              color: 'white.main'
+            }}
             cursor="pointer"
             onClick={listening ? stopListening : startListening}
           />
@@ -113,17 +121,22 @@ export default function ChatInput({ onSubmit, disabledSubmit, isOnline }: {
       </Flex>
       <IconButton
         disabled={message.length === 0}
-        opacity={message.length === 0 ? "0.5" : "1"}
+        opacity={message.length === 0 ? '0.5' : '1'}
         onClick={handleSubmit}
         icon={<SendIcon />}
         aria-label="Send message"
-        bg="white.600"
+        bg={message.length > 0 ? 'primary.800' : 'white.600'}
+        color={message.length > 0 ? 'white.main' : 'currentcolor'}
         p="1.5rem"
         h="unset"
         w="unset"
         borderRadius="1.6rem"
-        _hover={message.length > 0 ? { bg: "primary.900", color: "white.main" } : { bg: "white.600"}}
-        cursor={message.length === 0 ? "not-allowed" : "pointer"}
+        _hover={
+          message.length > 0
+            ? { bg: 'primary.900', color: 'white.main' }
+            : { bg: 'white.600' }
+        }
+        cursor={message.length === 0 ? 'not-allowed' : 'pointer'}
       />
     </Flex>
   );
