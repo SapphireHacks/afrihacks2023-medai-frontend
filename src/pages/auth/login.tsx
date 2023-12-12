@@ -1,11 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  Flex,
-  Link,
-  Text,
-  VStack
-} from '@chakra-ui/react';
+import { Box, Checkbox, Flex, Link, Text, VStack } from '@chakra-ui/react';
 import Image from 'next/image';
 import LoginImage from '@/assets/images/login-image.png';
 import { useState } from 'react';
@@ -46,21 +39,21 @@ const Login = () => {
   }> = async (data: any) => {
     if (!data) return;
 
-    let result: any
+    let result: any;
     try {
       result = await makeRequest({
         url: urls.loginUser,
         method: 'post',
-        payload: data,
+        payload: data
       });
     } catch (error: any) {
-      toast.error(error?.message)
+      toast.error(error?.message);
     }
-    if (!result) return toast.error("Something went wrong!")
-    if (result.status !== "success") {
-      return toast.error(result.message || result.error)
+    if (!result) return toast.error('Something went wrong!');
+    if (result.status !== 'success') {
+      return toast.error(result.message || result.error);
     } else {
-      const { data } = result
+      const { data } = result;
       let user = data.data.user,
       token = data.data.token
       if(rememberMe) localStorage.setItem("token", JSON.stringify(token))
@@ -72,16 +65,17 @@ const Login = () => {
   };
 
   return (
-    <Layout imageSource={LoginImage} imageAlt={"Login Illustration"}>
+    <Layout imageSource={LoginImage} imageAlt={'Login Illustration'}>
       <Box w="100%">
-        <FormHeading >
-          Welcome Back!
-        </FormHeading>
-        <Paragraph>
-          Login to your account to continue
-        </Paragraph>
+        <FormHeading>Welcome Back!</FormHeading>
+        <Paragraph>Login to your account to continue</Paragraph>
 
-        <VStack as="form" spacing="2.4rem" w="100%" onSubmit={handleSubmit(submit)}>
+        <VStack
+          as="form"
+          spacing="2.4rem"
+          w="100%"
+          onSubmit={handleSubmit(submit)}
+        >
           <Flex flexDir="column" mt="2rem" gap="1.5rem" w="100%">
             <BasicInput
               required
@@ -89,7 +83,7 @@ const Login = () => {
               placeholder="Enter your preferred username"
               type="text"
               {...register('emailOrUserName', {
-                required: 'This field is required',
+                required: 'This field is required'
               })}
             />
 
@@ -99,7 +93,7 @@ const Login = () => {
               placeholder="Enter your password"
               type="password"
               {...register('password', {
-                required: 'Password is required',
+                required: 'Password is required'
               })}
             />
             <Flex justifyContent="space-between" alignItems="center">
@@ -137,7 +131,7 @@ const Login = () => {
           </Link>
         </Text>
       </Box>
-    </Layout >
+    </Layout>
   );
 };
 

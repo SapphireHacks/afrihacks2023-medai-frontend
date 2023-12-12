@@ -32,7 +32,7 @@ import LoadingState from '@/components/loading-state';
 const Community = () => {
   const { loading, makeRequest } = useAxios();
   const [communities, setCommunities] = useState([] as any);
-  const [userDetails, setUserDetails] = useState({} as any);
+  const [token, setToken] = useState('' as any);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm({
@@ -41,25 +41,40 @@ const Community = () => {
     }
   });
 
-  const fetchCommunities = async () => {
-    if (!userDetails.token) return;
+  useEffect(() => {
+    const fetchCommunities = async () => {
+      if (!token) return;
+      const result = await makeRequest({
+        url: urls.getCommunities,
+        method: 'get',
+        token: token as string
+      });
+      if (result && result.status === 'success') {
+        setCommunities(result.data);
+      }
+    };
+
+    const hasAccepted = JSON.parse(
+      sessionStorage.getItem('hasAcceptedCommunityTerms') || '{}'
+    );
+    setHasAcceptedTerms(hasAccepted);
+    setToken(JSON.parse(sessionStorage.getItem('token') || ''));
+    fetchCommunities();
+  }, [token]);
+
+  const submit = async (data: any) => {
     const result = await makeRequest({
-      url: urls.getCommunities,
-      method: 'get',
-      // token: userDetails.token
+      url: urls.updateUser,
+      method: 'put',
+      payload: data
     });
+
     if (result && result.status === 'success') {
-      setCommunities(result.data);
+      const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+      sessionStorage.setItem('hasAcceptedCommunityTerms', 'true');
+      onClose();
     }
   };
-
-  // Get user details
-  useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-    setUserDetails(storedUser);
-    setHasAcceptedTerms(storedUser?.user?.hasAcceptedCommunityTerms);
-    fetchCommunities();
-  }, [userDetails.token]);
 
   // Speech Recognition
   const [searchText, setSearchText] = useState('');
@@ -70,30 +85,6 @@ const Community = () => {
     stopListening,
     hasRecognitionSupport
   } = useSpeechRecognition(setSearchText, () => searchText);
-
-  const submit = async (data: any) => {
-    const result = await makeRequest({
-      url: urls.updateUser,
-      method: 'put',
-      payload: data,
-    });
-
-    if (result && result.status === 'success') {
-      const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-
-      const updatedUser = {
-        ...storedUser,
-        user: {
-          ...storedUser.user,
-          hasAcceptedCommunityTerms: true
-        }
-      };
-      setUserDetails(updatedUser);
-      setHasAcceptedTerms(true);
-      sessionStorage.setItem('user', JSON.stringify(updatedUser));
-      onClose();
-    }
-  };
 
   return (
     <>
@@ -106,7 +97,6 @@ const Community = () => {
           w="100%"
           h="max-content"
           zIndex="100"
-          // mt="6rem"
           textAlign="center"
           py={{
             base: '0',
@@ -305,6 +295,7 @@ const Community = () => {
               }}
               gap="2.5rem"
               mt="2rem"
+              overflowY="auto"
             >
               {communities.communities?.map((community: any) => (
                 <GridItem key={community._id} h="100%">

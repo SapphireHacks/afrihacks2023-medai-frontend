@@ -38,7 +38,8 @@ export const getNearbyHospitals = async (lat: number, lng: number) => {
   const headers = {
     'Content-Type': 'application/json',
     'X-Goog-Api-Key': process.env.NEXT_PUBLIC_PLACES_API_KEY || '',
-    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress'
+    'X-Goog-FieldMask':
+      'places.displayName,places.formattedAddress,places.googleMapsUri'
   };
 
   return axios
