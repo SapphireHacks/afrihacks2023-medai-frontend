@@ -16,7 +16,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import urls from '../../services/urls';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
-import { setUser } from '@/redux/user/slice';
+import { setUserData } from '@/redux/user/slice';
 import { BasicInput, PasswordTypeInput, SubmitButton } from "@/components/auth/Inputs";
 import { FormHeading, Paragraph } from "@/components/auth/Text";
 import Layout from "@/components/auth/Layout";
@@ -65,7 +65,7 @@ const Login = () => {
       token = data.data.token
       if(rememberMe) localStorage.setItem("token", JSON.stringify(token))
       else sessionStorage.setItem("token", JSON.stringify(token))
-      dispatch(setUser(user))
+      dispatch(setUserData(user))
       toast.success(data.message || 'Login successful');
       router.push('/');
     }

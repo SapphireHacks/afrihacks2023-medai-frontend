@@ -29,6 +29,7 @@ export default function useSocket({
     [namespace, token]
   );
 
+  socket.disconnect()
   const disconnect = useCallback(() => {
     socket.disconnect();
   }, [socket]);
