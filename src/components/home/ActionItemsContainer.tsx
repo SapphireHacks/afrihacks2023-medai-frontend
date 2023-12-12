@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import ActionItem from './Actionitem';
 import { useAppDispatch } from '@/redux/hooks';
 import { setShowHospitalSearch } from '@/redux/hospital-search/slice';
+import { updateMessgeToSend } from "@/redux/conversations/slice";
 
 export default function ActionItemsList() {
   const actionItems = useGetActionItems()();
@@ -33,11 +34,21 @@ function useGetActionItems() {
     return [
       new ActionableItem(
         'How are you feeling today? Any specific symptoms bothering you?',
-        () => {}
+        () => {
+          dispatch(updateMessgeToSend({
+            content: "Doc MedAI, I'd like to talk to you about my health.",
+            conversationId: null
+          }))
+        }
       ),
       new ActionableItem(
         'Interested in exploring health tips or stories shared by our community?',
-        () => {}
+        () => {
+          dispatch(updateMessgeToSend({
+            content: "Doc MedAI, I'd like to get health tips and stories.",
+            conversationId: null
+          }))
+        }
       ),
       new ActionableItem(
         'Need information on nearby health facilities like hospitals or clinics?',
@@ -47,7 +58,12 @@ function useGetActionItems() {
       ),
       new ActionableItem(
         'Want to know more about staying fit or maintaining a healthy lifestyle?',
-        () => {}
+        () => {
+          dispatch(updateMessgeToSend({
+            content: "Doc MedAI, How can I lead a healthier life",
+            conversationId: null
+          }))
+        }
       )
     ];
   }, []);
