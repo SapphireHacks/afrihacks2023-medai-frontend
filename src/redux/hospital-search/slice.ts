@@ -8,10 +8,13 @@ const hospitalSearchSlice = createSlice({
   reducers: {
     setShowHospitalSearch: (state, action) => {
       state.showHospitalSearch = action.payload;
+    },
+    resetShowHospitalSearch: (state) => {
+      state.showHospitalSearch = false
     }
   }
 });
 
-export const { setShowHospitalSearch } = hospitalSearchSlice.actions;
+export const { setShowHospitalSearch,  resetShowHospitalSearch } = hospitalSearchSlice.actions;
 
 export default hospitalSearchSlice.reducer;
