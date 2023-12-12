@@ -9,9 +9,9 @@ import AppHead from '@/components/layouts/components/Head';
 import Conversation from '@/components/chat/Conversation';
 import { useMemo } from 'react';
 import { useAppSelector } from '@/redux/hooks';
-
 import Loader from '@/components/loading-state';
-import HospitalSearch from '@/components/hospital-search';
+import HospitalSearch from '@/components/hospital-search/HospitalSearch';
+
 const Home = () => {
   const {
     activeConversationId,

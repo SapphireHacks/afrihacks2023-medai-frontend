@@ -2,17 +2,20 @@ import HospitalChatInput from './HospitalChatInput';
 import { Box } from '@chakra-ui/react';
 import { AIBubble, AIBubbleLoading, UserBubble } from '../chat/ChatBubbles';
 import { getCoordinates, getNearbyHospitals } from '@/utils/getPlacesHelpers';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
+import HospitalList from './HospitalsList';
+import { useAppSelector } from '@/redux/hooks';
 
 const HospitalSearch = () => {
   const [location, setLocation] = useState('');
   const [messages, setMessages] = useState<
     {
       sender: 'AI' | 'USER';
-      content: string;
+      content: ReactNode;
     }[]
   >([]);
   const [loading, setLoading] = useState(false);
+  const user = useAppSelector(state => state.user.data);
 
   const getHospitals = async (location: string) => {
     setLoading(true);
@@ -24,7 +27,8 @@ const HospitalSearch = () => {
           ...prevMessages,
           {
             sender: 'AI',
-            content: 'Could not get coordinates for the provided address.'
+            content:
+              'Could not get coordinates for the provided address. Please check the address and try again.'
           }
         ]);
         setLoading(false);
@@ -33,23 +37,12 @@ const HospitalSearch = () => {
 
       const response = await getNearbyHospitals(lat, lng);
       if ('data' in response) {
-        console.log('response.data.places', response.data.places);
-        const hospitalList = response.data.places
-          .map(
-            (
-              hospital: {
-                displayName: { text: string };
-                formattedAddress: string;
-              },
-              index: number
-            ) => `${index + 1}. ${hospital.displayName.text}`
-          )
-          .join('\n');
+        // console.log('response.data.places', response.data.places);
         setMessages(prevMessages => [
           ...prevMessages,
           {
             sender: 'AI',
-            content: `Here are the hospitals near your location:\n${hospitalList}`
+            content: <HospitalList hospitals={response.data.places} />
           }
         ]);
       } else {
@@ -63,7 +56,8 @@ const HospitalSearch = () => {
         ...prevMessages,
         {
           sender: 'AI',
-          content: 'An error occurred while fetching hospitals.'
+          content:
+            'An error occurred while fetching hospitals. Please try again.'
         }
       ]);
     }
@@ -96,7 +90,7 @@ const HospitalSearch = () => {
           message.sender === 'AI' ? (
             <AIBubble key={index} content={message.content} />
           ) : (
-            <UserBubble key={index} content={message.content} user={null} />
+            <UserBubble key={index} content={message.content} user={user} />
           )
         )}
         {loading && <AIBubbleLoading />}

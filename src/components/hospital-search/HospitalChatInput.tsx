@@ -7,7 +7,7 @@ import {
   keyframes
 } from '@chakra-ui/react';
 import useSpeechRecognition from '@/utils/speechRecognition';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import SendIcon from '@/assets/icons/send';
 import MicIcon from '@/assets/icons/microphone';
 
@@ -23,10 +23,10 @@ const HospitalChatInput = ({
   fetchHospitals: (location: string) => void;
   setMessages: (
     callback: (
-      prevMessages: { sender: 'AI' | 'USER'; content: string }[]
-    ) => { sender: 'AI' | 'USER'; content: string }[]
+      prevMessages: { sender: 'AI' | 'USER'; content: ReactNode }[]
+    ) => { sender: 'AI' | 'USER'; content: ReactNode }[]
   ) => void;
-  messages: { sender: 'AI' | 'USER'; content: string }[];
+  messages: { sender: 'AI' | 'USER'; content: ReactNode }[];
 }) => {
   const {
     text,
@@ -118,10 +118,9 @@ const HospitalChatInput = ({
             fetchHospitals(message);
             setMessage('');
             setMessages(
-              (prevMessages: { sender: 'AI' | 'USER'; content: string }[]) => [
-                ...prevMessages,
-                { sender: 'USER', content: message }
-              ]
+              (
+                prevMessages: { sender: 'AI' | 'USER'; content: ReactNode }[]
+              ) => [...prevMessages, { sender: 'USER', content: message }]
             );
           }}
           icon={<SendIcon />}
