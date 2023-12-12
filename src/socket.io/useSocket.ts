@@ -70,9 +70,9 @@ export default function useSocket({
   }, [onConnect, onDisconnect, onError, onReconnect, onReconnectError, socket]);
 
   useEffect(() => {
-    const userData = sessionStorage.getItem('user');
-    if (userData !== null) {
-      const userToken = JSON.parse(userData)?.token;
+    const token = sessionStorage.getItem('token');
+    if (token !== null) {
+      const userToken = JSON.parse(token);
       if (userToken) setToken(userToken);
     }
   }, []);
