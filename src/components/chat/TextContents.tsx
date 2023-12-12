@@ -1,4 +1,5 @@
-import { Text } from '@chakra-ui/react';
+import { Text, Box } from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
 const TextContent = ({
   content,
@@ -8,11 +9,13 @@ const TextContent = ({
 }: {
   textAlign: 'left' | 'right';
   bg: string;
-  content: string;
-  borderRadius: string
+  content: ReactNode;
+  borderRadius: string;
 }) => {
+  const Wrapper = typeof content === 'string' ? Text : Box;
+
   return (
-    <Text
+    <Wrapper
       w="fit-content"
       maxW="72ch"
       textAlign={textAlign}
@@ -22,15 +25,29 @@ const TextContent = ({
       borderRadius={borderRadius}
     >
       {content}
-    </Text>
+    </Wrapper>
   );
 };
 export default TextContent;
 
-export const UserTextContent = ({ content }: { content: string }) => {
-return <TextContent borderRadius={"10px 0 10px 10px"} bg="primary.50" textAlign="right" content={content} />;
+export const UserTextContent = ({ content }: { content: ReactNode }) => {
+  return (
+    <TextContent
+      borderRadius={'10px 0 10px 10px'}
+      bg="primary.50"
+      textAlign="right"
+      content={content}
+    />
+  );
 };
 
-export const MedAITextContent = ({ content }: { content: string }) => {
-  return <TextContent borderRadius={"10px 10px 10px 0"} bg="white.main" textAlign="left" content={content} />;
+export const MedAITextContent = ({ content }: { content: ReactNode }) => {
+  return (
+    <TextContent
+      borderRadius={'10px 10px 10px 0'}
+      bg="white.main"
+      textAlign="left"
+      content={content}
+    />
+  );
 };
