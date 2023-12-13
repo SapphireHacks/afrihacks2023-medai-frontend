@@ -44,18 +44,18 @@ const Login = () => {
       result = await makeRequest({
         url: urls.loginUser,
         method: 'post',
-        payload: data
+        payload: { email: data.emailOrUserName, password: data.password }
       });
     } catch (error: any) {
       toast.error(error?.message);
     }
+    console.log(result, "nbvcvbnm")
     if (!result) return toast.error('Something went wrong!');
     if (result.status !== 'success') {
       return toast.error(result.message || result.error);
     } else {
       if(result.data.status >= 400) return toast.error(result.data.message)
       const { data } = result.data;
-    console.log(result, "nbvcvbnm")
       let user = data.user,
       token = data.token
       if(rememberMe){
