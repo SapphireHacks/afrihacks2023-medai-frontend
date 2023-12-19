@@ -9,11 +9,8 @@ const Onboarding = () => {
   useCheckLoggedInStatus(true)
   return (
     <Flex
-      p={{
-        base: '2rem 1rem',
-        md: '2rem 4rem'
-      }}
-      justifyContent="space-between"
+      h="100dvh"
+      justifyContent="center"
       alignItems="center"
       flexDir={{
         base: 'column',
@@ -21,64 +18,54 @@ const Onboarding = () => {
       }}
     >
       <Box
-        w={{
-          base: '60%',
-          md: '40%'
-        }}
-        h="100%"
-        mx="auto"
-      >
+        maxW={{ md: "33%"}}
+        flexGrow="1" maxH={{base: "35dvh", md: "unset"}} position="relative">
         <Image
           src={SplashImg}
           alt="onboarding illustration"
+          width={100}
+          height={100}
           style={{
             width: '100%',
-            height: '100%'
+            height: '100%',
+            objectFit: "contain"
           }}
         />
       </Box>
-      <Box
-        w={{
-          base: '100%',
-          md: '50%'
-        }}
-        mx="4rem"
-        mt="4rem"
-        textAlign="center"
-      >
-        <Text fontSize="3xl" fontWeight="550" mb="1rem">
+      <Box textAlign="center" maxW={{ base: "88%", md: "47.5%"}}>
+        <Text as="h1" lineHeight="100%" fontSize={{base: "3rem", md: "6rem"}} fontWeight="600" mb="1.6rem">
           Your Personal Health Companion
         </Text>
         <Text
           fontSize={{
-            base: 'sm',
-            md: 'xl'
+            base: '1.6rem',
+            md: '2.4rem'
           }}
-          fontWeight="400"
-        >
-          Experience the future of personalized healthcare with MedAI. We have
-          you covered on symptom insights, personalized health advice, or
-          proactive wellness tips
+          lineHeight="125%"
+          fontWeight="400">
+          Experience the future of personalized healthcare with MedAI. We have you covered on symptom insights, personalized health advice, or proactive wellness tips
         </Text>
-        <Button
-          type="submit"
-          h="4rem"
+        <Button 
+          as={Link} 
+          href="/auth/signup"
+          h="unset"
           w={{
             base: '100%',
-            md: '80%'
+            md: '70%'
           }}
-          borderRadius="0.5rem"
+          p="1.5rem"
           fontSize="lg"
           fontWeight="400"
           bg="primary.900"
           mt={{
-            base: '5rem',
-            md: '2rem'
+            base: '8rem',
+            md: '4rem'
           }}
           color="white"
           _hover={{ bg: 'primary.700' }}
+          borderRadius="10px"
         >
-          <Link href="/auth/signup">Sign up</Link>
+          Sign up
         </Button>
         <Text
           fontSize={{

@@ -9,7 +9,7 @@ function AuthInput({ labelText, isRequired, inputRef, ...props }: HTMLAttributes
 }){
   return(
     <FormControl isRequired>
-      <FormLabel fontSize="lg">{labelText}</FormLabel>
+      <FormLabel fontSize="1.6rem" fontWeight="500">{labelText}</FormLabel>
       <Input
         _focusWithin={{ outline: "0", border: "1px solid", borderColor: "primary.800", boxShadow: "0" }}
         _focusVisible={{ outline: "0", border: "1px solid", borderColor: "primary.800", boxShadow: "0" }}
@@ -36,7 +36,7 @@ export function PasswordInput({ labelText, isRequired, inputRef, ...props }: HTM
 
   return (
     <FormControl isRequired>
-      <FormLabel fontSize="1.6rem">Password</FormLabel>
+      <FormLabel fontSize="1.6rem" fontWeight="500">Password</FormLabel>
       <InputGroup size="md">
         <Input
           p="1.5rem"

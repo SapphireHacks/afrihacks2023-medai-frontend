@@ -51,8 +51,8 @@ const Login = () => {
     }
     console.log(result, "nbvcvbnm")
     if (!result) return toast.error('Something went wrong!');
-    if (result.status !== 'success') {
-      return toast.error(result.message || result.error);
+    if (result.error !== null) {
+      return toast.error(result.data.message || result.error);
     } else {
       if(result.data.status >= 400) return toast.error(result.data.message)
       const { data } = result.data;
@@ -89,6 +89,7 @@ const Login = () => {
               labelText="Email Address/Username"
               placeholder="Enter your preferred username"
               type="text"
+              autoComplete="username"
               {...register('emailOrUserName', {
                 required: 'This field is required'
               })}
@@ -98,6 +99,7 @@ const Login = () => {
               required
               labelText="Password"
               placeholder="Enter your password"
+              autoComplete="current-password"
               type="password"
               {...register('password', {
                 required: 'Password is required'
