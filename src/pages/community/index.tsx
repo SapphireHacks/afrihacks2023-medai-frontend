@@ -1,313 +1,59 @@
 import ProtectedLayout from '@/components/layouts/protected/DefaultLayout';
 import {
   Box,
-  useDisclosure,
-  Checkbox,
-  Text,
-  Button,
-  Flex,
-  FormLabel,
-  InputGroup,
-  InputRightElement,
-  Input,
-  IconButton,
-  InputLeftElement,
-  Grid,
-  GridItem
+  Flex
 } from '@chakra-ui/react';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import CommunityImg from '@/assets/images/community-image.png';
-import SendIcon from '@/assets/icons/send';
-import MicIcon from '@/assets/icons/microphone';
-import useSpeechRecognition from '@/utils/speechRecognition';
-import SearchIcon from '@/assets/icons/search';
-import CommunityCard from '@/components/community/CommunityCard';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import useAxios from '@/hooks/use-axios';
 import urls from '@/services/urls';
 import LoadingState from '@/components/loading-state';
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import AcceptTermsAndConditionsForm from "@/components/community/AcceptTermsAndConditionsFom";
+import DesktopHeader from "@/components/community/DesktopHeader";
+import CommunitiesList from "@/components/community/CommunitiesList";
+import CommunitiesSearchBar from "@/components/community/CommunitiesSearchBar";
+import { updateSuggestedCommunities } from "@/redux/communities/slice";
 
 const Community = () => {
+  const dispatch = useAppDispatch()
+  const { data: userData } = useAppSelector(store => store.user)
+  const { suggestedCommunities, hasFetchedSuggestedCommunities } = useAppSelector(store => store.communities)
   const { loading, makeRequest } = useAxios();
-  const [communities, setCommunities] = useState([] as any);
-  const [token, setToken] = useState('' as any);
-  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      hasAcceptedCommunityTerms: false
-    }
-  });
 
   useEffect(() => {
     const fetchCommunities = async () => {
-      if (!token) return;
-      const result = await makeRequest({
+      const response = await makeRequest({
         url: urls.getCommunities,
         method: 'get',
-        token: token as string
       });
-      if (result && result.status === 'success') {
-        setCommunities(result.data);
+      const result = response.data as any
+      if(Array.isArray(result.communities)){
+        dispatch(updateSuggestedCommunities(result.communities))
       }
-    };
-
-    const hasAccepted = JSON.parse(
-      sessionStorage.getItem('hasAcceptedCommunityTerms') || '{}'
-    );
-    setHasAcceptedTerms(hasAccepted);
-    setToken(JSON.parse(sessionStorage.getItem('token') || ''));
-    fetchCommunities();
-  }, [token]);
-
-  const submit = async (data: any) => {
-    const result = await makeRequest({
-      url: urls.updateUser,
-      method: 'put',
-      payload: data
-    });
-
-    if (result && result.status === 'success') {
-      const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-      sessionStorage.setItem('hasAcceptedCommunityTerms', 'true');
-      onClose();
     }
-  };
+    !hasFetchedSuggestedCommunities && fetchCommunities()
+  }, [dispatch, hasFetchedSuggestedCommunities, makeRequest]);
 
-  // Speech Recognition
-  const [searchText, setSearchText] = useState('');
-  const {
-    text,
-    listening,
-    startListening,
-    stopListening,
-    hasRecognitionSupport
-  } = useSpeechRecognition(setSearchText, () => searchText);
-
+  if(!userData) return <LoadingState/>
+  if (!userData?.hasAcceptedCommunityTerms) return (
+    <AcceptTermsAndConditionsForm />
+  )
   return (
     <>
-      {!hasAcceptedTerms && (
-        <Flex
-          pos="absolute"
-          bg="white"
-          flexDir="column"
-          gap="1.5rem"
-          w="100%"
-          h="max-content"
-          zIndex="100"
-          textAlign="center"
-          py={{
-            base: '0',
-            md: '4rem'
-          }}
-          px={{
-            base: '2rem',
-            md: '15rem'
-          }}
-        >
-          <Box
-            w={{
-              base: '80%',
-              md: '40%'
-            }}
-            mx="auto"
-            mt="2.5rem"
-          >
-            <Image
-              src={CommunityImg}
-              alt="Community illustration"
-              style={{
-                width: '100%',
-                height: '100%'
-              }}
-            />
-          </Box>
-          <Text
-            fontSize={{
-              base: '2xl',
-              md: '3xl'
-            }}
-            fontWeight="550"
-          >
-            Welcome to Our Health Community: Sharing Tips and Testimonies
-          </Text>
-          <Text
-            fontSize={{
-              base: 'sm',
-              md: 'lg'
-            }}
-          >
-            Join our dynamic Health Community, where members exchange valuable
-            health tips, share inspiring testimonies, and support one another on
-            their wellness journeys.
-          </Text>
-          <form onSubmit={handleSubmit(submit)}>
-            <FormLabel
-              htmlFor="join-community"
-              fontSize={{
-                base: 'xs',
-                md: 'sm'
-              }}
-              textAlign="center"
-              mt="1rem"
-              display="flex"
-              alignItems="flex-start"
-            >
-              <Checkbox
-                size="lg"
-                {...register('hasAcceptedCommunityTerms', {
-                  required: true
-                })}
-              />
-              By selecting this, you acknowledge and agree to adhere to our
-              community&apos;s guidelines, fostering a positive and supportive
-              environment for all members.
-            </FormLabel>
-
-            <Box>
-              <Button
-                h="4rem"
-                w={{
-                  base: '100%',
-                  md: '50%'
-                }}
-                borderRadius="0.5rem"
-                fontSize="lg"
-                fontWeight="400"
-                bg="primary.900"
-                mt="2rem"
-                color="white"
-                _hover={{ bg: 'primary.700' }}
-                type="submit"
-                isLoading={loading}
-              >
-                Join our community
-              </Button>
+      <Flex flexDirection="column" h={{ base: '80dvh', md: '100dvh' }} overflow="hidden" w="100%">
+        <DesktopHeader />
+        {
+          loading ? <LoadingState/> :
+          <>
+            <Box w="92%" position="sticky" mx="auto" top="0" mt={{ base: "1rem", md: "3.5rem" }}>
+              <CommunitiesSearchBar />
             </Box>
-          </form>
-        </Flex>
-      )}
-      {hasAcceptedTerms && communities && (
-        <Box
-          w="100%"
-          p="2rem"
-          pt={{
-            base: '0',
-            md: '2rem'
-          }}
-          mt={{
-            base: '-0.8rem',
-            md: '0'
-          }}
-        >
-          <Box
-            h="4rem"
-            textAlign="center"
-            display={{
-              base: 'none',
-              md: 'block'
-            }}
-          >
-            <Text as="h2" fontSize="2xl" fontWeight="550">
-              Community
-            </Text>
-          </Box>
-
-          <InputGroup
-            h={{
-              base: '4rem',
-              md: '6rem'
-            }}
-            mt="2rem"
-          >
-            <InputLeftElement
-              m={{
-                base: '0.8rem',
-                md: '1.55rem'
-              }}
-            >
-              <IconButton
-                aria-label="Search"
-                icon={<SearchIcon height={18} width={18} />}
-                bg="none"
-              />
-            </InputLeftElement>
-
-            <Input
-              h="100%"
-              placeholder="Search"
-              fontSize="lg"
-              pl="5rem"
-              pr="5rem"
-              borderRadius="0.5rem"
-              value={searchText}
-              onChange={e => setSearchText(e.target.value)}
-            />
-            <InputRightElement
-              m={{
-                base: '0.5rem',
-                md: '1.55rem'
-              }}
-            >
-              {hasRecognitionSupport && (
-                <IconButton
-                  // to do: change icon when listening, need recording icon
-                  icon={listening ? <SendIcon /> : <MicIcon />}
-                  aria-label="Send message"
-                  bg="none"
-                  onClick={listening ? stopListening : startListening}
-                />
-              )}
-            </InputRightElement>
-          </InputGroup>
-
-          <Box mt="2rem">
-            <Text
-              fontSize={{
-                base: 'base',
-                md: 'xl'
-              }}
-              fontWeight="550"
-            >
-              Discover Communities
-            </Text>
-            <Text
-              fontSize={{
-                base: 'sm',
-                md: 'lg'
-              }}
-              fontWeight="500"
-            >
-              Communities you might like
-            </Text>
-          </Box>
-
-          {loading ? (
-            <LoadingState />
-          ) : (
-            <Grid
-              templateColumns={{
-                base: 'repeat(2, 1fr)',
-                sm: 'repeat(3, 1fr)',
-                md: 'repeat(4, 1fr)'
-              }}
-              gap="2.5rem"
-              mt="2rem"
-              overflowY="auto"
-            >
-              {communities.communities?.map((community: any) => (
-                <GridItem key={community._id} h="100%">
-                  <Link href={`/community/${community._id}`}>
-                    <CommunityCard {...community} />
-                  </Link>
-                </GridItem>
-              ))}
-            </Grid>
-          )}
-        </Box>
-      )}
+            <Box w="92%" mx="auto" mt={{ base: "calc(2rem + 42px)", md: "calc(3.4rem + 42px)" }}>
+                <CommunitiesList communities={suggestedCommunities} />
+            </Box>
+          </>
+        }
+      </Flex>
     </>
   );
 };
