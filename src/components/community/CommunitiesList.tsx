@@ -17,8 +17,8 @@ export default function CommunitiesList({ communities }: {
             Communities you might like
           </Text>
         </Box>
-        <Grid 
-          templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} 
+      <Grid pb={{ base: "250px", md: "50px"}}
+          templateColumns={{ base: 'repeat(1, 1fr)', sm: "repeat(2, 1fr)", lg: 'repeat(3, 1fr)', xl: 'repeat(4, 1fr)' }} 
           gap={{ base: "1.6rem", md: "2.4rem"}}>
           {
             communities.map(community => (

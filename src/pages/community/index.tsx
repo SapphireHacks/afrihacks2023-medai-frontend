@@ -17,7 +17,7 @@ import { updateSuggestedCommunities } from "@/redux/communities/slice";
 const Community = () => {
   const dispatch = useAppDispatch()
   const { data: userData } = useAppSelector(store => store.user)
-  const { suggestedCommunities, hasFetchedSuggestedCommunities } = useAppSelector(store => store.communities)
+  const { suggestedCommunities, hasFetchedSuggestedCommunities, searchResults, searchTerm } = useAppSelector(store => store.communities)
   const { loading, makeRequest } = useAxios();
 
   useEffect(() => {
@@ -49,7 +49,10 @@ const Community = () => {
               <CommunitiesSearchBar />
             </Box>
             <Box w="92%" mx="auto" mt={{ base: "calc(2rem + 42px)", md: "calc(3.4rem + 42px)" }}>
-                <CommunitiesList communities={suggestedCommunities} />
+                {
+                  ((searchTerm.length > 0 && searchResults.length > 0) || searchTerm.length === 0) &&
+                  <CommunitiesList communities={searchTerm.length === 0 ? suggestedCommunities : searchResults} />
+                }
             </Box>
           </>
         }

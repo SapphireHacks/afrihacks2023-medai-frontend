@@ -18,6 +18,8 @@ export interface CommunitiesState {
   suggestedCommunitiesPage: number
   hasMoreSuggestedCommunities: boolean
   activeCommunityId: string | null
+  searchResults: StoreCommunity[]
+  searchTerm: string
 }
 
 const initialState: CommunitiesState = {
@@ -27,7 +29,9 @@ const initialState: CommunitiesState = {
   hasFetchedSuggestedCommunities: false,
   suggestedCommunitiesPage: 1,
   hasMoreSuggestedCommunities: true,
-  activeCommunityId: null
+  activeCommunityId: null,
+  searchResults: [],
+  searchTerm: ""
 };
 
 export const communitiesSlice = createSlice({
@@ -74,6 +78,14 @@ export const communitiesSlice = createSlice({
         )
       )]
       .map(el => JSON.parse(el))
+    },
+    searchSuggestedCommunities: (state, action: PayloadAction<string>) => {
+      state.searchTerm = action.payload
+      state.searchResults = (state.suggestedCommunities as StoreCommunity[]).filter(it => {
+        if(it.name.toLowerCase().includes(action.payload.toLowerCase())) return true
+        else if(it.description.toLowerCase().includes(action.payload.toLowerCase())) return true
+        else return false
+      })
     }
   }
 });
@@ -81,6 +93,7 @@ export const communitiesSlice = createSlice({
 export const {
   updateJoinedCommunities,
   updateSuggestedCommunities,
+  searchSuggestedCommunities,
 } = communitiesSlice.actions;
 
 export default communitiesSlice.reducer;
