@@ -72,6 +72,7 @@ const SignUp = () => {
               labelText="Username"
               placeholder="Enter your preferred username"
               type="text"
+              autoComplete="username"
               {...register('userName', {
                 required: 'Username is required',
                 pattern: {
@@ -84,6 +85,7 @@ const SignUp = () => {
               labelText="Email Address"
               placeholder="Enter your email address"
               type="email"
+              autoComplete="email"
               {...register('email', {
                 required: 'Email is required',
                 pattern: {

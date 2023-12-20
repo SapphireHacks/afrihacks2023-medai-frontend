@@ -4,6 +4,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 const urls = {
   createUser: `${baseUrl}/users/signup`,
+  getUser: `${baseUrl}/users/me`,
   loginUser: `${baseUrl}/users/login`,
   verifyEmail: (userId: string, emailVerificationToken: string) =>
     `${baseUrl}/users/verify-email/${userId}/${emailVerificationToken}`,

@@ -17,3 +17,14 @@ export interface ResponseData {
   status: number;
   message: string;
 }
+
+export interface Community {
+   name: string,
+    primaryCoverImage: string,
+    secondaryCoverImage: string,
+    description: string,
+    moderators: string[],
+    tags: string[],
+    reportsCount: number,
+    _id: string
+}

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import communitiesReducer from './communities/slice';
 import userReducer from './user/slice';
 import conversationsReducer from './conversations/slice';
 import socketReducer from './socket/slice';
@@ -10,7 +11,8 @@ export const makeStore = () => {
       user: userReducer,
       conversations: conversationsReducer,
       socket: socketReducer,
-      hospitalSearch: hospitalSearchReducer
+      hospitalSearch: hospitalSearchReducer,
+      communities: communitiesReducer,
     }
   });
 };

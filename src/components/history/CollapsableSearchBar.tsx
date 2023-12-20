@@ -20,12 +20,14 @@ export default function CollapsableSearchBar({
   childrenWhenExpanded,
   disabled,
   handleTyping,
+  expandSearchBarAlways
 }: Children & {
   childrenWhenExpanded?: Children['children'];
   disabled: boolean;
   handleTyping: (value: string) => void
+  expandSearchBarAlways?: boolean
 }) {
-  const [showSearchBar, setShowSearchBar] = useBoolean(false);
+  const [showSearchBar, setShowSearchBar] = useBoolean(expandSearchBarAlways ? true : false);
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function CollapsableSearchBar({
   }, [showSearchBar])
 
   return (
-    <Flex alignItems="center" bg="white">
+    <Flex alignItems="center">
       <Box position="relative" w={showSearchBar ? '100%' : ''}>
         <Button
           onClick={disabled ?  setShowSearchBar.off : setShowSearchBar.toggle}
@@ -51,9 +53,6 @@ export default function CollapsableSearchBar({
           alignItems="center"
           justify={{ base: 'center', md: 'space-between' }}
           w={showSearchBar ? '100%' : '0'}
-          pb={showSearchBar ? { md: '3.2rem', base: '1.4rem' } : '0'}
-          pt={showSearchBar ? { md: '5.6rem', base: '2.4rem' } : '0'}
-          bg="white"
           overflow="hidden"
           top="0"
           left="0"
@@ -61,7 +60,7 @@ export default function CollapsableSearchBar({
           gap={{ base: '1.5rem', md: '1.6rem' }}
           position={showSearchBar ? 'absolute' : 'static'}
         >
-          <Button bg="transparent" onClick={setShowSearchBar.toggle}>
+          <Button as={expandSearchBarAlways ? "span" : "button"} bg="transparent" onClick={!expandSearchBarAlways ? setShowSearchBar.toggle : undefined}>
             {childrenWhenExpanded || children}
           </Button>
           <SearchInput inputRef={inputRef} handleTyping={handleTyping} />
@@ -101,7 +100,7 @@ function SearchInput({ handleTyping, inputRef }: {
             setMessage(e.target.value)
             handleTyping(e.target.value)
           }}
-          bg="white.500"
+          bg={"white.500"}
         />
         {hasRecognitionSupport && (
           <InputRightElement width="4.5rem" my="0.5rem">

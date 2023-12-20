@@ -13,21 +13,15 @@ type MakeRequest<RType extends ResponseData> = <PType>(
   args: Request<PType>
 ) => Promise<{
   data: RType | null;
-  status: 'success' | 'error';
   error: unknown;
 }>;
 
 function useAxios<RType extends ResponseData>() {
-  const [token, setToken] = useState<string | null>(null)
   const getTokenFromStorage = useCallback(() => {
     const tokenInStorage = localStorage.getItem("token") || sessionStorage.getItem("token")
-    console.log(tokenInStorage)
     if (tokenInStorage && tokenInStorage !== "undefined") return JSON.parse(tokenInStorage)
     else return ""
   }, [])
-  useEffect(() => {
-    setToken(getTokenFromStorage() || null)
-  }, [getTokenFromStorage])
 
   const [loading, setLoading] = useState<boolean>(false);
   const makeRequest: MakeRequest<RType> = useCallback(
@@ -38,12 +32,11 @@ function useAxios<RType extends ResponseData>() {
           url,
           method,
           data: payload ,
-         headers: { Authorization: `Bearer ${token || getTokenFromStorage()}`  }
+         headers: { Authorization: `Bearer ${getTokenFromStorage()}`  }
         });
         console.log(response.status)
         return {
           data: response.data,
-          status: 'success',
           error: null
         };
       } catch (error: unknown) {
@@ -58,7 +51,7 @@ function useAxios<RType extends ResponseData>() {
         setLoading(false);
       }
     },
-    [token, getTokenFromStorage]
+    [getTokenFromStorage]
   );
 
   return { loading, makeRequest };

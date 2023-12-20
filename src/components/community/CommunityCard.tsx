@@ -2,6 +2,7 @@ import { Box, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import CardBg from '@/assets/images/community-card-bg.png';
 import CardAvatar from '@/assets/images/community-card-avatar.png';
+import { Community } from "@/types";
 
 const CommunityCard = ({
   _id,
@@ -9,13 +10,7 @@ const CommunityCard = ({
   description,
   primaryCoverImage,
   secondaryCoverImage
-}: {
-  _id: string;
-  name: string;
-  description: string;
-  primaryCoverImage: string;
-  secondaryCoverImage: string;
-}) => {
+}: Community) => {
   return (
     <Box
       h="100%"
