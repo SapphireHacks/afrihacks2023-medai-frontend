@@ -1,123 +1,62 @@
-import ChatInput from '@/components/chat/ChatInput';
 import ProtectedLayout from '@/components/layouts/protected/DefaultLayout';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import CommunityBg from '@/assets/images/community-header-bg.png';
-import Image from 'next/image';
-import CardAvatar from '@/assets/images/community-card-avatar.png';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useAxios from '@/hooks/use-axios';
 import urls from '@/services/urls';
 import LoadingState from '@/components/loading-state';
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { updateCommunities } from "@/redux/communities/slice";
+import { Community } from "@/types";
+import CommunityChatInput from "@/components/community/CommunityChatInput";
+import DesktopHeader from "@/components/community/DesktopHeader";
+import CommunityChatHeading from "@/components/community/CommunityChatHeading";
+import CommunityConversation from "@/components/community/CommunityConversation";
 
 const SingleCommunity = () => {
+  const dispatch = useAppDispatch()
   const router = useRouter();
   const { loading, makeRequest } = useAxios();
   const { communityId } = router.query;
-  const [community, setCommunity] = useState({} as any);
+  const { memberships, communities, hasFetchedMemberships, hasFetchedCommunities } = useAppSelector(store => store.communities)
+  const isMemberOfCommunity = useMemo(() => 
+    hasFetchedMemberships && memberships.find(it => it.community === communityId), 
+  [memberships, communityId, hasFetchedMemberships])
+  const community = useMemo(() => communities.find(it => it._id === communityId), [communities, communityId])
+  const fetchCommunity = useCallback(async () => {
+    if(!communityId) return
+    const result = await makeRequest({
+      url: urls.getCommunityById(communityId as string),
+      method: 'get',
+    });
+    const data = (result.data as any)
+    if (data.community as Community) {
+      dispatch(updateCommunities([data.community]))
+    }
+  }, [communityId])
 
-  // const fetchCommunity = async () => {
-  //   const result = await makeRequest({
-  //     url: urls.getCommunityById(communityId as string),
-  //     method: 'get',
-  //   });
-  //   if (result && result.status === 'success') {
-  //     setCommunity(result.data);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (!communityId) return;
-  //   fetchCommunity();
-  // }, [communityId, fetchCommunity]);
-
-  if (loading) return <LoadingState />;
-
-  const { name, primaryCoverImage, secondaryCoverImage } =
-    community?.community || {};
+  useEffect(() => {
+    if(!community && hasFetchedCommunities === false){
+      fetchCommunity()
+    }
+  }, [fetchCommunity, community]);
 
   return (
-    <Box
-      h="100vh"
-      overflowY="auto"
-      p="2rem"
-      py={{
-        base: '0',
-        md: '2rem'
-      }}
-      sx={{
-        '::-webkit-scrollbar': {
-          width: '10px'
-        },
-        '::-webkit-scrollbar-thumb': {
-          background: 'gray',
-          borderRadius: '6px'
-        },
-        '::-webkit-scrollbar-thumb:hover': {
-          background: 'darkgray'
-        }
-      }}
-    >
-      <Box
-        h="4rem"
-        mb="3rem"
-        textAlign="center"
-        display={{
-          base: 'none',
-          md: 'block'
-        }}
-      >
-        <Text as="h2" fontSize="2xl" fontWeight="550">
-          Community
-        </Text>
-      </Box>
-      <Box h="20%" w="100%" pos="relative" borderRadius="0.5rem">
-        <Image
-          src={primaryCoverImage !== '' ? primaryCoverImage : CommunityBg}
-          alt="Community header"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center',
-            borderRadius: '0.5rem'
-          }}
-        />
-        <Flex
-          alignItems="flex-end"
-          gap="1rem"
-          pos="absolute"
-          bottom="0"
-          left="0"
-          right="0"
-          h="5rem"
-          bg="rgba(255, 255, 255, 0.5)"
-          pl="4rem"
-          pb="2rem"
-        >
-          <Box h="6rem" w="6rem">
-            <Image
-              src={
-                secondaryCoverImage !== '' ? secondaryCoverImage : CardAvatar
-              }
-              alt="Community Avatar"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                borderRadius: '1rem'
-              }}
-            />
+    <Flex flexDirection="column" h={{ base: '80dvh', md: '100dvh' }} overflow="hidden" w="100%">
+      <DesktopHeader />
+      {
+        loading ? <LoadingState/> :
+          <Box w="95%" mr="3%" ml="2%">
+          <Box h="20%" w="100%" pos="sticky" top="0" borderRadius="0.5rem">
+            <CommunityChatHeading community={community} />
           </Box>
-          <Text fontSize="lg" fontWeight="550" mb="-.5rem">
-            {name}
-          </Text>
-        </Flex>
-      </Box>
-      <Box py="1.6rem" position="absolute" bottom="0" width="calc(100% - 4rem)">
-        <ChatInput onSubmit={(message) => console.log(message)} />
-      </Box>
-    </Box>
+          <Box  h={{ base: 'calc(100vh - 36rem)', }} overflow="auto" pt="8rem">
+            <CommunityConversation messages={community?.messages || []} />
+          </Box>
+          <CommunityChatInput community={community} />
+        </Box>
+      }
+    </Flex>
   );
 };
 

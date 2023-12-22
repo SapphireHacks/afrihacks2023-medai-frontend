@@ -1,8 +1,8 @@
 import { useMemo } from "react"
-import { Message } from "@/types/chat"
+import { CommunityMessage, Message } from "@/types/chat"
 
 export default function useSortMessages (
-  messages: Message[],
+  messages: (Message | CommunityMessage)[],
 ) {
   return useMemo(() => {
     return [...messages].map(it => ({
@@ -14,5 +14,5 @@ export default function useSortMessages (
               b.createdAt.getTime()
             )
       })
-  }, [messages])
+  }, [messages]) as any
 }

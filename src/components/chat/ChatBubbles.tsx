@@ -28,7 +28,8 @@ const Bubble = ({
 
 export const UserBubble = ({
   content,
-  user
+  user,
+  direction = "row-reverse"
 }: {
   content: ReactNode;
   user: {
@@ -36,11 +37,12 @@ export const UserBubble = ({
     firstName: string;
     lastName: string;
   } | null;
+  direction?: "row" | "row-reverse"
 }) => {
   return (
     <Bubble
       gap={{ base: '10px', md: '24px' }}
-      direction="row-reverse"
+      direction={direction}
       justification="end"
     >
       <UserChatAvatar

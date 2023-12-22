@@ -1,3 +1,5 @@
+import { User } from "@/redux/user/slice";
+
 export type Message = {
   conversationOwner: string;
   conversation: string;
@@ -13,3 +15,11 @@ export type Conversation = {
   createdAt: string;
   updatedAt: string;
 };
+export type CommunityMessage = {
+  sender: User["data"],
+  community: string,
+  recipients: string[],
+  message: string,
+  createdAt?: string
+  _id: string
+}

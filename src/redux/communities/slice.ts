@@ -1,34 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { Community } from '@/types';
-import type { Message } from '@/types/chat';
+import type { CommunityMessage, } from '@/types/chat';
 
 export interface StoreCommunity extends Community {
-  messages?: Message[];
+  messages?: CommunityMessage[];
   hasOlderMessages: boolean;
   hasFetchedInitialMessages: boolean;
   page: number;
 }
 
+export interface Membership {
+  member: string,
+  community: string
+}
+
 export interface CommunitiesState {
-  joinedCommunities: StoreCommunity[],
-  hasFetchedJoinedCommunities: boolean,
-  suggestedCommunities: Community[]
-  hasFetchedSuggestedCommunities: boolean,
-  suggestedCommunitiesPage: number
-  hasMoreSuggestedCommunities: boolean
+  memberships: Membership[],
+  hasFetchedMemberships: boolean,
+  communities: StoreCommunity[]
+  hasFetchedCommunities: boolean,
+  communitiesPage: number
+  hasMoreCommunities: boolean
   activeCommunityId: string | null
   searchResults: StoreCommunity[]
   searchTerm: string
 }
 
 const initialState: CommunitiesState = {
-  joinedCommunities: [],
-  hasFetchedJoinedCommunities: false,
-  suggestedCommunities: [],
-  hasFetchedSuggestedCommunities: false,
-  suggestedCommunitiesPage: 1,
-  hasMoreSuggestedCommunities: true,
+  memberships: [],
+  hasFetchedMemberships: false,
+  communities: [],
+  hasFetchedCommunities: false,
+  communitiesPage: 1,
+  hasMoreCommunities: true,
   activeCommunityId: null,
   searchResults: [],
   searchTerm: ""
@@ -38,39 +43,11 @@ export const communitiesSlice = createSlice({
   name: 'communities',
   initialState,
   reducers: {
-    updateJoinedCommunities: (state, action: PayloadAction<{ communities: Community[], page: number, hasMore: boolean}>) => {
-      state.hasFetchedJoinedCommunities = true
-      state.joinedCommunities = [...Array.from(
+    updateMemberships: (state, action: PayloadAction<Membership[]>) => {
+      state.hasFetchedMemberships = true
+      state.memberships = [...Array.from(
          new Set(
-          [...state.joinedCommunities
-            , ...action.payload.communities
-          ].map(el =>
-            JSON.stringify(el)
-          )
-        )
-      )]
-      .map(el => JSON.parse(el))
-      .map((community: StoreCommunity) => {
-          return {
-            ...community,
-            messages: Array.isArray(community.messages) ? community.messages : [],
-            hasOlderMessages:
-              typeof community.hasOlderMessages === 'boolean'
-                ? community.hasOlderMessages
-                : true,
-            hasFetchedInitialMessages:
-              typeof community.hasFetchedInitialMessages === 'boolean'
-                ? community.hasFetchedInitialMessages
-                : false,
-            page: typeof community.page === 'number' ? community.page : 1
-          };
-        });
-    },
-    updateSuggestedCommunities: (state, action: PayloadAction<Community[]>) => {
-      state.hasFetchedSuggestedCommunities = true
-      state.suggestedCommunities = [...Array.from(
-         new Set(
-          [...state.suggestedCommunities
+          [...state.memberships
             , ...action.payload
           ].map(el =>
             JSON.stringify(el)
@@ -79,9 +56,26 @@ export const communitiesSlice = createSlice({
       )]
       .map(el => JSON.parse(el))
     },
-    searchSuggestedCommunities: (state, action: PayloadAction<string>) => {
+    updateCommunities: (state, action: PayloadAction<Community[]>) => {
+      state.hasFetchedCommunities = true
+      const communitiesInStore = [...state.communities]
+      action.payload.forEach((community: Community) => {
+          const communityInStore = communitiesInStore.find(it => it._id === community._id)
+          if(!communityInStore){
+            communitiesInStore.push({
+            ...community,
+            messages: [],
+            hasOlderMessages: true,
+            hasFetchedInitialMessages: false,
+            page: 1
+          })   
+          }
+      }) 
+      state.communities = communitiesInStore    
+     },
+    searchCommunities: (state, action: PayloadAction<string>) => {
       state.searchTerm = action.payload
-      state.searchResults = (state.suggestedCommunities as StoreCommunity[]).filter(it => {
+      state.searchResults = (state.communities as StoreCommunity[]).filter(it => {
         if(it.name.toLowerCase().includes(action.payload.toLowerCase())) return true
         else if(it.description.toLowerCase().includes(action.payload.toLowerCase())) return true
         else return false
@@ -91,9 +85,9 @@ export const communitiesSlice = createSlice({
 });
 
 export const {
-  updateJoinedCommunities,
-  updateSuggestedCommunities,
-  searchSuggestedCommunities,
+  updateMemberships,
+  updateCommunities,
+  searchCommunities,
 } = communitiesSlice.actions;
 
 export default communitiesSlice.reducer;

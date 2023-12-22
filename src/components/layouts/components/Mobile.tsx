@@ -59,7 +59,7 @@ const MobileLayout = ({
         <Divider position="relative" zIndex="-3" />
       </Box>
       <Box
-        pt={{ base: '100px', md: '0' }}
+        pt={{ base: '70px', md: '0' }}
         overflowY="auto"
         h="100vh"
         sx={{
