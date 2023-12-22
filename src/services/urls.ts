@@ -11,6 +11,7 @@ const urls = {
   logoutUser: `${baseUrl}/users/logout`,
   updateUser: `${baseUrl}/users/me`,
   getCommunities: `${baseUrl}/communities`,
+  getMemberships: `${baseUrl}/communities/user`,
   getCommunityById: (communityId: string) =>
     `${baseUrl}/communities/${communityId}`
 };

@@ -12,27 +12,34 @@ import AcceptTermsAndConditionsForm from "@/components/community/AcceptTermsAndC
 import DesktopHeader from "@/components/community/DesktopHeader";
 import CommunitiesList from "@/components/community/CommunitiesList";
 import CommunitiesSearchBar from "@/components/community/CommunitiesSearchBar";
-import { updateSuggestedCommunities } from "@/redux/communities/slice";
+import { updateCommunities, updateMemberships } from "@/redux/communities/slice";
 
 const Community = () => {
   const dispatch = useAppDispatch()
   const { data: userData } = useAppSelector(store => store.user)
-  const { suggestedCommunities, hasFetchedSuggestedCommunities, searchResults, searchTerm } = useAppSelector(store => store.communities)
+  const { communities, hasFetchedCommunities, searchResults, searchTerm } = useAppSelector(store => store.communities)
   const { loading, makeRequest } = useAxios();
 
   useEffect(() => {
     const fetchCommunities = async () => {
-      const response = await makeRequest({
+      const membershipsResponse = await makeRequest({
+        url: urls.getMemberships,
+        method: "get"
+      })
+      const communitiesResponse = await makeRequest({
         url: urls.getCommunities,
         method: 'get',
       });
-      const result = response.data as any
-      if(Array.isArray(result.communities)){
-        dispatch(updateSuggestedCommunities(result.communities))
+      const communitiesResult = communitiesResponse.data as any
+      if(Array.isArray(communitiesResult?.communities)){
+        dispatch(updateCommunities(communitiesResult.communities))
       }
+      const membershipsResult = membershipsResponse.data as any
+      Array.isArray(membershipsResult?.communities) && 
+      dispatch(updateMemberships(membershipsResult.communities))
     }
-    !hasFetchedSuggestedCommunities && fetchCommunities()
-  }, [dispatch, hasFetchedSuggestedCommunities, makeRequest]);
+    !hasFetchedCommunities && fetchCommunities()
+  }, [dispatch, hasFetchedCommunities, makeRequest]);
 
   if(!userData) return <LoadingState/>
   if (!userData?.hasAcceptedCommunityTerms) return (
@@ -51,7 +58,7 @@ const Community = () => {
             <Box w="92%" mx="auto" mt={{ base: "calc(2rem + 42px)", md: "calc(3.4rem + 42px)" }}>
                 {
                   ((searchTerm.length > 0 && searchResults.length > 0) || searchTerm.length === 0) &&
-                  <CommunitiesList communities={searchTerm.length === 0 ? suggestedCommunities : searchResults} />
+                  <CommunitiesList communities={searchTerm.length === 0 ? communities : searchResults} />
                 }
             </Box>
           </>

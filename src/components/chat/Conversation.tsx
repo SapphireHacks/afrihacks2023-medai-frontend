@@ -1,4 +1,4 @@
-import { Message } from '@/types/chat';
+import { CommunityMessage, Message } from '@/types/chat';
 import { UserBubble, AIBubble, AIBubbleLoading } from './ChatBubbles';
 import { Flex } from '@chakra-ui/react';
 
@@ -20,7 +20,7 @@ export default function Conversation({
   const sortedMessages = useSortMessages(messages);
   return (
     <Flex flexDirection="column" gap="16px" w="100%" position="relative">
-      {sortedMessages.map(msg => {
+      {sortedMessages.map((msg: Message) => {
         if (msg.role === 'user')
           return <UserBubble key={msg._id} user={user} content={msg.content} />;
         else return <AIBubble key={msg._id} content={msg.content} />;

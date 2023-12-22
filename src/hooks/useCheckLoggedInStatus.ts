@@ -1,3 +1,5 @@
+
+"use client"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { isTokenExpired } from "@/utils/checkToken";
 import { useRouter, usePathname } from "next/navigation";
@@ -23,18 +25,18 @@ export default function useCheckLoggedInStatus(shouldRedirectIfLoggedIn: boolean
       url: urls.getUser
     })
     const data = response.data as any
-    if(data.data.user) dispatch(setUserData(data.data.user))
-  }, [])
+    if(data?.data?.user) dispatch(setUserData(data.data.user))
+  }, [dispatch])
   useEffect(() => {
     let token = sessionStorage.getItem("token") || localStorage.getItem("token")
     if(token) token = JSON.parse(token)
     if(!token) {
-      if(!pathname.includes("auth")) {
+      if(!(pathname?.includes("auth"))) {
         toast.error("Unauthorized to access this route!")
         router.push("/auth")
       }
     } else if (isTokenExpired(token)) {
-        if(!pathname.includes("auth")) {
+        if(!(pathname?.includes("auth"))) {
           router.push('/auth/login');
           toast.error('You are not authorized to view this page');
         }
@@ -43,7 +45,7 @@ export default function useCheckLoggedInStatus(shouldRedirectIfLoggedIn: boolean
         fetchLoggedInUser(token)
       }
       if (shouldRedirectIfLoggedIn) {
-        if(pathname.includes("/auth")) router.push("/")
+        if(pathname?.includes("/auth")) router.push("/")
       }
       setIsChecking(false)
     };
